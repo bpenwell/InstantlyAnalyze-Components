@@ -56,8 +56,6 @@
   ],
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@bpenwell/rei-app-root": "file:../REI-App-Root",
-    "@bpenwell/rei-layouts": "file:../REI-Layouts",
     "build": "^0.1.4",
     "i": "^0.3.7",
     "npm": "^10.4.0",
