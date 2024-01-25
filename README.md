@@ -6,6 +6,10 @@ This project is part of a [blog & video tutorial](https://dev.to/alexeagleson/ho
 
 You can use this repo to fork as a template for your own React library projects.  
 
+## Pre-requisites
+if the storybook command doesn't work, you may need to run:
+`npx sb init`
+
 ## Available Scripts
 
 ### Build the library
