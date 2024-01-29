@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "A simple template for a custom React component library",
   "scripts": {
-    "build": "rollup -c",
+    "build": "rollup -c -w",
     "test": "jest",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
