@@ -56,6 +56,7 @@
   ],
   "types": "dist/index.d.ts",
   "dependencies": {
+    "@bpenwell/rei-module": "file:../REI-Module",
     "build": "^0.1.4",
     "i": "^0.3.7",
     "npm": "^10.4.0",

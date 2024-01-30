@@ -2,9 +2,10 @@ import React from 'react';
 
 import { Header } from '../Header/Header';
 import './page.css';
+import { IUserData } from '@bpenwell/rei-module';
 
 export interface PageProps {
-  user?: {};
+  user?: IUserData;
   onLogin: () => void;
   onLogout: () => void;
   onCreateAccount: () => void;
