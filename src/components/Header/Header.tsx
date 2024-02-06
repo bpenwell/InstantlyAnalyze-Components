@@ -1,7 +1,7 @@
-import React from 'react';
-
+import React, { useState } from 'react';
 import { Button } from '../Button/Button';
 import {
+  KNOWN_TOOL_NAMES,
   PAGE_PATH,
   RedirectAPI,
 } from '@bpenwell/rei-module';
@@ -14,6 +14,7 @@ export interface HeaderProps {
 export const Header = (props: HeaderProps) => {
   const { token } = props;
   const redirectApi: RedirectAPI = new RedirectAPI();
+  //const [isDropdownOpen, setDropdownOpen] = useState(false);
 
   const handleLogOutOnClick = () => {
     redirectApi.redirectToPage(PAGE_PATH.LOGOUT);
@@ -24,12 +25,16 @@ export const Header = (props: HeaderProps) => {
   const handleSignUpOnClick = () => {
     redirectApi.redirectToPage(PAGE_PATH.SIGNUP);
   }; 
+  
+  const handleDropdownToggle = () => {
+    /*setDropdownOpen(!isDropdownOpen);*/
+  };
 
   return (
     <header>
       <div className="wrapper">
         <div>
-          <a href='/#'>
+          <a href='/'>
             <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
               <g fill="none" fillRule="evenodd">
                 <path
@@ -48,6 +53,22 @@ export const Header = (props: HeaderProps) => {
             </svg>
             <h1>Acme</h1>
           </a>
+        </div>
+        <div>
+          <Button size="small" onClick={handleDropdownToggle} label="Tools" />
+          {/*isDropdownOpen &&*/ (
+                <nav className="dropdown-menu">
+                  <ul>
+                    {Object.values(KNOWN_TOOL_NAMES).map((toolName) => (
+                      <li key={toolName}>
+                        <a href={`/tools/${toolName}`}>
+                          {toolName}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
+              )}
         </div>
         <div>
           { token ? (
