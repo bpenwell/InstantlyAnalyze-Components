@@ -8,10 +8,11 @@ interface InputProps {
     options?: string[]; // Add options prop for select input
     value: any;
     onChange: (value: any) => void;
+    required?: boolean;
 }
 
 export const Input = (props: InputProps) => {
-    const { label, type = 'text', options, value, onChange } = props;
+    const { label, type = 'text', options, value, onChange, required } = props;
 
     const renderInput = () => {
         if (type === 'select' && options) {
@@ -27,6 +28,7 @@ export const Input = (props: InputProps) => {
         } else {
             return (
                 <input
+                    required={required}
                     type={type}
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
