@@ -4,15 +4,16 @@ import {
   KNOWN_TOOL_NAMES,
   PAGE_PATH,
   RedirectAPI,
+  IUserData,
 } from '@bpenwell/rei-module';
 import './header.css';
 
 export interface HeaderProps {
-  token?: String;
+  user?: IUserData;
 }
 
 export const Header = (props: HeaderProps) => {
-  const { token } = props;
+  const { user } = props;
   const redirectApi: RedirectAPI = new RedirectAPI();
   //const [isDropdownOpen, setDropdownOpen] = useState(false);
 
@@ -71,7 +72,7 @@ export const Header = (props: HeaderProps) => {
               )}
         </div>
         <div>
-          { token ? (
+          { user ? (
             <Button size="small" onClick={handleLogOutOnClick} label="Log out" />
             ) : (
               <>

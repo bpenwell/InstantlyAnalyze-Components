@@ -6,9 +6,11 @@ root_path="..\REI-Tool"
 # Navigate to the root directory
 cd "$root_path" || exit
 
-npm run watch & 
-
-npm run build & 
+npm run clean
+npm run install 
+npm run build
+npm run watch &
+npm run server &
 
 # npm run server || { echo "Error: Failed to run npm run server in $folder"; exit 1; }
 

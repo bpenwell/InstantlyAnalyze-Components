@@ -311,7 +311,7 @@ The final step before we can run our first rollup is to define the values of "ma
     "@rollup/plugin-node-resolve": "^13.0.6",
     "@rollup/plugin-typescript": "^8.3.0",
     "@types/react": "^17.0.34",
-    "react": "^17.0.2",
+    "react": "^18.2.0",
     "rollup": "^2.60.0",
     "rollup-plugin-dts": "^4.0.1",
     "typescript": "^4.4.4"
@@ -730,7 +730,7 @@ Then we move React from `devDependencies` to `peerDependencies` in our `package.
     "typescript": "^4.4.4"
   },
   "peerDependencies": {
-    "react": "^17.0.2"
+    "react": "^18.2.0"
   },
   ...
 ```

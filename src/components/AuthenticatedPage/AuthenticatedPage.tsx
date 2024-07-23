@@ -1,22 +1,22 @@
 import React, { Fragment } from 'react';
-import './button.css';
 import {
   RedirectAPI,
-  PAGE_PATH
+  PAGE_PATH,
+  IUserData
 } from '@bpenwell/rei-module';
 import { Children } from 'react';
 
 export interface IAuthenticatedPageProps {
-  token: String,
-  setToken: (React.SetStateAction<String | undefined>) => void,
+  user: IUserData,
+  setUser: (React.SetStateAction<IUserData | undefined>),
 };
 
 /**
  * Primary UI component for user interaction
  */
-export const AuthenticatedPage = (props: IAuthenticatedPageProps) => {
-  const { token, children } = props;
-  if(!token) {
+export const AuthenticatedPage = (props: any) => {
+  const { user, children } = props;
+  if(!user) {
     const redirectApi: RedirectAPI = new RedirectAPI();
     redirectApi.redirectToPage(PAGE_PATH.LOGIN);
     return undefined;
