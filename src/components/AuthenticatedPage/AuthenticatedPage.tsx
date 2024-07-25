@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Dispatch, Fragment } from 'react';
 import {
   RedirectAPI,
   PAGE_PATH,
@@ -7,8 +7,8 @@ import {
 import { Children } from 'react';
 
 export interface IAuthenticatedPageProps {
-  user: IUserData,
-  setUser: (React.SetStateAction<IUserData | undefined>),
+  user?: IUserData,
+  setUser?: (Dispatch<React.SetStateAction<IUserData | undefined>>),
 };
 
 /**
@@ -19,7 +19,7 @@ export const AuthenticatedPage = (props: any) => {
   if(!user) {
     const redirectApi: RedirectAPI = new RedirectAPI();
     redirectApi.redirectToPage(PAGE_PATH.LOGIN);
-    return undefined;
+    return <div/>;
   }
 
   return (

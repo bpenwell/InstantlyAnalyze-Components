@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "description": "A simple template for a custom React component library",
   "scripts": {
-    "build": "webpack --watch",
+    "build": "webpack --mode production",
+    "server": "webpack --watch --mode production",
     "lint": "eslint .",
     "test": "jest"
   },
@@ -45,6 +46,9 @@
   ],
   "dependencies": {
     "@bpenwell/rei-module": "file:../REI-Module",
-    "mini-css-extract-plugin": "^2.9.0"
+    "copy-webpack-plugin": "^12.0.2",
+    "glob": "^11.0.0",
+    "mini-css-extract-plugin": "^2.9.0",
+    "path": "^0.12.7"
   }
 }

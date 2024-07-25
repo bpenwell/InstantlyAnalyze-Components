@@ -1,43 +1,30 @@
 const path = require('path');
-const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-  mode: 'production', // or 'development' if you prefer
   entry: './src/index.ts',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    libraryTarget: 'umd',
     filename: 'index.js',
-    publicPath: '/',
-  },
-  externals: {
-    // Use external version of React
-    "react": {
-        "commonjs": "react",
-        "commonjs2": "react",
-        "amd": "react",
-        "root": "React"
-    },
-    "react-dom": {
-        "commonjs": "react-dom",
-        "commonjs2": "react-dom",
-        "amd": "react-dom",
-        "root": "ReactDOM"
-    }
+    libraryTarget: 'commonjs2'
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx']
   },
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
-        loader: 'ts-loader',
+        test: /\.(ts|tsx)$/,
         exclude: /node_modules/,
+        use: {
+          loader: 'ts-loader',
+          options: {
+            transpileOnly: true,
+          },
+        },
       },
       {
-        test: /\.css$/,
+        test: /\.css$/i,
         use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
     ],
@@ -47,13 +34,8 @@ module.exports = {
       filename: '[name].css',
     }),
   ],
-  optimization: {
-    minimizer: [
-      new TerserPlugin({
-        terserOptions: {
-          ecma: 6,
-        },
-      }),
-    ],
-  },
+  externals: {
+    react: 'react',
+    'react-dom': 'react-dom'
+  }
 };
