@@ -29,11 +29,12 @@ button + button {
 .dropdown-menu {
   position: absolute;
   top: 100%; /* Position below the button */
-  left: 0; /* Align to the left of the button */
+  left: 50%; /* Start at 50% of the button's width */
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 5px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateX(-50%); /* Shift 50% of its own width to center */
   z-index: 1000;
   width: 200px;
   display: none; /* Hidden by default */

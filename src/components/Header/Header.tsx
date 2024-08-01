@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '../Button/Button';
 import {
   KNOWN_TOOL_NAMES,
@@ -16,26 +16,45 @@ export const Header = (props: HeaderProps) => {
   const { user } = props;
   const redirectApi: RedirectAPI = new RedirectAPI();
   const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const handleLogOutOnClick = () => {
-    redirectApi.redirectToPage(PAGE_PATH.LOGOUT);
-  }; 
-  const handleLogInOnClick = () => {
-    redirectApi.redirectToPage(PAGE_PATH.LOGIN);
-  }; 
   const handleSignUpOnClick = () => {
-    redirectApi.redirectToPage(PAGE_PATH.SIGNUP);
-  }; 
-  
-  const handleDropdownToggle = () => {
-    setDropdownOpen(prevState => !prevState);
+    redirectApi.redirectToSignUp();
   };
+  const handleLogInOnClick = () => {
+    redirectApi.redirectToLogin();
+  };
+  const handleLogoutOnClick = () => {
+    redirectApi.redirectToLogout();
+  };
+
+  const handleDropdownToggle = () => {
+    setDropdownOpen((prevState) => !prevState);
+  };
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      setDropdownOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isDropdownOpen]);
 
   return (
     <header>
       <div className="wrapper">
         <div>
-          <a href='/'>
+          <a href="/">
             <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
               <g fill="none" fillRule="evenodd">
                 <path
@@ -55,7 +74,7 @@ export const Header = (props: HeaderProps) => {
             <h1>Acme</h1>
           </a>
         </div>
-        <div>
+        <div ref={dropdownRef}>
           <Button size="small" onClick={handleDropdownToggle} label="Tools" />
           <nav className={`dropdown-menu ${isDropdownOpen ? 'show' : ''}`}>
             <ul>
@@ -70,13 +89,13 @@ export const Header = (props: HeaderProps) => {
           </nav>
         </div>
         <div>
-          { user ? (
-            <Button size="small" onClick={handleLogOutOnClick} label="Log out" />
-            ) : (
-              <>
-                <Button size="small" onClick={handleLogInOnClick} label="Log in" />
-                <Button primary size="small" onClick={handleSignUpOnClick} label="Sign up" />
-              </>
+          {user ? (
+            <Button size="small" onClick={handleLogoutOnClick} label="Log out" />
+          ) : (
+            <>
+              <Button size="small" onClick={handleLogInOnClick} label="Log in" />
+              <Button primary size="small" onClick={handleSignUpOnClick} label="Sign up" />
+            </>
           )}
         </div>
       </div>
