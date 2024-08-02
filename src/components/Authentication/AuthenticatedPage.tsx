@@ -18,7 +18,7 @@ export const AuthenticatedPage = (props: any) => {
   const { user, children } = props;
   if(!user) {
     const redirectApi: RedirectAPI = new RedirectAPI();
-    redirectApi.redirectToPage(PAGE_PATH.LOGIN);
+    redirectApi.redirectToLogin();
     return <div/>;
   }
 
