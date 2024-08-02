@@ -6,7 +6,8 @@
     "build": "npx tsc && webpack --mode production",
     "server": "webpack --watch --mode production",
     "lint": "eslint .",
-    "test": "jest"
+    "test": "jest",
+    "clean": "rm -rf dist package-lock.json"
   },
   "author": "bpenwell",
   "license": "ISC",
