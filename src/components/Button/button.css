@@ -7,23 +7,28 @@
   display: inline-block;
   line-height: 1;
 }
+
 .storybook-button--primary {
-  color: white;
-  background-color: #1ea7fd;
+  color: #FFFFFF; /* White text */
+  background-color: #004A00; /* Dark green background */
 }
+
 .storybook-button--secondary {
-  color: #333;
-  background-color: transparent;
+  color: #FFFFFF; /* White text */
+  background-color: #676867; /* Robinhood bright green background */
   box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;
 }
+
 .storybook-button--small {
   font-size: 12px;
   padding: 10px 16px;
 }
+
 .storybook-button--medium {
   font-size: 14px;
   padding: 11px 20px;
 }
+
 .storybook-button--large {
   font-size: 16px;
   padding: 12px 24px;
