@@ -38,7 +38,7 @@
     position: absolute; /* Position the wrapper absolutely */
     top: 100%; /* Flush with the bottom of the header */
     left: 0; /* Align to the left of the button */
-    margin-top: 30px; /* Adjust the margin for padding effect */
+    margin-top: 10px; /* Adjust the margin for padding effect */
     width: 200px;
 }
   
