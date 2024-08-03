@@ -17,7 +17,7 @@ export const Input = (props: InputProps) => {
     const renderInput = () => {
         if (type === 'select' && options) {
             return (
-                <select value={value} onChange={(e) => onChange(e.target.value)} className="input-field">
+                <select value={value} onChange={(e) => onChange(e.target.value)} className='input-field'>
                     {options.map((option) => (
                         <option key={option} value={option}>
                             {option}
@@ -32,15 +32,15 @@ export const Input = (props: InputProps) => {
                     type={type}
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
-                    className="input-field"
+                    className='input-field'
                 />
             );
         }
     };
 
     return (
-        <div className="input-container">
-            <label className="label">{label}</label>
+        <div className='input-container'>
+            <label className='label'>{label}</label>
             {renderInput()}
         </div>
     );
