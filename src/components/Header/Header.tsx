@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '../Button/Button';
 import {
-  KNOWN_TOOL_NAMES,
+  TOOL_IDS,
   PAGE_PATH,
   RedirectAPI,
   IUserData,
+  TOOL_ID_TO_TOOL_NAME_MAP,
 } from '@bpenwell/rei-module';
 import './header.css';
 
@@ -78,10 +79,10 @@ export const Header = (props: HeaderProps) => {
           <Button size="small" onClick={handleDropdownToggle} label="Tools" />
           <nav className={`dropdown-menu ${isDropdownOpen ? 'show' : ''}`}>
             <ul>
-              {Object.values(KNOWN_TOOL_NAMES).map((toolName) => (
-                <li key={toolName}>
-                  <a href={`/tools/${toolName}`}>
-                    {toolName}
+              {Object.values(TOOL_IDS).map((toolId) => (
+                <li key={toolId}>
+                  <a href={`/tools/${toolId}`}>
+                    {TOOL_ID_TO_TOOL_NAME_MAP[toolId]}
                   </a>
                 </li>
               ))}
