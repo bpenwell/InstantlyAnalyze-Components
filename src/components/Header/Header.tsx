@@ -62,7 +62,7 @@ export const Header = (props: HeaderProps) => {
       <div className='header-container'>
         <div className='header-left'>
           <a href='/'>
-            <img src='public/logo103.png' alt='REI Automated' className='header-logo' />
+            <img src='/public/logo103.png' alt='REI Automated' className='header-logo' />
           </a>
           <h1>REI Automated</h1>
           <DropdownButton label='Tools' items={toolItems} />

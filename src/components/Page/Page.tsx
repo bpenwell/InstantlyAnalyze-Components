@@ -12,7 +12,7 @@ export const Page = ({ user }: PageProps) => (
   <article>
     <Header user={user}/>
 
-    <section>
+    <section className='pageSection'>
       <h2>Pages in Storybook</h2>
       <p>
         We recommend building UIs with a{' '}
