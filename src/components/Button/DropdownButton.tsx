@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './DropdownButton.css';
+import { PAGE_PATH, RedirectAPI } from '@bpenwell/rei-module';
 
 interface DropdownButtonProps {
   label: string;
@@ -9,18 +10,25 @@ interface DropdownButtonProps {
 export const DropdownButton: React.FC<DropdownButtonProps> = ({ label, items }) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const buttonRef = useRef<HTMLDivElement>(null);
+  const redirectAPI = new RedirectAPI();
+
+  const shouldNotOpenDropdown = items.length === 1;
 
   const handleDropdownToggle = () => {
+    if (shouldNotOpenDropdown) return;
     setDropdownOpen((prevState) => !prevState);
   };
 
   const handleClickOutside = (event: MouseEvent) => {
+    if (shouldNotOpenDropdown) return;
     if (buttonRef.current && !buttonRef.current.contains(event.target as Node)) {
       setDropdownOpen(false);
     }
   };
 
   useEffect(() => {
+    if (shouldNotOpenDropdown) return;
+
     if (isDropdownOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     } else {
@@ -32,8 +40,14 @@ export const DropdownButton: React.FC<DropdownButtonProps> = ({ label, items }) 
     };
   }, [isDropdownOpen]);
 
+  const handleOnClick = (event: any): void => {
+    if (shouldNotOpenDropdown) {
+      redirectAPI.redirectToPage(items[0].link as PAGE_PATH);
+    }
+  }
+
   return (
-    <div className='dropdown-button' ref={buttonRef} onMouseEnter={handleDropdownToggle} onMouseLeave={() => setDropdownOpen(false)}>
+    <div className='dropdown-button' ref={buttonRef} onClick={handleOnClick} onMouseEnter={handleDropdownToggle} onMouseLeave={() => setDropdownOpen(false)}>
       <span className='dropdown-button-label'>{label}</span>
       {isDropdownOpen && (
         <div className='dropdown-menu-wrapper'>

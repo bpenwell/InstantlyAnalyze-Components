@@ -5,6 +5,7 @@ import {
   RedirectAPI,
   IUserData,
   TOOL_ID_TO_TOOL_NAME_MAP,
+  PAGE_PATH,
 } from '@bpenwell/rei-module';
 import './header.css';
 import { DropdownButton } from '../Button/DropdownButton';
@@ -18,16 +19,6 @@ export const Header = (props: HeaderProps) => {
   const redirectApi: RedirectAPI = new RedirectAPI();
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  const handleSignUpOnClick = () => {
-    redirectApi.redirectToSignUp();
-  };
-  const handleLogInOnClick = () => {
-    redirectApi.redirectToLogin();
-  };
-  const handleLogoutOnClick = () => {
-    redirectApi.redirectToLogout();
-  };
 
   const handleDropdownToggle = () => {
     setDropdownOpen((prevState) => !prevState);
@@ -66,14 +57,18 @@ export const Header = (props: HeaderProps) => {
           </a>
           <h1>REI Automated</h1>
           <DropdownButton label='Tools' items={toolItems} />
+          <DropdownButton label='AI Real Estate Agent' items={[{
+            label: TOOL_ID_TO_TOOL_NAME_MAP[TOOL_IDS.AI_REAL_ESTATE_AGENT],
+            link: PAGE_PATH.AI_REAL_ESTATE_AGENT,
+          }]} />
         </div>
         <div className='header-right'>
           {user ? (
-            <Button size='small' onClick={handleLogoutOnClick} label='Log out' />
+            <Button size='small' onClick={() => { redirectApi.redirectToPage(PAGE_PATH.LOGOUT) } } label='Log out' />
           ) : (
             <>
-              <Button primary size='small' onClick={handleLogInOnClick} label='Log in' />
-              <Button size='small' onClick={handleSignUpOnClick} label='Sign up' />
+              <Button primary size='small' onClick={() => { redirectApi.redirectToPage(PAGE_PATH.LOGIN) }} label='Log in' />
+              <Button size='small' onClick={() => { redirectApi.redirectToPage(PAGE_PATH.SIGNUP) }} label='Sign up' />
             </>
           )}
         </div>
