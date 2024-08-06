@@ -1,6 +1,12 @@
-// components/Input.tsx
 import React from 'react';
+import styled from 'styled-components';
 import './Input.css'; // Import the CSS file
+
+// Asterisk component
+const Asterisk = styled.span`
+  color: red;
+  margin-left: 4px;
+`;
 
 interface InputProps {
     label: string;
@@ -40,10 +46,11 @@ export const Input = (props: InputProps) => {
 
     return (
         <div className='input-container'>
-            <label className='label'>{label}</label>
+            <label className='label'>
+                {label}
+                {required && <Asterisk>*</Asterisk>}
+            </label>
             {renderInput()}
         </div>
     );
 };
-
-export default Input;
