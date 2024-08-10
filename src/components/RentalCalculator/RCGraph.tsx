@@ -9,6 +9,7 @@ import {
     Tooltip,
     Legend,
 } from 'chart.js';
+import { IRentalCalculatorPageData } from '../../interfaces';
 
 // Register the necessary components
 ChartJS.register(
@@ -33,7 +34,7 @@ const data = {
     ],
 };
 
-export const RCGraph: React.FC = () => {
+export const RCGraph: React.FC<IRentalCalculatorPageData> = (props: IRentalCalculatorPageData) => {
     return (
         <section className="mb-4">
             <h2 className="text-2xl font-semibold">Graphs</h2>

@@ -10,7 +10,7 @@ export type { IAuthenticatedPageProps } from './components/Authentication/Authen
 export { Input } from './components/Input/Input';
 export { ErrorBoundary } from './utils/ErrorBoundary';
 export { RCTitle } from './components/RentalCalculator/RCTitle';
-export { RCDetails } from './components/RentalCalculator/RCDetails';
+export { RCExpenses } from './components/RentalCalculator/RCExpenses';
 export { RCSummary } from './components/RentalCalculator/RCSummary';
 export { RCGraph } from './components/RentalCalculator/RCGraph';
 export { Asterisk } from './components/Asterisk/Asterisk';
