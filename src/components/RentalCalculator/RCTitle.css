@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.rc-title {
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+}
+
+.title-container {
+    width: 100%;
+    /*background-color: #676867;*/
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 5px;
+  }
+  

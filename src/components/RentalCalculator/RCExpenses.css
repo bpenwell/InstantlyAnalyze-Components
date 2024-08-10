@@ -1,3 +1,78 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+.rc-expenses {
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+}
+
+.expenses-container {
+  width: 100%;
+  background-color: #676867;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 5px;
+}
+
+.expenses-content {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 10px; /* Reduced gap between columns */
+}
+
+.left-column,
+.expenses-box {
+  flex: 1;
+}
+
+.expense-header h3,
+.expense-header h4 {
+  font-weight: 1000;
+  color: #004A00;
+  justify-content: center;
+  line-height: 0.6;
+}
+
+.expense-header p {
+  font-weight: 800;
+  font-size: 16px;
+  color: #000000;
+  justify-content: center;
+  line-height: 0.6;
+}
+
+.expense-item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.expense-item h3,
+.expense-item h4,
+.expense-item h5 {
+  font-weight: 600;
+  color: #000000;
+  line-height: 0.6;
+}
+
+.expense-item p {
+  font-weight: 600;
+  color: #676867;
+  line-height: 0.6;
+}
+
+.expenses-box {
+  background-color: #f7f7f7;
+  padding: 10px; /* Reduced padding inside the boxes */
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 20%;
+}
+
+.sub-utilities h4,
+.sub-utilities h5 {
+  font-size: 12px;
+  color: #000000;
+  line-height: 0.6;
+}
+
+.sub-utilities p {
+  font-size: 12px;
+  line-height: 0.6;
+}

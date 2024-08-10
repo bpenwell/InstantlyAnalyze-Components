@@ -10,6 +10,7 @@ import {
     Legend,
 } from 'chart.js';
 import { IRentalCalculatorPageData } from '../../interfaces';
+import './RCGraph.css';
 
 // Register the necessary components
 ChartJS.register(
@@ -36,11 +37,10 @@ const data = {
 
 export const RCGraph: React.FC<IRentalCalculatorPageData> = (props: IRentalCalculatorPageData) => {
     return (
-        <section className="mb-4">
-            <h2 className="text-2xl font-semibold">Graphs</h2>
-            <div className="my-4">
-                <Bar data={data} />
-            </div>
+        <section className='rc-graph'>
+          <div className='graph-container'>
+            <h2>Graph</h2>
+          </div>
         </section>
     );
 };
