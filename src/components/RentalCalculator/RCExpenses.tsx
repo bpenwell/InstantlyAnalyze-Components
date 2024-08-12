@@ -2,6 +2,7 @@ import React from 'react';
 import { IRentalCalculatorPageData } from '../../interfaces';
 import './RCExpenses.css';
 import { CalculationUtils } from '@bpenwell/rei-module';
+import PieChart, { IPieChartProps } from '../Charts/PieChart';
 
 export const RCExpenses: React.FC<IRentalCalculatorPageData> = (props: IRentalCalculatorPageData) => {
   const calculationUtils: CalculationUtils = new CalculationUtils();
@@ -9,7 +10,7 @@ export const RCExpenses: React.FC<IRentalCalculatorPageData> = (props: IRentalCa
   let insurance = props.currentYearData.expenseDetails.insurance;
 
   const loanAmount = props.currentYearData.purchaseDetails.purchasePrice - props.currentYearData.loanDetails.downPayment;
-  
+
   let rehabCost = 0;
   if (props.currentYearData.purchaseDetails.rehabbingProperty && props.currentYearData.purchaseDetails.rehabRepairCosts) {
     rehabCost = props.currentYearData.purchaseDetails.rehabRepairCosts;
@@ -22,7 +23,6 @@ export const RCExpenses: React.FC<IRentalCalculatorPageData> = (props: IRentalCa
     props.currentYearData.loanDetails.interestRate,
     props.currentYearData.loanDetails.loanTerm);
 
-  // Adjust for annual vs yearly inputs
   if (props.currentYearData.expenseDetails.propertyTaxFrequency === 'annual') {
     taxes /= 12;
   }
@@ -30,45 +30,48 @@ export const RCExpenses: React.FC<IRentalCalculatorPageData> = (props: IRentalCa
     insurance /= 12;
   }
 
-  const getTotalFixedExpenses = () => {
-    return (
-      props.currentYearData.expenseDetails.electricity +
-      props.currentYearData.expenseDetails.garbage +
-      props.currentYearData.expenseDetails.gas +
-      props.currentYearData.expenseDetails.other +
-      props.currentYearData.expenseDetails.hoaFees +
-      props.currentYearData.expenseDetails.waterAndSewer
-    );
-  };
-  let totalFixedExpenses = getTotalFixedExpenses();
+  const totalFixedExpenses = (
+    props.currentYearData.expenseDetails.electricity +
+    props.currentYearData.expenseDetails.garbage +
+    props.currentYearData.expenseDetails.gas +
+    props.currentYearData.expenseDetails.other +
+    props.currentYearData.expenseDetails.hoaFees +
+    props.currentYearData.expenseDetails.waterAndSewer
+  );
 
-  const getTotalVariableExpenses = () => {
-    return (
-      props.currentYearData.expenseDetails.capitalExpenditures +
-      props.currentYearData.expenseDetails.managementFees +
-      props.currentYearData.expenseDetails.repairsAndMaintenance +
-      props.currentYearData.expenseDetails.vacancy
-    );
-  };
-  let totalVariableExpenses = getTotalVariableExpenses();
+  const totalVariableExpenses = (
+    props.currentYearData.expenseDetails.capitalExpenditures +
+    props.currentYearData.expenseDetails.managementFees +
+    props.currentYearData.expenseDetails.repairsAndMaintenance +
+    props.currentYearData.expenseDetails.vacancy
+  );
 
-  const getTotalExpenses = () => {
-    return (
-      mortgage +
-      insurance +
-      taxes +
-      totalFixedExpenses +
-      totalVariableExpenses
-    );
+  const monthlyTotalExpenses = (
+    mortgage +
+    insurance +
+    taxes +
+    totalFixedExpenses +
+    totalVariableExpenses
+  );
+
+  const pieChartProps: IPieChartProps = {
+    labels: [], // Remove labels from the chart itself
+    data: [mortgage, taxes, insurance, totalFixedExpenses, totalVariableExpenses],
+    backgroundColors: ['#ab2626', '#007a00', '#1f1f1f', '#ffcc00', '#0066cc'],
+    hoverBackgroundColors: ['#ab2626', '#007a00', '#1f1f1f', '#ffcc00', '#0066cc'],
   };
-  let monthlyTotalExpenses = getTotalExpenses();
 
   return (
     <section className="rc-expenses">
       <div className="expenses-container">
         <h2>Expenses</h2>
         <div className="expenses-content">
-          {/* Left Column: Total Expenses */}
+          {/* Pie Chart */}
+          <div className="chart-box">
+            <PieChart {...pieChartProps} />
+          </div>
+
+          {/* Total Expenses Section with Labels */}
           <div className="expenses-box">
             <div className="expense-header">
               <h3>Total Expenses</h3>
@@ -76,29 +79,34 @@ export const RCExpenses: React.FC<IRentalCalculatorPageData> = (props: IRentalCa
             </div>
             <div className="sub-utilities">
               <div className="expense-item">
+                <span className="label-circle mortgage-color"></span>
                 <h4>Mortgage</h4>
                 <p>${mortgage.toFixed(0)}</p>
               </div>
               <div className="expense-item">
+                <span className="label-circle taxes-color"></span>
                 <h4>Taxes</h4>
                 <p>${taxes.toFixed(0)}</p>
               </div>
               <div className="expense-item">
+                <span className="label-circle insurance-color"></span>
                 <h4>Insurance</h4>
                 <p>${insurance.toFixed(0)}</p>
               </div>
               <div className="expense-item">
-                <h4>Variable Expenses</h4>
-                <p>${totalVariableExpenses.toFixed(0)}</p>
-              </div>
-              <div className="expense-item">
+                <span className="label-circle fixed-color"></span>
                 <h4>Fixed Expenses</h4>
                 <p>${totalFixedExpenses.toFixed(0)}</p>
+              </div>
+              <div className="expense-item">
+                <span className="label-circle variable-color"></span>
+                <h4>Variable Expenses</h4>
+                <p>${totalVariableExpenses.toFixed(0)}</p>
               </div>
             </div>
           </div>
 
-          {/* Middle Column: fixed expenses Box */}
+          {/* Fixed Expenses Section */}
           <div className="expenses-box">
             <div className="expense-header">
               <h4>Fixed Expenses</h4>
@@ -123,7 +131,8 @@ export const RCExpenses: React.FC<IRentalCalculatorPageData> = (props: IRentalCa
               </div>
             </div>
           </div>
-          {/* Right Column: variable expenses Box */}
+
+          {/* Variable Expenses Section */}
           <div className="expenses-box">
             <div className="expense-header">
               <h4>Variable Expenses</h4>
@@ -143,7 +152,7 @@ export const RCExpenses: React.FC<IRentalCalculatorPageData> = (props: IRentalCa
                 <p>${props.currentYearData.expenseDetails.capitalExpenditures.toFixed(0)}</p>
               </div>
               <div className="expense-item">
-                <h5>Management fees</h5>
+                <h5>Management</h5>
                 <p>${props.currentYearData.expenseDetails.managementFees.toFixed(0)}</p>
               </div>
             </div>
