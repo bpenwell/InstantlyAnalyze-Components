@@ -11,6 +11,6 @@ export { Input } from './components/Input/Input';
 export { ErrorBoundary } from './utils/ErrorBoundary';
 export { RCTitle } from './components/RentalCalculator/RCTitle';
 export { RCExpenses } from './components/RentalCalculator/RCExpenses';
-export { RCSummary } from './components/RentalCalculator/RCSummary';
-export { RCGraph } from './components/RentalCalculator/RCGraph';
+export { RCSummary, IRCSummary } from './components/RentalCalculator/RCSummary';
+export { RCCustomize } from './components/RentalCalculator/RCCustomize';
 export { Asterisk } from './components/Asterisk/Asterisk';

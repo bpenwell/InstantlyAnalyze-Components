@@ -1,17 +1,26 @@
-/*@tailwind base;
-@tailwind components;
-@tailwind utilities;*/
-
 .rc-title {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
     padding-top: 20px;
+    width: 100%;
 }
 
 .title-container {
-    width: 100%;
-    /*background-color: #676867;*/
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 5px;
-  }
-  
+    max-width: 80%; /* Adjust width as necessary */
+    text-align: center;
+    padding: 20px; /* Added padding for better spacing */
+}
+
+.title-container img {
+    display: block;
+    margin: 0 auto 20px auto; /* Center the image and add spacing below */
+    max-width: 100%; /* Make sure the image fits within its container */
+}
+
+.title-container h2,
+.title-container h3 {
+    margin: 0;
+    margin-bottom: 10px; /* Space between title and address */
+}

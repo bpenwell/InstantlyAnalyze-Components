@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -24,6 +24,7 @@ export interface ILineChartProps {
   pointBackgroundColor?: string;
   pointBorderColor?: string;
   title?: string;
+  onPointClick?: (index: number, value: number, label: string) => void;
 }
 
 const LineChart = (props: ILineChartProps) => {
@@ -35,7 +36,28 @@ const LineChart = (props: ILineChartProps) => {
     pointBackgroundColor = '#fff',
     pointBorderColor = 'rgba(75,192,192,1)',
     title = 'Line Chart',
+    onPointClick,
   } = props;
+
+  const chartRef = useRef<any>(null);
+
+  const handleClick = (event: any) => {
+    const chart = chartRef.current;
+    if (!chart) return;
+
+    const points = chart.getElementsAtEventForMode(event, 'nearest', { intersect: true }, true);
+
+    if (points.length > 0) {
+      const firstPoint = points[0];
+      const label = chart.data.labels[firstPoint.index] as string;
+      const value = chart.data.datasets[firstPoint.datasetIndex].data[firstPoint.index] as number;
+      const index = firstPoint.index;
+
+      if (onPointClick) {
+        onPointClick(index, value, label);
+      }
+    }
+  };
 
   const chartData: ChartData<'line'> = {
     labels,
@@ -53,6 +75,7 @@ const LineChart = (props: ILineChartProps) => {
 
   const options: ChartOptions<'line'> = {
     responsive: true,
+    maintainAspectRatio: true, // Maintains the aspect ratio on resize   
     plugins: {
       legend: {
         display: false,
@@ -70,9 +93,10 @@ const LineChart = (props: ILineChartProps) => {
         display: true,
       },
     },
+    onClick: handleClick,
   };
 
-  return <Line data={chartData} options={options} />;
+  return <Line ref={chartRef} data={chartData} options={options} />;
 };
 
 export default LineChart;

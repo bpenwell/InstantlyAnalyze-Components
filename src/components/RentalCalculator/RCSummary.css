@@ -1,16 +1,20 @@
-/*@tailwind base;
-@tailwind components;
-@tailwind utilities;*/
-
 .rc-summary {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
     padding-top: 20px;
+    width: 100%;
 }
 
 .summary-container {
-    width: 100%;
+    width: 100%; /* Adjust width as necessary */
     background-color: #676867;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 5px;
+    padding: 20px; /* Added more padding for better spacing */
+    text-align: center;
+}
+
+.summary-container h2 {
+    margin-bottom: 20px; /* Add some space below the title */
 }

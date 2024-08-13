@@ -1,6 +1,7 @@
 import React from 'react';
 import { IRentalCalculatorPageData } from '../../interfaces';
 import './RCExpenses.css';
+import '../Charts/Chart.css';
 import { CalculationUtils } from '@bpenwell/rei-module';
 import PieChart, { IPieChartProps } from '../Charts/PieChart';
 
