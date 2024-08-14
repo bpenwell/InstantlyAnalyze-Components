@@ -11,7 +11,7 @@ import {
 } from 'chart.js';
 import { IRentalCalculatorPageData } from '../../interfaces';
 /*import { Slider } from 'rc-slider';*/
-import 'rc-slider/assets/index.css';
+//import 'rc-slider/assets/index.css';
 import './RCCustomize.css';
 
 // Register the necessary components

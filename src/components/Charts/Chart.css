@@ -3,7 +3,6 @@
     display: block;
     padding: 10px;
     border-radius: 8px;
-    /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
     max-width: 20%;
     width: 100% !important;
     align-items: center;
@@ -16,6 +15,9 @@
     justify-content: center;
     padding: 10px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 40%; /* Allow the chart to use available width */
+    max-width: 80%; /* Set a reasonable max width to avoid full-page stretch */
+    width: 100%; /* Ensure the div uses available width up to the max width */
+    height: 350px; /* Fixed height for the container */
+    margin: 0 auto; /* Center the container itself */
+    box-sizing: border-box; /* Include padding and border in width and height calculations */
 }

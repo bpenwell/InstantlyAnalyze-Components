@@ -20,21 +20,40 @@ export const RCSummary: React.FC<IRCSummary> = (props: IRCSummary) => {
     updateDataYear(index);
   };
 
+  const shouldDisplayChartTermYear = (termYear: number): boolean => {
+    const overrideAcceptedYears: number[] = [0, 1, 2, 3, 4];
+    const generalAcceptedYearMultiplier: number = 5;
+    
+    // Check if termYear is in the overrideAcceptedYears array
+    if (overrideAcceptedYears.includes(termYear)) {
+      return true;
+    }
+    
+    // Check if termYear is a multiple of generalAcceptedYearMultiplier
+    return termYear % generalAcceptedYearMultiplier === 0;
+  };
+  
   const getSummaryChartInputs = (): ILineChartProps => {
     const lineChartProps: ILineChartProps = {
       data: [],
-      labels: []
+      labels: [],
+      onPointClick: handlePointClick,
+      labelDisplayFilter: shouldDisplayChartTermYear
     };
-  
+
     fullLoanTermRentalReportData.forEach((data: IRentalCalculatorData, index: number) => {
-      lineChartProps.data.push(calculationUtils.calculateRentalIncome(data));
-      lineChartProps.labels.push(`${index + 1}`);
+      const year = index + 1;
+      if (shouldDisplayChartTermYear(year)) {
+        lineChartProps.data.push(calculationUtils.calculateRentalIncome(data));
+        lineChartProps.labels.push(`${year}`);
+      }
     });
   
     return lineChartProps;
   };
+
   
-  const summaryChartInputs = getSummaryChartInputs();
+  const summaryChartProps = getSummaryChartInputs();
 
   return (
     <section className='rc-summary'>
@@ -42,9 +61,7 @@ export const RCSummary: React.FC<IRCSummary> = (props: IRCSummary) => {
         <h2>Cash Flow</h2>
         <div className='chart-box-small-centered'>
           <LineChart 
-            data={summaryChartInputs.data}
-            labels={summaryChartInputs.labels}
-            onPointClick={handlePointClick}
+            {...summaryChartProps}
           />
         </div>
       </div>
