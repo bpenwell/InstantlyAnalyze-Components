@@ -16,10 +16,7 @@ export const RCExpenses: React.FC<IRentalCalculatorPageData> = (props: IRentalCa
   if (props.currentYearData.purchaseDetails.rehabbingProperty && props.currentYearData.purchaseDetails.rehabRepairCosts) {
     rehabCost = props.currentYearData.purchaseDetails.rehabRepairCosts;
   }
-  const totalCashNeeded = loanAmount
-    + props.currentYearData.purchaseDetails.purchaseClosingCosts
-    + rehabCost;
-
+  
   const mortgage = calculationUtils.calculateMortgagePayment(loanAmount,
     props.currentYearData.loanDetails.interestRate,
     props.currentYearData.loanDetails.loanTerm);
@@ -47,13 +44,7 @@ export const RCExpenses: React.FC<IRentalCalculatorPageData> = (props: IRentalCa
     props.currentYearData.expenseDetails.vacancy
   );
 
-  const monthlyTotalExpenses = (
-    mortgage +
-    insurance +
-    taxes +
-    totalFixedExpenses +
-    totalVariableExpenses
-  );
+  const monthlyTotalExpenses = calculationUtils.calculateRentalTotalExpense(props.currentYearData);
 
   const pieChartProps: IPieChartProps = {
     labels: [], // Remove labels from the chart itself

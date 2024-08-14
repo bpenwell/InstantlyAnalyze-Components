@@ -1,7 +1,7 @@
 import React from 'react';
 import { IRentalCalculatorPageData } from '../../interfaces';
 import './RCSummary.css';
-import LineChart, { ILineChartProps } from '../Charts/LineChart';
+import LineChart, { ILineChartProps, ILineChartDataset } from '../Charts/LineChart';
 import { CalculationUtils, IRentalCalculatorData } from '@bpenwell/rei-module';
 
 export interface IRCSummary extends IRentalCalculatorPageData {
@@ -34,25 +34,36 @@ export const RCSummary: React.FC<IRCSummary> = (props: IRCSummary) => {
   };
   
   const getSummaryChartInputs = (): ILineChartProps => {
-    const lineChartProps: ILineChartProps = {
+    const incomeData: ILineChartDataset = {
+      label: 'Income Data',
       data: [],
-      labels: [],
-      onPointClick: handlePointClick,
-      labelDisplayFilter: shouldDisplayChartTermYear
+      borderColor: 'green', // Set the line color to green for income data
+      backgroundColor: 'rgba(0, 255, 0, 0.35)',
     };
+    const expenseData: ILineChartDataset = {
+      label: 'Expense Data',
+      data: [],
+      borderColor: 'red', // Set the line color to green for income data
+      backgroundColor: 'rgba(255, 0, 0, 0.35)',
+    };
+    const labels: string[] = [];
 
     fullLoanTermRentalReportData.forEach((data: IRentalCalculatorData, index: number) => {
       const year = index + 1;
       if (shouldDisplayChartTermYear(year)) {
-        lineChartProps.data.push(calculationUtils.calculateRentalIncome(data));
-        lineChartProps.labels.push(`${year}`);
+        incomeData.data.push(calculationUtils.calculateRentalIncome(data));
+        expenseData.data.push(calculationUtils.calculateRentalTotalExpense(data));
+        labels.push(`${year}`);
       }
     });
-  
-    return lineChartProps;
+
+    return {
+      datasets: [incomeData], // Add datasets here
+      labels,
+      onPointClick: handlePointClick,
+    };
   };
 
-  
   const summaryChartProps = getSummaryChartInputs();
 
   return (
