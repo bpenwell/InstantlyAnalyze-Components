@@ -13,7 +13,8 @@ export const RCSummary: React.FC<IRCSummary> = (props: IRCSummary) => {
   const calculationUtils: CalculationUtils = new CalculationUtils();
   const {
     fullLoanTermRentalReportData,
-    updateDataYear
+    updateDataYear,
+    currentYearData
   } = props;
 
   const handlePointClick = (index: number, value: number, label: string) => {
@@ -37,28 +38,41 @@ export const RCSummary: React.FC<IRCSummary> = (props: IRCSummary) => {
     const incomeData: ILineChartDataset = {
       label: 'Income Data',
       data: [],
-      borderColor: 'green', // Set the line color to green for income data
-      backgroundColor: 'rgba(0, 255, 0, 0.35)',
+      borderColor: 'green',
+      backgroundColor: 'rgba(14, 205, 99, 0.75)',
     };
     const expenseData: ILineChartDataset = {
       label: 'Expense Data',
       data: [],
-      borderColor: 'red', // Set the line color to green for income data
-      backgroundColor: 'rgba(255, 0, 0, 0.35)',
+      borderColor: 'red',
+      backgroundColor: 'rgba(250, 150, 86, 0.75)',
+    };
+    const cashFlowData: ILineChartDataset = {
+      label: 'Cash Flow Data',
+      data: [],
+      borderColor: 'black',
+      backgroundColor: 'rgba(0, 0, 0, 0.75)',
     };
     const labels: string[] = [];
 
     fullLoanTermRentalReportData.forEach((data: IRentalCalculatorData, index: number) => {
       const year = index + 1;
       if (shouldDisplayChartTermYear(year)) {
-        incomeData.data.push(calculationUtils.calculateRentalIncome(data));
-        expenseData.data.push(calculationUtils.calculateRentalTotalExpense(data));
+        const totalIncome = calculationUtils.calculateRentalIncome(data);
+        const totalExpenses = calculationUtils.calculateRentalTotalExpense(data);
+        const cashFlow = totalIncome - totalExpenses;
+        incomeData.data.push(totalIncome);
+        expenseData.data.push(totalExpenses);
+        cashFlowData.data.push(cashFlow);
         labels.push(`${year}`);
       }
     });
 
+    // Use CoC ROI for whatever you need
+    //const cashOnCashROI = calculationUtils.calculateCoCROI(data);
+
     return {
-      datasets: [incomeData], // Add datasets here
+      datasets: [incomeData, expenseData, cashFlowData], // Add datasets here
       labels,
       onPointClick: handlePointClick,
     };
@@ -66,14 +80,38 @@ export const RCSummary: React.FC<IRCSummary> = (props: IRCSummary) => {
 
   const summaryChartProps = getSummaryChartInputs();
 
+  // Example values (replace these with dynamic values)
+  const income = calculationUtils.calculateRentalIncome(currentYearData);
+  const expenses = calculationUtils.calculateRentalTotalExpense(currentYearData);
+  const monthlyCashFlow = income - expenses;
+  const cocROI = calculationUtils.calculateRentalTotalExpense(currentYearData);
+
   return (
     <section className='rc-summary'>
       <div className='summary-container'>
         <h2>Cash Flow</h2>
         <div className='chart-box-small-centered'>
-          <LineChart 
-            {...summaryChartProps}
-          />
+          <LineChart {...summaryChartProps} />
+        </div>
+        <div className="analysis-report-cashflow-aside">
+          <div className="analysis-report-cashflow-breakdown-cashflow">
+            <p>Monthly cash flow (at year 1)</p>
+            <span className="analysis-report-cashflow-aside-cashflow">${monthlyCashFlow.toFixed(0)}</span>
+          </div>
+          <div className="analysis-report-cashflow-breakdown-other">
+            <div>
+              <p>Income</p>
+              <span className="analysis-report-cashflow-aside-income">${income.toFixed(0)}</span>
+            </div>
+            <div>
+              <p>Expenses</p>
+              <span className="analysis-report-cashflow-aside-expenses">${expenses.toFixed(0)}</span>
+            </div>
+            <div>
+              <p>CoC ROI</p>
+              <span className="analysis-report-cashflow-aside-coc-roi">{cocROI.toFixed(2)}%</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>

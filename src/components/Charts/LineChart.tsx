@@ -13,6 +13,7 @@ import {
   ChartOptions,
 } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
+import { printObjectFields } from '@bpenwell/rei-module';
 
 ChartJS.register(LineElement, PointElement, Tooltip, Legend, Title, CategoryScale, LinearScale, annotationPlugin);
 
@@ -50,8 +51,6 @@ const LineChart = (props: ILineChartProps) => {
   });
   const minX = Math.min(...labels.map(Number)).toFixed(0);
   const maxX = Math.max(...labels.map(Number)).toFixed(0);
-  console.log('labels');
-  console.log(labels.toString());
 
   const handleClick = (event: any) => {
     const chart = chartRef.current;
@@ -91,7 +90,6 @@ const LineChart = (props: ILineChartProps) => {
     const chart = chartRef.current;
     if (!chart) return;
 
-    const xScale = chart.scales.x;
     const yScale = chart.scales.y;
 
     const elementsAtX = chart.getElementsAtEventForMode(event, 'index', { intersect: false }, true);
@@ -127,6 +125,8 @@ const LineChart = (props: ILineChartProps) => {
       pointRadius: 0,                     // Ensure no point radius
     })),
   };
+
+  console.log(printObjectFields(chartData));
   
   const options: ChartOptions<'line'> = {
     responsive: true,
@@ -162,8 +162,8 @@ const LineChart = (props: ILineChartProps) => {
       x: {
         type: 'linear', // Use 'linear' for numerical data
         position: 'bottom',
-        min: minX,
-        max: maxX,
+        min: Number(minX),
+        max: Number(maxX),
         ticks: {
           color: 'white',
           font: {

@@ -21,3 +21,39 @@
     margin: 0 auto; /* Center the container itself */
     box-sizing: border-box; /* Include padding and border in width and height calculations */
 }
+
+.analysis-report-cashflow-breakdown-cashflow p {
+    margin: 0;
+    font-size: 14px;
+    color: #FFF;
+}
+
+.analysis-report-cashflow-aside-cashflow {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.analysis-report-cashflow-breakdown-other div {
+    margin-top: 10px;
+}
+
+.analysis-report-cashflow-breakdown-other p {
+    margin: 0;
+    font-size: 14px;
+    color: #ffffff;
+}
+
+.analysis-report-cashflow-aside-income {
+    font-size: 18px;
+    color: #0ecd63;
+}
+
+.analysis-report-cashflow-aside-expenses {
+    font-size: 18px;
+    color: #fa9656;
+}
+
+.analysis-report-cashflow-aside-coc-roi {
+    font-size: 18px;
+    color: #000;
+}
