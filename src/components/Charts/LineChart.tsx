@@ -126,8 +126,6 @@ const LineChart = (props: ILineChartProps) => {
     })),
   };
 
-  console.log(printObjectFields(chartData));
-  
   const options: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: true,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { IRentalCalculatorPageData } from '../../interfaces';
 import './RCSummary.css';
 import LineChart, { ILineChartProps, ILineChartDataset } from '../Charts/LineChart';
@@ -16,9 +16,15 @@ export const RCSummary: React.FC<IRCSummary> = (props: IRCSummary) => {
     updateDataYear,
     currentYearData
   } = props;
+  const [currentYear, updateCurrentYear] = useState<number>(0);
 
   const handlePointClick = (index: number, value: number, label: string) => {
-    updateDataYear(index);
+    console.log(`[DEBUG] Updating Report currentYearData to ${label}`);
+    const newYear: number = Number(label);
+    //Re-populates all report data
+    updateDataYear(newYear);
+    //Updates Monthly Cash flow display in Summary
+    updateCurrentYear(newYear);
   };
 
   const shouldDisplayChartTermYear = (termYear: number): boolean => {
@@ -68,9 +74,6 @@ export const RCSummary: React.FC<IRCSummary> = (props: IRCSummary) => {
       }
     });
 
-    // Use CoC ROI for whatever you need
-    //const cashOnCashROI = calculationUtils.calculateCoCROI(data);
-
     return {
       datasets: [incomeData, expenseData, cashFlowData], // Add datasets here
       labels,
@@ -84,7 +87,12 @@ export const RCSummary: React.FC<IRCSummary> = (props: IRCSummary) => {
   const income = calculationUtils.calculateRentalIncome(currentYearData);
   const expenses = calculationUtils.calculateRentalTotalExpense(currentYearData);
   const monthlyCashFlow = income - expenses;
-  const cocROI = calculationUtils.calculateRentalTotalExpense(currentYearData);
+  const cashOnCashROI = calculationUtils.calculateCoCROI(currentYearData);
+
+  let cashFlowMessage = 'Monthly cash flow';
+  if(currentYear !== 0) {
+    cashFlowMessage += `(at year ${currentYear})`;
+  }
 
   return (
     <section className='rc-summary'>
@@ -95,7 +103,7 @@ export const RCSummary: React.FC<IRCSummary> = (props: IRCSummary) => {
         </div>
         <div className="analysis-report-cashflow-aside">
           <div className="analysis-report-cashflow-breakdown-cashflow">
-            <p>Monthly cash flow (at year 1)</p>
+            <p>{cashFlowMessage}</p>
             <span className="analysis-report-cashflow-aside-cashflow">${monthlyCashFlow.toFixed(0)}</span>
           </div>
           <div className="analysis-report-cashflow-breakdown-other">
@@ -109,7 +117,7 @@ export const RCSummary: React.FC<IRCSummary> = (props: IRCSummary) => {
             </div>
             <div>
               <p>CoC ROI</p>
-              <span className="analysis-report-cashflow-aside-coc-roi">{cocROI.toFixed(2)}%</span>
+              <span className="analysis-report-cashflow-aside-coc-roi">{cashOnCashROI.toFixed(2)}%</span>
             </div>
           </div>
         </div>
