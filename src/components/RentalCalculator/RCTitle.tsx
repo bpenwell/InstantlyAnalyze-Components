@@ -1,8 +1,8 @@
 import React from 'react';
 import './RCTitle.css';
-import { IRentalCalculatorPageData } from '../../interfaces';
+import { IRentalCalculatorPageProps } from '../../interfaces';
 
-export const RCTitle: React.FC<IRentalCalculatorPageData> = (props: IRentalCalculatorPageData) => {
+export const RCTitle: React.FC<IRentalCalculatorPageProps> = (props: IRentalCalculatorPageProps) => {
   return (
     <section className="rc-title">
       <div className="title-container">

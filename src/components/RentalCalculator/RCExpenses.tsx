@@ -1,25 +1,21 @@
 import React from 'react';
-import { IRentalCalculatorPageData } from '../../interfaces';
+import { IRentalCalculatorPageProps } from '../../interfaces';
 import './RCExpenses.css';
 import '../Charts/Chart.css';
 import { CalculationUtils } from '@bpenwell/rei-module';
 import PieChart, { IPieChartProps } from '../Charts/PieChart';
 
-export const RCExpenses: React.FC<IRentalCalculatorPageData> = (props: IRentalCalculatorPageData) => {
+export const RCExpenses: React.FC<IRentalCalculatorPageProps> = (props: IRentalCalculatorPageProps) => {
   const calculationUtils: CalculationUtils = new CalculationUtils();
   let taxes = props.currentYearData.expenseDetails.propertyTaxes;
   let insurance = props.currentYearData.expenseDetails.insurance;
-
-  const loanAmount = props.currentYearData.purchaseDetails.purchasePrice - props.currentYearData.loanDetails.downPayment;
 
   let rehabCost = 0;
   if (props.currentYearData.purchaseDetails.rehabbingProperty && props.currentYearData.purchaseDetails.rehabRepairCosts) {
     rehabCost = props.currentYearData.purchaseDetails.rehabRepairCosts;
   }
   
-  const mortgage = calculationUtils.calculateMortgagePayment(loanAmount,
-    props.currentYearData.loanDetails.interestRate,
-    props.currentYearData.loanDetails.loanTerm);
+  const mortgage = calculationUtils.calculateMortgagePayment(props.currentYearData);
 
   if (props.currentYearData.expenseDetails.propertyTaxFrequency === 'annual') {
     taxes /= 12;

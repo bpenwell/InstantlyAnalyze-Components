@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { IRentalCalculatorPageData } from '../../interfaces';
+import { IRentalCalculatorPageProps } from '../../interfaces';
 import './RCSummary.css';
 import LineChart, { ILineChartProps, ILineChartDataset } from '../Charts/LineChart';
 import { CalculationUtils, IRentalCalculatorData } from '@bpenwell/rei-module';
 
-export interface IRCSummary extends IRentalCalculatorPageData {
-  fullLoanTermRentalReportData: IRentalCalculatorData[];
+export interface IRCSummary extends IRentalCalculatorPageProps {
   updateDataYear: (loanTermIndex: number) => void;
 };
 

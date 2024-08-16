@@ -1,6 +1,7 @@
 import { IRentalCalculatorData } from "@bpenwell/rei-module";
 
-export interface IRentalCalculatorPageData {
+export interface IRentalCalculatorPageProps {
     currentYearData: IRentalCalculatorData;
-    updateInitialData?: (data: IRentalCalculatorData) => void;
+    fullLoanTermRentalReportData: IRentalCalculatorData[];
+    updateInitialData: (data: IRentalCalculatorData) => void;
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Bar } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
@@ -9,10 +9,11 @@ import {
     Tooltip,
     Legend,
 } from 'chart.js';
-import { IRentalCalculatorPageData } from '../../interfaces';
-/*import { Slider } from 'rc-slider';*/
+import { IRentalCalculatorPageProps } from '../../interfaces';
+import { Slider } from '@mui/material';
 //import 'rc-slider/assets/index.css';
 import './RCCustomize.css';
+import { CalculationUtils } from '@bpenwell/rei-module';
 
 // Register the necessary components
 ChartJS.register(
@@ -24,152 +25,191 @@ ChartJS.register(
     Legend
 );
 
-const data = {
-    labels: ['January', 'February', 'March', 'April', 'May'],
-    datasets: [
-        {
-            label: 'Cash Flow',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1,
-        },
-    ],
-};
+export const RCCustomize: React.FC<IRentalCalculatorPageProps> = (props: IRentalCalculatorPageProps) => {
+    const calculatorUtils = new CalculationUtils();
+    const initialRentalReportData = props.fullLoanTermRentalReportData[0];
+    const rentalIncome = Number(props.currentYearData.rentalIncome.grossMonthlyIncome.toFixed(0));
+    const otherExpenses = Number(props.currentYearData.expenseDetails.other.toFixed(0));
+    const vacancy = calculatorUtils.calculateVacancyPercentage(props.currentYearData);
+    const managementFees = Number(props.currentYearData.expenseDetails.managementFees.toFixed(0));
+    const purhcasePrice = Number(props.currentYearData.purchaseDetails.purchasePrice.toFixed(0));
+    const loanToValuePercent = calculatorUtils.calculateLoanPercentage(props.currentYearData);
+    const loanTerm = props.currentYearData.loanDetails.loanTerm;
+    const interestRate = props.currentYearData.loanDetails.interestRate;
 
-export const RCCustomize: React.FC<IRentalCalculatorPageData> = (props: IRentalCalculatorPageData) => {
-    const rentalIncome = props.currentYearData.rentalIncome.grossMonthlyIncome;
+    const [initalRentalIncome, setInitalRentalIncome] = useState(0);
+    const handleRentalIncomeChange = (newValue: number) => {
+        props.updateInitialData({
+            ...initialRentalReportData, 
+            rentalIncome: {
+                ...initialRentalReportData.rentalIncome,
+                grossMonthlyIncome: newValue as number
+            }
+        });
+    };
+    const handleOtherExpensesChange = (newValue: number) => {
+        props.updateInitialData({
+            ...initialRentalReportData, 
+            expenseDetails: {
+                ...initialRentalReportData.expenseDetails,
+                other: newValue as number
+            }
+        });
+    };
+    const handleVacancyChange = (newValue: number) => {
+        props.updateInitialData({
+            ...initialRentalReportData, 
+            expenseDetails: {
+                ...initialRentalReportData.expenseDetails,
+                vacancy: newValue as number
+            }
+        });
+    };
+    const handleManagementFeesChange = (newValue: number) => {
+        props.updateInitialData({
+            ...initialRentalReportData, 
+            expenseDetails: {
+                ...initialRentalReportData.expenseDetails,
+                managementFees: newValue as number
+            }
+        });
+    };
+    const handlePurchasePriceChange = (newValue: number) => {
+        props.updateInitialData({
+            ...initialRentalReportData, 
+            purchaseDetails: {
+                ...initialRentalReportData.purchaseDetails,
+                purchasePrice: newValue as number
+            }
+        });
+    };
+    const handleLoanPercentageChange = (newValue: number) => {
+        props.updateInitialData({
+            ...initialRentalReportData, 
+            loanDetails: {
+                ...initialRentalReportData.loanDetails,
+                downPayment: newValue * initialRentalReportData.purchaseDetails.purchasePrice,
+            }
+        });
+    };
+    const handleInterestRateChange = (newValue: number) => {
+        props.updateInitialData({
+            ...initialRentalReportData, 
+            loanDetails: {
+                ...initialRentalReportData.loanDetails,
+                interestRate: newValue,
+            }
+        });
+    };
+    const handleLoanTermChange = (newValue: number) => {
+        props.updateInitialData({
+            ...initialRentalReportData, 
+            loanDetails: {
+                ...initialRentalReportData.loanDetails,
+                loanTerm: newValue,
+            }
+        });
+    };
+
+    useEffect(() => {
+        console.debug(`initalRentalIncome: ${initalRentalIncome}`);
+        setInitalRentalIncome(rentalIncome);
+    }, []);
+
+    const getLowerRangeValue = (value: number, isPercent: boolean): number => {
+        if (isPercent) {
+            return 0;
+        }
+        return value * 0.5;
+    };
+
+    /**
+     * @param isPercent if true, max is 20%
+     * @returns 
+     */
+    const getHigherRangeValue = (value: number, isPercent: boolean): number => {
+        if (isPercent) {
+            return 20;
+        }
+        return value * 1.5;
+    };
+
+    /**
+     * 
+     * @param sectionTitle 
+     * @param sliderLabel exact label suffix (might need to include spaces as needed)
+     * @returns 
+     */
+    const makeSliderContainer = (sectionTitle: string, sliderLabel: string, sliderValue: number, isPercentDisplay: boolean, handleValueChange: (newValue: number) => void) => {
+        return (
+            <div className="analysis-report-slider-container">
+                <span className="analysis-form-label">
+                    <span>{sectionTitle}</span>
+                    <span className="analysis-report-slider-value">{sliderLabel}</span>
+                </span>
+                <Slider
+                aria-label="Small steps"
+                defaultValue={sliderValue}
+                getAriaValueText={(value, _) => {return sliderLabel}}
+                step={1}
+                marks
+                min={getLowerRangeValue(initalRentalIncome, isPercentDisplay)}
+                max={getHigherRangeValue(initalRentalIncome, isPercentDisplay)}
+                valueLabelDisplay="auto"
+                onChange={(event, newValue) => {
+                    if ((newValue as number[]).length > 1) {
+                        throw Error(`Weird newValue: ${newValue}`);
+                    }
+                    handleValueChange(newValue as number);
+                }}
+                />
+            </div>
+        );
+    };
 
     return (
         <section className='rc-graph'>
-          <div className='graph-container'>
-            <h2>Test Different Scenarios</h2>
-          {/*</div>
-            <div className="analysis-report-container">
+            <div className='graph-container'>
+                <h2>Test Different Scenarios</h2>
                 <div className="analysis-report-section">
                     <div className="analysis-report-section-header">
                         <h3 className="analysis-report-section-title">Rental income</h3>
                     </div>
                     <div className="analysis-report-section-body">
-                        <div className="analysis-report-pie-chart-main">
-                            <div className="analysis-report-pie-chart-middle">
-                                ${rentalIncome}
-                            </div>
-                        </div>
-                        <div className="analysis-report-slider-container">
-                            <span className="analysis-form-label">
-                                <span>Rental income</span>
-                                <span className="analysis-report-slider-value">${rentalIncome} /month</span>
-                            </span>
-                            <Slider
-                                min={500}
-                                max={2000}
-                                value={rentalIncome}
-                                onChange={(value) => setRentalIncome(value)}
-                            />
-                        </div>
+                        {makeSliderContainer('Rental Income', `$${rentalIncome}`, rentalIncome, false, handleRentalIncomeChange)}
                     </div>
                 </div>
-
                 <div className="analysis-report-section">
                     <div className="analysis-report-section-header">
                         <h3 className="analysis-report-section-title">Expenses</h3>
                     </div>
                     <div className="analysis-report-section-body">
-                        <div className="analysis-report-slider-container">
-                            <span className="analysis-form-label">
-                                <span>Custom expenses</span>
-                                <span className="analysis-report-slider-value">${customExpenses} /month</span>
-                            </span>
-                            <Slider
-                                min={0}
-                                max={1000}
-                                value={customExpenses}
-                                onChange={(value) => setCustomExpenses(value)}
-                            />
-                        </div>
-                        <div className="analysis-report-slider-container">
-                            <span className="analysis-form-label">
-                                <span>Vacancy</span>
-                                <span className="analysis-report-slider-value">{vacancy}%</span>
-                            </span>
-                            <Slider
-                                min={0}
-                                max={20}
-                                value={vacancy}
-                                onChange={(value) => setVacancy(value)}
-                            />
-                        </div>
-                        <div className="analysis-report-slider-container">
-                            <span className="analysis-form-label">
-                                <span>Management fees</span>
-                                <span className="analysis-report-slider-value">{managementFees}%</span>
-                            </span>
-                            <Slider
-                                min={0}
-                                max={20}
-                                value={managementFees}
-                                onChange={(value) => setManagementFees(value)}
-                            />
-                        </div>
+                        {makeSliderContainer('Custom Expenses', `$${otherExpenses}`, otherExpenses, false, handleOtherExpensesChange)}
+                    </div>
+                    <div className="analysis-report-section-body">
+                        {makeSliderContainer('Vacancy', `${vacancy}%`, vacancy, true, handleVacancyChange)}
+                    </div>
+                    <div className="analysis-report-section-body">
+                        {makeSliderContainer('Management Fees', `${managementFees}%`, managementFees, true, handleManagementFeesChange)}
                     </div>
                 </div>
-
                 <div className="analysis-report-section">
-                    <h3 className="analysis-report-section-title">Loan details</h3>
-                    <div className="analysis-report-tweakable-section-total">
-                        <div className="analysis-report-tweakable-section-total-label">Total cash needed</div>
-                        <div className="analysis-report-tweakable-section-total-value">$45,750</div>
+                    <div className="analysis-report-section-header">
+                        <h3 className="analysis-report-section-title">Loan details</h3>
                     </div>
-                    <div className="analysis-report-slider-container">
-                        <span className="analysis-form-label">
-                            <span>Purchase price</span>
-                            <span className="analysis-report-slider-value">${purchasePrice}</span>
-                        </span>
-                        <Slider
-                            min={97500}
-                            max={162500}
-                            value={purchasePrice}
-                            onChange={(value) => setPurchasePrice(value)}
-                        />
+                    <div className="analysis-report-section-body">
+                        {makeSliderContainer('Purchase price', `$${purhcasePrice}`, purhcasePrice, false, handlePurchasePriceChange)}
                     </div>
-                    <div className="analysis-report-slider-container">
-                        <span className="analysis-form-label">
-                            <span>Loan amount</span>
-                            <span className="analysis-report-slider-value">${loanAmount}</span>
-                        </span>
-                        <Slider
-                            min={50000}
-                            max={150000}
-                            value={loanAmount}
-                            onChange={(value) => setLoanAmount(value)}
-                        />
+                    <div className="analysis-report-section-body">
+                        {makeSliderContainer('Loan To Value (LTV)', `$${loanToValuePercent}`, loanToValuePercent, false, handleLoanPercentageChange)}
                     </div>
-                    <div className="analysis-report-slider-container">
-                        <span className="analysis-form-label">
-                            <span>Loan term</span>
-                            <span className="analysis-report-slider-value">{loanTerm} years</span>
-                        </span>
-                        <Slider
-                            min={5}
-                            max={30}
-                            value={loanTerm}
-                            onChange={(value) => setLoanTerm(value)}
-                 }       />
+                    <div className="analysis-report-section-body">
+                        {makeSliderContainer('Loan term', `${loanTerm} years`, loanTerm, false, handleLoanTermChange)}
                     </div>
-                    <div className="analysis-report-slider-container">
-                        <span className="analysis-form-label">
-                            <span>Interest rate</span>
-                            <span className="analysis-report-slider-value">{interestRate}%</span>
-                        </span>
-                        <Slider
-                            min={1}
-                            max={10}
-                            value={interestRate}
-                            onChange={(value) => setInterestRate(value)}
-                        />
+                    <div className="analysis-report-section-body">
+                        {makeSliderContainer('Interest rate', `${interestRate}%`, interestRate, true, handleInterestRateChange)}
                     </div>
-                </div>*/}
+                </div>
             </div>
         </section>
     );
