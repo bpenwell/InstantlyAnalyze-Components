@@ -1,63 +1,87 @@
-/*@tailwind base;
-@tailwind components;
-@tailwind utilities;*/
+/* Simplified CSS for RCCustomize component */
 
-.rc-graph {
+/* Overall container */
+.container {
     display: flex;
     justify-content: center;
     padding-top: 20px;
 }
 
-.graph-container {
-    width: 100%;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 5px;
+/* Grid layout for each .report-section, items stack vertically */
+.report-section {
+    display: grid;
+    grid-template-rows: auto;
+    gap: 10px; /* Adjust spacing between rows within each section */
 }
 
-.analysis-report-container {
+/* Grid layout for the entire container, .report-sections align left to right */
+.graph-box {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Adjust min width as needed */
+    gap: 20px; /* Adjust spacing between sections */
+}
+
+/* Section header style */
+.section-header {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.report-container {
     padding: 20px;
     border-radius: 10px;
     max-width: 800px;
     margin: auto;
 }
 
-.analysis-report-section {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
+.section-body {
+    width: 20%;
+    padding: 20px;
 }
 
-.analysis-report-section-header {
-    margin-bottom: 10px;
-}
-
-.analysis-report-section-title {
+.section-title {
     font-size: 20px;
+    align-content: center;
     font-weight: bold;
 }
 
-.analysis-report-section-body {
-    display: flex;
+/* Slider containers and labels */
+.slider-container {
+    width: 100%;
     align-items: center;
-    justify-content: space-between;
-}
-
-.analysis-report-slider-container {
-    width: 15%;
     padding: 10px;
     margin-top: 10px;
 }
 
-.analysis-form-label {
+.form-label {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
 }
 
-.analysis-report-slider-value {
+.slider-value {
     font-weight: bold;
+    color: #FFFFFF; /* Text color */
 }
 
-.rc-slider {
+/* Slider custom styles */
+.custom-slider {
     width: 100%;
+}
+
+.custom-slider .MuiSlider-thumb {
+    color: #004A00; /* Primary dark green */
+}
+
+.custom-slider .MuiSlider-track {
+    background-color: #676867; /* Secondary gray */
+}
+
+.custom-slider .MuiSlider-rail {
+    background-color: #000000; /* Secondary text black */
+}
+
+.custom-slider .MuiSlider-valueLabel {
+    color: #004A00; /* Primary dark green */
+    background-color: #FFFFFF; /* White background */
 }

@@ -13,7 +13,6 @@ import {
   ChartOptions,
 } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
-import { printObjectFields } from '@bpenwell/rei-module';
 
 ChartJS.register(LineElement, PointElement, Tooltip, Legend, Title, CategoryScale, LinearScale, annotationPlugin);
 
@@ -68,6 +67,13 @@ const LineChart = (props: ILineChartProps) => {
         onPointClick(index, value, label);
       }
 
+      console.log('annotations');
+      console.log(points);
+      console.log(firstPoint);
+      console.log(firstPoint.datasetIndex);
+      console.log(index);
+      console.log(value);
+      console.log(chart.options.plugins.annotation.annotations);
       if (activeAnnotationId) {
         delete chart.options.plugins.annotation.annotations[activeAnnotationId];
       }
