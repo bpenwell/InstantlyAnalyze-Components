@@ -18,3 +18,52 @@
 .summary-container h2 {
     margin-bottom: 20px; /* Add some space below the title */
 }
+
+.analysis-report-cashflow-breakdown-other div {
+    margin-top: 10px;
+}
+
+.return-header {
+    margin: 0;
+    font-size: 20px;
+    color: #ffffff;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.summary-return-container {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    justify-content: center;
+}
+
+.analysis-report-cashflow-breakdown-cashflow p,
+.analysis-report-cashflow-breakdown-other p {
+    margin: 0;
+    font-size: 20px;
+    color: #ffffff;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.analysis-report-cashflow-aside-cashflow {
+    font-size: 32px;
+}
+
+.mortgage-payment,
+.five-year-return,
+.analysis-report-cashflow-aside-expenses,
+.analysis-report-cashflow-aside-income,
+.analysis-report-cashflow-aside-coc-roi {
+    font-size: 24px;
+}
+
+.analysis-report-cashflow-aside-expenses {
+    color: #fa9656;
+}
+
+.analysis-report-cashflow-aside-income
+{
+    color: #0ecd63;
+}

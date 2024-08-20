@@ -13,11 +13,16 @@ import { Slider } from '@mui/material';
 import './RCCustomize.css';
 import {
     CalculationUtils,
-    getHigherRangeSliderValue,
-    getLowerRangeSliderValue,
-    SliderValueType,
-    getSliderStep,
-    displayAsMoney
+    displayAsMoney,
+    IDataDisplayConfig,
+    getRentalIncomeDisplayConfig,
+    getOtherExpensesDisplayConfig,
+    getVacancyDisplayConfig,
+    getInterestRateDisplayConfig,
+    getLoanTermDisplayConfig,
+    getLoanToValuePercentDisplayConfig,
+    getPurchasePriceDisplayConfig,
+    getManagementFeesDisplayConfig
 } from '@bpenwell/rei-module';
 
 // Register the necessary components
@@ -29,12 +34,6 @@ ChartJS.register(
     Tooltip,
     Legend
 );
-
-interface ISliderProps {
-    min: number;
-    max: number;
-    step: number;
-};
 
 export const RCCustomize: React.FC<IRentalCalculatorPageProps> = (props: IRentalCalculatorPageProps) => {
     const calculatorUtils = new CalculationUtils();
@@ -48,61 +47,29 @@ export const RCCustomize: React.FC<IRentalCalculatorPageProps> = (props: IRental
     const [loanTerm, setLoanTerm] = useState(props.currentYearData.loanDetails.loanTerm);
     const [interestRate, setInterestRate] = useState(props.currentYearData.loanDetails.interestRate);
 
-    const rentalIncomeSliderProps = useMemo<ISliderProps>(() => {
-        return {
-            min: getLowerRangeSliderValue(rentalIncome, SliderValueType.RentValue),
-            max: getHigherRangeSliderValue(rentalIncome, SliderValueType.RentValue),
-            step: getSliderStep(rentalIncome, SliderValueType.RentValue),
-        }
+    const rentalIncomeSliderProps = useMemo<IDataDisplayConfig>(() => {
+        return getRentalIncomeDisplayConfig(rentalIncome);
     }, []);
-    const otherExpensesSliderProps = useMemo<ISliderProps>(() => {
-        return {
-            min: getLowerRangeSliderValue(otherExpenses, SliderValueType.Default),
-            max: getHigherRangeSliderValue(otherExpenses, SliderValueType.Default),
-            step: getSliderStep(otherExpenses, SliderValueType.Default),
-        }
+    const otherExpensesSliderProps = useMemo<IDataDisplayConfig>(() => {
+        return getOtherExpensesDisplayConfig(otherExpenses);
     }, []);
-    const vacancySliderProps = useMemo<ISliderProps>(() => {
-        return {
-            min: getLowerRangeSliderValue(vacancy, SliderValueType.FeePercent),
-            max: getHigherRangeSliderValue(vacancy, SliderValueType.FeePercent),
-            step: getSliderStep(vacancy, SliderValueType.FeePercent),
-        }
+    const vacancySliderProps = useMemo<IDataDisplayConfig>(() => {
+        return getVacancyDisplayConfig(vacancy);
     }, []);
-    const managementFeesSliderProps = useMemo<ISliderProps>(() => {
-        return {
-            min: getLowerRangeSliderValue(managementFees, SliderValueType.FeePercent),
-            max: getHigherRangeSliderValue(managementFees, SliderValueType.FeePercent),
-            step: getSliderStep(managementFees, SliderValueType.FeePercent),
-        }
+    const managementFeesSliderProps = useMemo<IDataDisplayConfig>(() => {
+        return getManagementFeesDisplayConfig(managementFees);
     }, []);
-    const purchasePriceSliderProps = useMemo<ISliderProps>(() => {
-        return {
-            min: getLowerRangeSliderValue(purchasePrice, SliderValueType.PurchaseValue),
-            max: getHigherRangeSliderValue(purchasePrice, SliderValueType.PurchaseValue),
-            step: getSliderStep(purchasePrice, SliderValueType.PurchaseValue),
-        }
+    const purchasePriceSliderProps = useMemo<IDataDisplayConfig>(() => {
+        return getPurchasePriceDisplayConfig(purchasePrice);
     }, []);
-    const loanToValuePercentSliderProps = useMemo<ISliderProps>(() => {
-        return {
-            min: getLowerRangeSliderValue(loanToValuePercent, SliderValueType.LoanToValue),
-            max: getHigherRangeSliderValue(loanToValuePercent, SliderValueType.LoanToValue),
-            step: getSliderStep(loanToValuePercent, SliderValueType.LoanToValue),
-        }
+    const loanToValuePercentSliderProps = useMemo<IDataDisplayConfig>(() => {
+        return getLoanToValuePercentDisplayConfig(loanToValuePercent);
     }, []);
-    const loanTermSliderProps = useMemo<ISliderProps>(() => {
-        return {
-            min: getLowerRangeSliderValue(loanTerm, SliderValueType.LoanTerm),
-            max: getHigherRangeSliderValue(loanTerm, SliderValueType.LoanTerm),
-            step: getSliderStep(loanTerm, SliderValueType.LoanTerm),
-        }
+    const loanTermSliderProps = useMemo<IDataDisplayConfig>(() => {
+        return getLoanTermDisplayConfig(loanTerm);
     }, []);
-    const interestRateSliderProps = useMemo<ISliderProps>(() => {
-        return {
-            min: getLowerRangeSliderValue(interestRate, SliderValueType.InterestPercent),
-            max: getHigherRangeSliderValue(interestRate, SliderValueType.InterestPercent),
-            step: getSliderStep(interestRate, SliderValueType.InterestPercent),
-        }
+    const interestRateSliderProps = useMemo<IDataDisplayConfig>(() => {
+        return getInterestRateDisplayConfig(interestRate);
     }, []);
     console.debug('[DEBUG] Render RCCustomize');
 
@@ -185,7 +152,7 @@ export const RCCustomize: React.FC<IRentalCalculatorPageProps> = (props: IRental
      * @param sliderLabel exact label suffix (might need to include spaces as needed)
      * @returns 
      */
-    const makeSliderContainer = (sectionTitle: string, sliderLabel: string, currentSliderValue: number, sliderMinMaxStep: ISliderProps, handleOnChange: React.Dispatch<React.SetStateAction<number>>, handleValueChange: (newValue: number) => void) => {
+    const makeSliderContainer = (sectionTitle: string, sliderLabel: string, currentSliderValue: number, dataDisplayConfig: IDataDisplayConfig, handleOnChange: React.Dispatch<React.SetStateAction<number>>, handleValueChange: (newValue: number) => void) => {
         return (
             <div className="slider-container">
                 <span className="analysis-form-label">
@@ -197,10 +164,10 @@ export const RCCustomize: React.FC<IRentalCalculatorPageProps> = (props: IRental
                 aria-label="Small steps"
                 value={currentSliderValue}
                 getAriaValueText={(value, _) => {return sliderLabel}}
-                step={sliderMinMaxStep.step}
+                step={dataDisplayConfig.step}
                 marks
-                min={sliderMinMaxStep.min}
-                max={sliderMinMaxStep.max}
+                min={dataDisplayConfig.min}
+                max={dataDisplayConfig.max}
                 valueLabelDisplay="auto"
                 onChangeCommitted={(event, newValue) => {
                     if ((newValue as number[]).length > 1) {
@@ -221,7 +188,7 @@ export const RCCustomize: React.FC<IRentalCalculatorPageProps> = (props: IRental
 
     return (
         <section className='rc-graph'>
-            <h2 style={{ textAlign: 'center' }}>Test Different Scenarios</h2>
+            <h2 className='rc-header'>Test Different Scenarios</h2>
             <div className='graph-box'>
                 <div className="report-section">
                     <div className="section-header">

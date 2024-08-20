@@ -1,4 +1,6 @@
 export { Button } from './components/Button/Button';
+export { SelectableButton } from './components/Button/SelectableButton';
+export { DropdownButton } from './components/Button/DropdownButton';
 export type { ButtonProps } from './components/Button/Button';
 export { Header } from './components/Header/Header';
 export type { HeaderProps } from './components/Header/Header';
@@ -14,3 +16,4 @@ export { RCExpenses } from './components/RentalCalculator/RCExpenses';
 export { RCSummary, IRCSummary } from './components/RentalCalculator/RCSummary';
 export { RCCustomize } from './components/RentalCalculator/RCCustomize';
 export { Asterisk } from './components/Asterisk/Asterisk';
+export { SensitivityTable } from './components/RentalCalculator/SensitivityTable';

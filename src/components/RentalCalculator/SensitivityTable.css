@@ -1,0 +1,60 @@
+.sensitivity-table-container {
+  padding: 10px;
+  margin: 20px;
+  background-color: #004A00;
+  color: white;
+  border-radius: 8px;
+  width: 90%;
+  align-content: center;
+}
+
+.header {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.bold-label {
+  font-weight: bold;
+}
+
+.selectable-button {
+  margin: 5px; /* Space out the buttons */
+}
+
+.table-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.sensitivity-table {
+  width: 50%;
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+
+.sensitivity-table th,
+.sensitivity-table td {
+  border: 1px solid white;
+  padding: 8px;
+  text-align: center;
+  background-color: #676867;
+  color: white;
+}
+
+.sensitivity-table .bold-cell,
+.sensitivity-table th:first-child,
+.sensitivity-table td:first-child {
+  font-weight: bold;
+  background-color: #004A00;
+}

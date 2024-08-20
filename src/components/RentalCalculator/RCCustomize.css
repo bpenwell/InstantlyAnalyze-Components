@@ -1,4 +1,3 @@
-/* Simplified CSS for RCCustomize component */
 
 /* Overall container */
 .container {
@@ -12,13 +11,29 @@
     display: grid;
     grid-template-rows: auto;
     gap: 10px; /* Adjust spacing between rows within each section */
+    max-width: 90%;
 }
 
-/* Grid layout for the entire container, .report-sections align left to right */
+/* Adjusted layout for report sections to align items horizontally */
+.report-section {
+    gap: 10px; /* Adjust spacing between rows within each section */
+}
+
 .graph-box {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Adjust min width as needed */
-    gap: 20px; /* Adjust spacing between sections */
+    display: grid; /* Changed from grid to flex */
+    width: 75%;
+    align-items: start;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* Adjusted graph box to align children left-to-right */
+.rc-graph {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 20px;
+    width: 100%;
 }
 
 /* Section header style */
@@ -26,6 +41,11 @@
     font-size: 20px;
     font-weight: bold;
     text-align: center; /* Center the section header */
+}
+
+.rc-header {
+    text-align: center; /* Center the section header */
+    width: 100%;
 }
 
 .report-container {
@@ -37,13 +57,13 @@
 
 .section-body {
     width: 100%; /* Updated from 20% to 100% */
-    padding: 20px;
+    padding-right: 20px;
 }
 
 .section-title {
     font-size: 20px;
     align-content: center;
-    font-weight: bold;
+    width: 100%;
 }
 
 /* Slider containers and labels */
@@ -72,36 +92,43 @@
     padding: 0; /* Remove padding around the slider */
 }
 
-.custom-slider .MuiSlider-track,
-.custom-slider .MuiSlider-rail {
+.custom-slider .MuiSlider-track {
     height: 10px; /* Match the slider height */
+    background-color: #00c000; /* Green for the left side */
     border-radius: 7.5px; /* Round the track */
 }
 
-.custom-slider .MuiSlider-thumb {
-    height: 20px; /* Larger thumb size */
-    width: 20px;  /* Larger thumb size */
-    background-color: #004A00; /* Primary dark green */
-    border: 2px solid white; /* Outer border for thumb */
-    box-shadow: 0 0 0 4px #004A00; /* Optional: shadow around thumb */
+.custom-slider .MuiSlider-rail {
+    height: 10px; /* Match the slider height */
+    background-color: #676867; /* Gray for the right side */
+    border-radius: 7.5px; /* Round the rail */
+}
 
-    /* Create the smaller white circle inside the thumb */
+.custom-slider .MuiSlider-thumb {
+    height: 20px; /* Thumb size */
+    width: 20px;  /* Thumb size */
+    background-color: #004A00; /* Primary dark green */
+    box-shadow: 0 0 8px 4px rgba(0, 74, 0, 0.8); /* Prominent shadow */
     display: flex;
     align-items: center;
     justify-content: center;
+
+    /* Ensure thumb size remains consistent in all states */
+    transition: none; /* Disable size change animations */
 }
 
-/*.custom-slider .MuiSlider-thumb::before {
-    content: "";
-    width: 60%;
-    height: 60%;
-    background-color: white;
-    border-radius: 50%;
-}*/
+/* Remove hover, focus, and active effects that change thumb size */
+.custom-slider .MuiSlider-thumb:hover,
+.custom-slider .MuiSlider-thumb.Mui-focusVisible,
+.custom-slider .MuiSlider-thumb.Mui-active {
+    height: 25px; /* Maintain thumb size */
+    width: 25px;  /* Maintain thumb size */
+    box-shadow: 0 0 8px 4px rgba(195, 255, 195, 0.8); /* Prominent shadow */
+}
 
+/* Hide the value label entirely */
 .custom-slider .MuiSlider-valueLabel {
-    color: #004A00; /* Primary dark green */
-    background-color: #FFFFFF; /* White background */
+    display: none;
 }
 
 /* Hide slider marks */
