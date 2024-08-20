@@ -25,6 +25,7 @@
 .section-header {
     font-size: 20px;
     font-weight: bold;
+    text-align: center; /* Center the section header */
 }
 
 .report-container {
@@ -35,7 +36,7 @@
 }
 
 .section-body {
-    width: 20%;
+    width: 100%; /* Updated from 20% to 100% */
     padding: 20px;
 }
 
@@ -64,24 +65,46 @@
     color: #FFFFFF; /* Text color */
 }
 
-/* Slider custom styles */
+/* Custom styles for the slider */
 .custom-slider {
     width: 100%;
+    height: 10px; /* Increased slider height */
+    padding: 0; /* Remove padding around the slider */
+}
+
+.custom-slider .MuiSlider-track,
+.custom-slider .MuiSlider-rail {
+    height: 10px; /* Match the slider height */
+    border-radius: 7.5px; /* Round the track */
 }
 
 .custom-slider .MuiSlider-thumb {
-    color: #004A00; /* Primary dark green */
+    height: 20px; /* Larger thumb size */
+    width: 20px;  /* Larger thumb size */
+    background-color: #004A00; /* Primary dark green */
+    border: 2px solid white; /* Outer border for thumb */
+    box-shadow: 0 0 0 4px #004A00; /* Optional: shadow around thumb */
+
+    /* Create the smaller white circle inside the thumb */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.custom-slider .MuiSlider-track {
-    background-color: #676867; /* Secondary gray */
-}
-
-.custom-slider .MuiSlider-rail {
-    background-color: #000000; /* Secondary text black */
-}
+/*.custom-slider .MuiSlider-thumb::before {
+    content: "";
+    width: 60%;
+    height: 60%;
+    background-color: white;
+    border-radius: 50%;
+}*/
 
 .custom-slider .MuiSlider-valueLabel {
     color: #004A00; /* Primary dark green */
     background-color: #FFFFFF; /* White background */
+}
+
+/* Hide slider marks */
+.custom-slider .MuiSlider-mark {
+    display: none;
 }
