@@ -12,7 +12,6 @@ import {
     getRentalIncomeDisplayConfig,
     getVacancyDisplayConfig,
     IDataDisplayConfig,
-    ValueType,
     getDisplayByValueType,
 } from '@bpenwell/rei-module';
 import { SelectableButton } from '../Button/SelectableButton';
@@ -45,7 +44,7 @@ export const SensitivityTable: React.FC<IRentalCalculatorPageProps> = (props) =>
     const [selectedInputs, setSelectedInputs] = useState<InputOption[]>([]);
     const [selectedOutput, setSelectedOutput] = useState<OutputOption | null>(null);
     const [generatedTable, setGeneratedTable] = useState<(string | number)[][]>([]);
-    const [tableData, setTableData] = useState<ITableEntry[]>([]); // Add this state
+    const [tableData, setTableData] = useState<ITableEntry[]>([]);
 
     const handleInputChange = (input: InputOption) => {
         const newSelectedInputs = selectedInputs.includes(input)
@@ -55,7 +54,7 @@ export const SensitivityTable: React.FC<IRentalCalculatorPageProps> = (props) =>
     };
 
     const handleOutputChange = (output: OutputOption) => {
-        setSelectedOutput(selectedOutput === output ? null : output); // Allow unselecting
+        setSelectedOutput(selectedOutput === output ? null : output);
     };
 
     const generateTable = () => {
@@ -65,30 +64,12 @@ export const SensitivityTable: React.FC<IRentalCalculatorPageProps> = (props) =>
         }
 
         const tableData = formatTableInputData(selectedInputs);
-        setTableData(tableData); // Update state with newTableData
+        setTableData(tableData);
 
         const table: (string | number)[][] = [];
 
-        // Add the first header row with a cell spanning columns 2-10
-        const headerRow: (string | number)[] = [
-            '', // Top-left blank cell
-            'Overall Header',
-            ...Array(tableData[0].data.length).fill(''), // Empty cells for colspan
-        ];
-        table.push(headerRow);
-        
-        // Add the second header row
-        const secondHeaderRow: (string | number)[] = [
-            'Legend',
-            ...tableData[0].data.map((val) => (
-                getDisplayByValueType(val, tableData[0].displayFormat.valueType)
-            )),
-        ];
-        table.push(secondHeaderRow);
-
-        // Add data rows
         for (let i = 0; i < tableData[1].data.length; i++) {
-            const row: (string | number)[] = [
+            const row = [
                 getDisplayByValueType(tableData[1].data[i], tableData[1].displayFormat.valueType),
                 ...tableData[0].data.map(() => 0), // Placeholder for calculation
             ];
@@ -187,34 +168,28 @@ export const SensitivityTable: React.FC<IRentalCalculatorPageProps> = (props) =>
             </button>
 
             {generatedTable.length > 0 && (
-                <div className="table-container">
-                    <table className="sensitivity-table">
-                        <thead>
-                                <tr>
-                                <th></th>
-                                <th colSpan={tableData[0].data.length}>Overall Header</th>
-                            </tr>
-                            <tr>
-                                <th>Legend</th>
-                                {tableData[0].data.map((val, index) => (
-                                    <th key={index}>
-                                        {getDisplayByValueType(val, tableData[0].displayFormat.valueType)}
-                                    </th>
+                <div className="grid-container">
+                    <div className="top-header">
+                        {tableData[0]?.displayFormat.label}
+                    </div>
+                    <div className="side-header">
+                        {tableData[1]?.displayFormat.label}
+                    </div>
+                    <div className="table-wrapper">
+                        <table className="sensitivity-table">
+                            <tbody>
+                                {generatedTable.map((row, rowIndex) => (
+                                    <tr key={rowIndex}>
+                                        {row.map((cell, cellIndex) => (
+                                            <td key={cellIndex} className={rowIndex === 0 || cellIndex === 0 ? 'bold-cell' : ''}>
+                                                {cell}
+                                            </td>
+                                        ))}
+                                    </tr>
                                 ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {generatedTable.slice(1).map((row, rowIndex) => (
-                                <tr key={rowIndex}>
-                                    {row.map((cell, cellIndex) => (
-                                        <td key={cellIndex} className={rowIndex === 0 || cellIndex === 0 ? 'bold-cell' : ''}>
-                                            {cell}
-                                        </td>
-                                    ))}
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             )}
         </div>
