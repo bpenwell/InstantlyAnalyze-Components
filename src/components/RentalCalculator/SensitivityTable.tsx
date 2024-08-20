@@ -66,8 +66,19 @@ export const SensitivityTable: React.FC<IRentalCalculatorPageProps> = (props) =>
         const tableData = formatTableInputData(selectedInputs);
         setTableData(tableData);
 
+        console.log("Table Data:", tableData); // Debugging statement to inspect tableData
+
         const table: (string | number)[][] = [];
 
+        // Add the top row data for the range of input data
+        const topRow = [selectedOutput as string].concat(tableData[0].data.map((value, index) => {
+            const displayValue = getDisplayByValueType(value, tableData[0].displayFormat.valueType);
+            console.log(`Top Row Value ${index}:`, displayValue); // Debugging statement to inspect each value in the top row
+            return displayValue;
+        }));
+        table.push(topRow);
+
+        // Add rows for the side header and calculation placeholders
         for (let i = 0; i < tableData[1].data.length; i++) {
             const row = [
                 getDisplayByValueType(tableData[1].data[i], tableData[1].displayFormat.valueType),
@@ -76,6 +87,7 @@ export const SensitivityTable: React.FC<IRentalCalculatorPageProps> = (props) =>
             table.push(row);
         }
 
+        console.log("Generated Table:", table); // Debugging statement to inspect the final generated table
         setGeneratedTable(table);
     };
 

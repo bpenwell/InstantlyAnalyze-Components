@@ -35,36 +35,44 @@
 
 .grid-container {
   display: grid;
-  grid-template-columns: auto 1fr; /* Side header and table */
-  grid-template-rows: auto 1fr; /* Top header and table */
-  gap: 0; /* No gaps between headers and table */
-}
-
-.top-header,
-.side-header {
-  background-color: #676867;
-  color: white;
-  text-align: center;
-  padding: 8px;
-  font-weight: bold;
-}
-
-.side-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 0;
 }
 
 .top-header {
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+  color: white;
+  text-align: center;
+  font-weight: bold;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.side-header {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+  color: white;
+  text-align: center;
+  padding-left: 8px;
+  padding-right: 8px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* Ensure it stretches to match the table's height */
 }
 
 .table-wrapper {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
   display: flex;
   justify-content: center;
-  align-items: center;
 }
 
 .sensitivity-table {
