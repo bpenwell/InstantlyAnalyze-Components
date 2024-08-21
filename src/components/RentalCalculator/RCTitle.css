@@ -16,7 +16,7 @@
 .title-container img {
     display: block;
     margin: 0 auto 20px auto; /* Center the image and add spacing below */
-    max-width: 100%; /* Make sure the image fits within its container */
+    max-width: 60%; /* Make sure the image fits within its container */
 }
 
 .title-container h2,

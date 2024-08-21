@@ -50,7 +50,7 @@ export const DropdownButton: React.FC<DropdownButtonProps> = ({ label, items }) 
     <div className='dropdown-button' ref={buttonRef} onClick={handleOnClick} onMouseEnter={handleDropdownToggle} onMouseLeave={() => setDropdownOpen(false)}>
       <span className='dropdown-button-label'>{label}</span>
       {isDropdownOpen && (
-        <div className='dropdown-menu-wrapper'>
+        <div className='dropdown-button-wrapper'>
             <nav className='dropdown-menu'>
             <ul>
                 {items.map((item, index) => (

@@ -36,16 +36,16 @@ ChartJS.register(
 );
 
 export const RCCustomize: React.FC<IRentalCalculatorPageProps> = (props: IRentalCalculatorPageProps) => {
+    const { initialRentalReportData, currentYearData } = props;
     const calculatorUtils = new CalculationUtils();
-    const initialRentalReportData = props.fullLoanTermRentalReportData[0];
-    const [rentalIncome, setRentalIncome] = useState(Number(props.currentYearData.rentalIncome.grossMonthlyIncome.toFixed(0)));
-    const [otherExpenses, setOtherExpenses] = useState(Number(props.currentYearData.expenseDetails.other.toFixed(0)));
-    const [vacancy, setVacancy] = useState(calculatorUtils.calculateVacancyPercentage(props.currentYearData));
-    const [managementFees, setManagementFees] = useState(Number(props.currentYearData.expenseDetails.managementFees.toFixed(0)));
-    const [purchasePrice, setPurchasePrice] = useState(Number(props.currentYearData.purchaseDetails.purchasePrice.toFixed(0)));
-    const [loanToValuePercent, setLoanToValuePercent] = useState(calculatorUtils.calculateLoanPercentage(props.currentYearData));
-    const [loanTerm, setLoanTerm] = useState(props.currentYearData.loanDetails.loanTerm);
-    const [interestRate, setInterestRate] = useState(props.currentYearData.loanDetails.interestRate);
+    const [rentalIncome, setRentalIncome] = useState(Number(currentYearData.rentalIncome.grossMonthlyIncome.toFixed(0)));
+    const [otherExpenses, setOtherExpenses] = useState(Number(currentYearData.expenseDetails.other.toFixed(0)));
+    const [vacancy, setVacancy] = useState(calculatorUtils.calculateVacancyPercentage(currentYearData));
+    const [managementFees, setManagementFees] = useState(Number(currentYearData.expenseDetails.managementFees.toFixed(0)));
+    const [purchasePrice, setPurchasePrice] = useState(Number(currentYearData.purchaseDetails.purchasePrice.toFixed(0)));
+    const [loanToValuePercent, setLoanToValuePercent] = useState(currentYearData.loanDetails.loanToValuePercent);
+    const [loanTerm, setLoanTerm] = useState(currentYearData.loanDetails.loanTerm);
+    const [interestRate, setInterestRate] = useState(currentYearData.loanDetails.interestRate);
 
     const rentalIncomeSliderProps = useMemo<IDataDisplayConfig>(() => {
         return getRentalIncomeDisplayConfig(rentalIncome);

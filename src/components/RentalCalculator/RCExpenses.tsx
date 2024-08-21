@@ -52,7 +52,7 @@ export const RCExpenses: React.FC<IRentalCalculatorPageProps> = (props: IRentalC
   return (
     <section className="rc-expenses">
       <div className="expenses-container">
-        <h2>Expenses</h2>
+        <h2 className='rc-header'>Expenses</h2>
         <div className="expenses-content">
           {/* Pie Chart */}
           <div className="chart-box">
@@ -69,7 +69,7 @@ export const RCExpenses: React.FC<IRentalCalculatorPageProps> = (props: IRentalC
               <div className="expense-item">
                 <span className="label-circle mortgage-color"></span>
                 <h4>Mortgage</h4>
-                <p>${mortgage.toFixed(0)}</p>
+                <p>${mortgage.toFixed(0)}</p>selectedInputs.length
               </div>
               <div className="expense-item">
                 <span className="label-circle taxes-color"></span>

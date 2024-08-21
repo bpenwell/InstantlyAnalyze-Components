@@ -78,7 +78,7 @@ export const RCSummary: React.FC<IRCSummary> = (props: IRCSummary) => {
   return (
     <section className='rc-summary'>
       <div className='summary-container'>
-        <h2>Cash Flow</h2>
+        <h2 className='rc-header'>Cash Flow</h2>
         <div className='chart-box-small-centered'>
           <LineChart {...summaryChartProps} />
           <div className="analysis-report-cashflow-aside">

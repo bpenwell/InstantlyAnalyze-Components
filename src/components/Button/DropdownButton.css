@@ -34,7 +34,7 @@
   }
 
   /* Wrapper for dropdown menu to control its margin */
-.dropdown-menu-wrapper {
+.dropdown-button-wrapper {
     position: absolute; /* Position the wrapper absolutely */
     top: 100%; /* Flush with the bottom of the header */
     left: 0; /* Align to the left of the button */
