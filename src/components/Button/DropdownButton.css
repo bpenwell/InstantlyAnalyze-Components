@@ -34,14 +34,13 @@
   }
 
   /* Wrapper for dropdown menu to control its margin */
-.dropdown-button-wrapper {
-    position: absolute; /* Position the wrapper absolutely */
-    top: 100%; /* Flush with the bottom of the header */
-    left: 0; /* Align to the left of the button */
-    margin-top: 5px; /* Adjust the margin for padding effect */
-    width: 200px;
-}
-  
+  .dropdown-button-wrapper {
+      position: absolute; /* Position the wrapper absolutely */
+      top: 100%; /* Flush with the bottom of the header */
+      left: 0; /* Align to the left of the button */
+      margin-top: 5px; /* Adjust the margin for padding effect */
+      width: 200px;
+  }
   /* Dropdown menu */
   .dropdown-menu {
     background-color: #2e2e2e; /* Dark gray background */

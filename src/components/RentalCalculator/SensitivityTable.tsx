@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import './SensitivityTable.css';
 import { IRentalCalculatorPageProps } from '../../interfaces';
 import {
@@ -46,13 +46,20 @@ interface ITableEntry {
 const STEPS_PER_INPUT = 10;
 
 export const SensitivityTable: React.FC<IRentalCalculatorPageProps> = (props) => {
-    const { initialRentalReportData } = props;
+    const { initialRentalReportData, fullLoanTermRentalReportData } = props;
     const calculatorUtils = new CalculationUtils();
-    const initialData: IRentalCalculatorData = Object.assign(initialRentalReportData);
+    const initialData: IRentalCalculatorData = structuredClone(initialRentalReportData);
     const [selectedInputs, setSelectedInputs] = useState<InputOption[]>([]);
     const [selectedOutput, setSelectedOutput] = useState<OutputOption | null>(null);
     const [generatedTable, setGeneratedTable] = useState<(string | number)[][]>([]);
     const [tableData, setTableData] = useState<ITableEntry[]>([]);
+    const [initialDataClone, setInitialDataClone] = useState(initialData);
+
+    useEffect(() => {
+        console.debug('[DEBUG][USE_EFFECT] initialRentalReportData updating!');
+        console.debug(initialDataClone.expenseDetails.vacancy);
+        console.debug(initialDataClone.expenseDetails.vacancyPercent);
+    },[initialDataClone]);
 
     const handleInputChange = (input: InputOption) => {
         const newSelectedInputs = selectedInputs.includes(input)
@@ -64,78 +71,100 @@ export const SensitivityTable: React.FC<IRentalCalculatorPageProps> = (props) =>
     const handleOutputChange = (output: OutputOption) => {
         setSelectedOutput(selectedOutput === output ? null : output);
     };
-
+    
     const generateTable = () => {
         if (selectedInputs.length !== 2 || selectedOutput === null) {
             alert('Please select exactly 2 input variables and 1 output variable.');
             return;
         }
-
-        console.debug(`[DEBUG][generateTable] before grossMonthlyIncome=${initialData.rentalIncome.grossMonthlyIncome}`);
-        console.debug(`[DEBUG][generateTable] before vacancy=${initialData.expenseDetails.vacancy}`);
-        console.debug(`[DEBUG][generateTable] before vacancyPercent=${initialData.expenseDetails.vacancyPercent}`);
-        
-        const tableData = formatTableInputData(initialData, selectedInputs);
+    
+        const tableData = formatTableInputData(initialDataClone, selectedInputs);
         setTableData(tableData);
     
+        //Contains the table display values
         const table: (string | number)[][] = [];
+        //Contains the table numerical values
+        let rowValueArray: number[] = [];
+        const tableValueArray: (number)[][] = [];
+
         const tableColumnData = tableData[0];
         const tableRowData = tableData[1];
         const outputOption = outputOptions[0];
     
         const topRow = [selectedOutput as string].concat(
-            tableColumnData.data.map((value, index) => getDisplayByDataClassifier(value, tableColumnData.displayFormat.dataClassifier))
+            tableColumnData.data.map((value) => {
+                rowValueArray.push(value);
+                return getDisplayByDataClassifier(value, tableColumnData.displayFormat.dataClassifier);
+            })
         );
+        tableValueArray.push(rowValueArray);
         table.push(topRow);
     
         tableRowData.data.forEach((rowInputData, rowIndex) => {
-            const row: string[] = [
-                getDisplayByDataClassifier(tableRowData.data[rowIndex], tableRowData.displayFormat.dataClassifier)
-            ];
-
-            console.debug(`[DEBUG][generateTable] grossMonthlyIncome=${initialData.rentalIncome.grossMonthlyIncome}`);
-            console.debug(`[DEBUG][generateTable] vacancy=${initialData.expenseDetails.vacancy}`);
-            console.debug(`[DEBUG][generateTable] vacancyPercent=${initialData.expenseDetails.vacancyPercent}`);
+            const displayString = getDisplayByDataClassifier(tableRowData.data[rowIndex], tableRowData.displayFormat.dataClassifier);
+            const row: (string | number)[] = [displayString];
+            rowValueArray = [];
     
             tableColumnData.data.forEach((columnInputData, colIndex) => {
                 const hypotheticalReportData = calculatorUtils.calculateFullLoanTermRentalReportDataWithSensitivityData(
-                    initialData,
+                    initialDataClone,
                     columnInputData,
                     tableColumnData.displayFormat.dataClassifier,
                     rowInputData,
                     tableRowData.displayFormat.dataClassifier
                 );
     
-                // Generate business metric for the hypothetical data
-                const hypotheticalBusinessMetric = calculatorUtils.calculateBusinesMetricOnFullLoanTermRentalReportData(hypotheticalReportData, selectedOutput);
+                const hypotheticalBusinessMetric = calculatorUtils.calculateBusinessMetricOnFullLoanTermRentalReportData(hypotheticalReportData, selectedOutput);
     
-                // Compare the current data to the initial data; only skip if they're identical
-                const initialColumnValue = calculatorUtils.getDataByDataClassifier(initialData, tableColumnData.displayFormat.dataClassifier);
-                const initialRowValue = calculatorUtils.getDataByDataClassifier(initialData, tableRowData.displayFormat.dataClassifier);
+                const initialColumnValue = calculatorUtils.getDataByDataClassifier(initialDataClone, tableColumnData.displayFormat.dataClassifier);
+                const initialRowValue = calculatorUtils.getDataByDataClassifier(initialDataClone, tableRowData.displayFormat.dataClassifier);
     
-                // Only skip the entry if both column and row data match the initial data
+                let cellValue;
                 if (initialColumnValue === columnInputData && initialRowValue === rowInputData) {
-                    console.debug(`[DEBUG][generateTable] Skipping identical data at column ${colIndex} and row ${rowIndex}`);
-                    console.debug(`[DEBUG][generateTable] initialColumnValue=${initialColumnValue}. columnInputData=${columnInputData}. initialRowValue=${initialRowValue}. rowInputData=${rowInputData}.`);
-                    row.push('-'); // Insert a placeholder or skip the actual value
+                    const fullLoanTermRentalReportDataBusinessMetric = calculatorUtils.calculateBusinessMetricOnFullLoanTermRentalReportData(fullLoanTermRentalReportData, selectedOutput);
+                    cellValue = fullLoanTermRentalReportDataBusinessMetric;
                 } else {
-                    row.push(getDisplayByDataClassifier(hypotheticalBusinessMetric, outputOption));
+                    cellValue = hypotheticalBusinessMetric;
                 }
+                rowValueArray.push(Number(cellValue));  // Add to the array for gradient calculation
+                row.push(getDisplayByDataClassifier(cellValue, outputOption));
             });
-    
+            tableValueArray.push(rowValueArray);
             table.push(row);
         });
     
-        setGeneratedTable(table);
-    };
+        // Calculate min and max values for gradient
+        const minValue = Math.min(...rowValueArray);
+        const maxValue = Math.max(...rowValueArray);
     
+        setGeneratedTable(table);
+    
+        // Apply gradient colors based on the values
+        setTimeout(() => {
+            const tableRows = document.querySelectorAll('.sensitivity-table tr');
+            tableRows.forEach((tr, rowIndex) => {
+                const cells = tr.querySelectorAll('td');
+                cells.forEach((cell, colIndex) => {
+                    if (rowIndex != 0 && colIndex != 0) {
+                        const value = tableValueArray[rowIndex - 1][colIndex - 1];
+                        const ratio = (value - minValue) / (maxValue - minValue);
+                        const green = Math.round(255 * ratio);
+                        const red = 255 - green;
+                        cell.style.backgroundColor = `rgb(${red}, ${green}, 0)`;
+                        cell.classList.add('gradient-cell');
+                    }
+                });
+            });
+        }, 0);
+    };
+        
     const populateTableDataByRange = (initialData: IRentalCalculatorData, displayConfig: IDataDisplayConfig): number[] => {
         if (displayConfig.max === undefined || displayConfig.min === undefined) {
             throw new Error(`Invalid display configuration. Max and min values must be provided.`);
         }
 
         if (STEPS_PER_INPUT % 2 === 1) {
-            throw new Error(`Invalid step size for generating data. Step size must be an even number to fit current initial data as an entry.`);
+            throw new Error(`Invalid step size for generating data. Step size must be an odd number to fit current initial data as an entry.`);
         }
         
         const stepSize = (displayConfig.max - displayConfig.min) / STEPS_PER_INPUT;
@@ -143,16 +172,11 @@ export const SensitivityTable: React.FC<IRentalCalculatorPageProps> = (props) =>
         for (let i = 0; i < STEPS_PER_INPUT; i++) {
             const nextValue = displayConfig.min + i * stepSize;
             if (i === (STEPS_PER_INPUT/2)) {
+                console.debug(`[DEBUG] Step size`);
                 const currentDataEntry = calculatorUtils.getDataByDataClassifier(initialData, displayConfig.dataClassifier);
 
                 //Inject current initialData data into table
                 data.push(currentDataEntry);
-                
-                //If this index's value is the same as the current data entry, do not double add it
-                //In this case, the table size will be STEPS_PER_INPUT instead of STEPS_PER_INPUT + 1
-                if (nextValue !== currentDataEntry) {
-                    data.push(nextValue);
-                }
             }
             else {
                 data.push(nextValue);
@@ -212,7 +236,8 @@ export const SensitivityTable: React.FC<IRentalCalculatorPageProps> = (props) =>
             <h2 className="header">Sensitivity Table</h2>
             <div className="form-group">
                 <label className="label bold-label">Select Input Variables:</label>
-                {inputOptions.map((input) => (
+                <div className="button-group">
+                    {inputOptions.map((input) => (
                     <SelectableButton
                         key={input}
                         label={input}
@@ -221,11 +246,13 @@ export const SensitivityTable: React.FC<IRentalCalculatorPageProps> = (props) =>
                         isDisabled={selectedInputs.length >= 2 && !selectedInputs.includes(input)}
                         className="selectable-button"
                     />
-                ))}
+                    ))}
+                </div>
             </div>
             <div className="form-group">
-                <label className="label bold-label">Select Output Variable:</label>
-                {outputOptions.map((output) => (
+                <label className="label bold-label">Select Output Variables:</label>
+                <div className="button-group">
+                    {outputOptions.map((output) => (
                     <SelectableButton
                         key={output}
                         label={output}
@@ -234,7 +261,8 @@ export const SensitivityTable: React.FC<IRentalCalculatorPageProps> = (props) =>
                         isDisabled={selectedOutput !== null && selectedOutput !== output}
                         className="selectable-button"
                     />
-                ))}
+                    ))}
+                </div>
             </div>
             <button className="submit-button" onClick={generateTable}>
                 Generate Table

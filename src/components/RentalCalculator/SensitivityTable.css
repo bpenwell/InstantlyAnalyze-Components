@@ -1,10 +1,9 @@
 .sensitivity-table-container {
   padding: 10px;
-  margin: 20px;
-  background-color: #004A00;
+  margin: 20px auto; /* Auto left and right margins */
   color: white;
   border-radius: 8px;
-  width: 90%;
+  width: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,6 +17,22 @@
 
 .form-group {
   margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center content horizontally */
+  width: 100%;
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Center the buttons within the group */
+  gap: 10px; /* Space between buttons */
+}
+
+.selectable-button {
+  flex: 1 1 calc(33.33% - 20px); /* Each button takes up roughly a third of the row */
+  box-sizing: border-box; /* Ensure padding and margin are included in width */
 }
 
 .label {

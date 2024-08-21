@@ -22,7 +22,8 @@ import {
     getLoanTermDisplayConfig,
     getLoanToValuePercentDisplayConfig,
     getPurchasePriceDisplayConfig,
-    getManagementFeesDisplayConfig
+    getManagementFeesDisplayConfig,
+    printObjectFields
 } from '@bpenwell/rei-module';
 
 // Register the necessary components
@@ -40,7 +41,9 @@ export const RCCustomize: React.FC<IRentalCalculatorPageProps> = (props: IRental
     const calculatorUtils = new CalculationUtils();
     const [rentalIncome, setRentalIncome] = useState(Number(currentYearData.rentalIncome.grossMonthlyIncome.toFixed(0)));
     const [otherExpenses, setOtherExpenses] = useState(Number(currentYearData.expenseDetails.other.toFixed(0)));
-    const [vacancy, setVacancy] = useState(calculatorUtils.calculateVacancyPercentage(currentYearData));
+    console.debug(`[DEBUG][RCCustomize] currentYearData vacancy=${currentYearData.expenseDetails.vacancy} vacancyPercent=${currentYearData.expenseDetails.vacancyPercent}`);
+    console.debug(`[DEBUG][RCCustomize] calculatorUtils vacancy=${calculatorUtils.calculateVacancyPercentage(currentYearData)}`);
+    const [vacancy, setVacancy] = useState(calculatorUtils.calculateVacancyPercentage(currentYearData) * 100);
     const [managementFees, setManagementFees] = useState(Number(currentYearData.expenseDetails.managementFees.toFixed(0)));
     const [purchasePrice, setPurchasePrice] = useState(Number(currentYearData.purchaseDetails.purchasePrice.toFixed(0)));
     const [loanToValuePercent, setLoanToValuePercent] = useState(currentYearData.loanDetails.loanToValuePercent);
@@ -92,13 +95,15 @@ export const RCCustomize: React.FC<IRentalCalculatorPageProps> = (props: IRental
         });
     };
     const handleVacancyChange = (newValue: number) => {
-        props.updateInitialData({
+        const newData = {
             ...initialRentalReportData, 
             expenseDetails: {
                 ...initialRentalReportData.expenseDetails,
-                vacancy: newValue as number
+                vacancyPercent: newValue as number,
             }
-        });
+        };
+        newData.expenseDetails.vacancy = calculatorUtils.calculateVacancyAbsoluteValue(newData);
+        props.updateInitialData(newData);
     };
     const handleManagementFeesChange = (newValue: number) => {
         props.updateInitialData({
