@@ -1,0 +1,37 @@
+/* components/Input.css */
+
+/* Style for the container of each input field */
+.input-container {
+    margin-bottom: 15px;
+}
+
+/* Style for the label above the input field */
+.label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Style for the input field */
+.input-field {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box; /* Ensures padding and border are included in the total width/height */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+/* Style for the submit button */
+.submit-button {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.submit-button:hover {
+    background-color: #45a049;
+}

@@ -1,0 +1,109 @@
+.sensitivity-table-container {
+  padding: 10px;
+  margin: 20px auto; /* Auto left and right margins */
+  color: white;
+  border-radius: 8px;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center content horizontally */
+  width: 100%;
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Center the buttons within the group */
+  gap: 10px; /* Space between buttons */
+}
+
+.selectable-button {
+  flex: 1 1 calc(33.33% - 20px); /* Each button takes up roughly a third of the row */
+  box-sizing: border-box; /* Ensure padding and margin are included in width */
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.bold-label {
+  font-weight: bold;
+}
+
+.selectable-button {
+  margin: 5px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 0;
+}
+
+.top-header {
+  grid-column: 1 / -1; /* Start from the first column and span across all columns */
+  grid-row: 1 / 2;
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.side-header {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+  color: white;
+  text-align: center;
+  padding-left: 8px;
+  padding-right: 8px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* Ensure it stretches to match the table's height */
+}
+
+.table-wrapper {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+  display: flex;
+  justify-content: center;
+}
+
+.sensitivity-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.sensitivity-table td {
+  border: 1px solid white;
+  padding: 8px;
+  text-align: center;
+  background-color: #676867;
+  color: white;
+}
+
+.sensitivity-table .bold-cell {
+  font-weight: bold;
+  background-color: #004A00;
+}

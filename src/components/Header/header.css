@@ -1,0 +1,88 @@
+/* Header container */
+.header-container {
+  font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #474847; /* Dark gray/black background */
+  color: #e2f1e8; /* Light greenish text */
+  position: relative;
+}
+
+/* Title styling */
+h1 {
+  margin: 0;
+  font-weight: bold;
+  color: white;
+  display: flex;
+  align-items: center; /* Center vertically with logo */
+}
+
+/* Logo styling */
+.header-logo {
+  margin-right: 15px;
+  vertical-align: middle; /* Align vertically with the title */
+}
+
+/* Header left section with logo and title */
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+/* Header center section */
+.header-center {
+  display: flex;
+  align-items: center;
+}
+
+/* Header right section */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Space between buttons */
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+  background-color: #2e2e2e; /* Dark gray background */
+  border: 1px solid #4CAF50; /* Dark green border */
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Darker shadow */
+  z-index: 1000;
+  display: block;
+}
+
+.dropdown-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown-menu li {
+  border-bottom: 1px solid #4CAF50; /* Dark green border */
+  text-align: center; /* Center items in their rows */
+}
+
+.dropdown-menu li:last-child {
+  border-bottom: none;
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 10px;
+  color: #e2f1e8; /* Light greenish text */
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.dropdown-menu a:hover {
+  background-color: #3a3a3a; /* Slightly lighter gray */
+}
+
+/* Button spacing */
+button + button {
+  margin-left: 10px;
+}

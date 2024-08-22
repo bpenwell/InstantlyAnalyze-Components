@@ -1,0 +1,51 @@
+.storybook-button {
+  font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  border: 0;
+  border-radius: 3em;
+  cursor: pointer;
+  display: inline-block;
+  line-height: 1;
+}
+
+.storybook-button--primary {
+  color: #FFFFFF; /* White text */
+  background-color: #003300; /* Dark green background */
+  max-width: fit-content;
+}
+
+.storybook-button--primary:hover {
+  background-color: #004A00; /* Lighter green on hover */
+  max-width: fit-content;
+}
+
+.storybook-button--secondary {
+  color: #FFFFFF; /* White text */
+  background-color: #676867; /* Robinhood bright green background */
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;
+  max-width: fit-content;
+}
+
+.storybook-button--secondary:hover {
+  background-color: #004A00; /* Lighter green on hover */
+  max-width: fit-content;
+}
+
+.storybook-button--small {
+  font-size: 12px;
+  padding: 10px 16px;
+}
+
+.storybook-button--medium {
+  font-size: 14px;
+  padding: 11px 20px;
+}
+
+.storybook-button--large {
+  font-size: 16px;
+  padding: 12px 24px;
+}
+
+.storybook-button--selected:hover {
+  background-color: #004A00; /* Lighter green on hover */
+}
