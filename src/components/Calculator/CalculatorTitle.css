@@ -1,12 +1,3 @@
-.rc-title {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding-top: 20px;
-    width: 100%;
-}
-
 .title-container {
     max-width: 80%; /* Adjust width as necessary */
     text-align: center;

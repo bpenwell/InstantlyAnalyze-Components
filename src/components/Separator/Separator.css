@@ -1,0 +1,14 @@
+.separator-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0;
+    width: 100%;
+}
+
+.separator {
+    height: 4px;
+    background-color: #cccccc; /* Adjust color as needed */
+    position: relative;
+    border-radius: 2px;
+}

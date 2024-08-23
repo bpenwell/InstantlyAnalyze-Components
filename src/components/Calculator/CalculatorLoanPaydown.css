@@ -1,0 +1,38 @@
+.chart-container {
+    width: 30%;
+    margin: 0 auto;
+}
+
+.loan-paydown-container {
+    width: 100%;
+}
+
+.loan-paydown-table {
+    margin-top: 5px; /* Add 5px margin on top */
+    table-layout: auto; /* Allow table to adjust to content size */
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.loan-paydown-table td {
+    color: #ffffff;
+    font-size: 18px;
+    padding: 5px; /* Reduce padding to decrease the gap between rows */
+    text-align: center;
+    width: auto; /* Ensure width adjusts to the content */
+    white-space: nowrap; /* Prevent text wrapping */
+    border: none; /* Remove borders */
+}
+
+.loan-paydown-table td:first-child {
+    text-align: left; /* Left-justify the first column (row headers) */
+}
+
+.color-box {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 8px;
+    vertical-align: middle; /* Align the color box with the text */
+}

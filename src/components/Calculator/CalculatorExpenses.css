@@ -1,15 +1,5 @@
-.rc-expenses {
-  display: flex;
-  justify-content: space-around; /* Spread out the boxes */
-  flex-wrap: wrap; /* Allow boxes to wrap on smaller screens */
-  padding-top: 20px;
-}
-
 .expenses-container {
   width: 100%;
-  background-color: #676867;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 5px;
 }
 
 .expenses-content {
@@ -60,9 +50,9 @@
 }
 
 .expenses-box {
-  background-color: #2e2e2e;
+  background-color: #353535;
   margin: 10px;
-  padding: 10px;
+  padding: 10px 5px 5px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   max-width: 20%;

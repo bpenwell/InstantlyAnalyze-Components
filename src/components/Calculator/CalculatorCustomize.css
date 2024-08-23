@@ -1,9 +1,11 @@
 
 /* Overall container */
-.container {
+.calculator-container {
     display: flex;
-    justify-content: center;
-    padding-top: 20px;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 /* Grid layout for each .report-section, items stack vertically */
@@ -24,16 +26,6 @@
     width: 75%;
     align-items: start;
     grid-template-columns: repeat(3, 1fr);
-}
-
-/* Adjusted graph box to align children left-to-right */
-.rc-graph {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding-top: 20px;
-    width: 100%;
 }
 
 /* Section header style */
@@ -100,7 +92,7 @@
 
 .custom-slider .MuiSlider-rail {
     height: 10px; /* Match the slider height */
-    background-color: #676867; /* Gray for the right side */
+    background-color: #353535; /* Gray for the right side */
     border-radius: 7.5px; /* Round the rail */
 }
 

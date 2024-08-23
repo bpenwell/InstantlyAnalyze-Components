@@ -1,16 +1,4 @@
-.sensitivity-table-container {
-  padding: 10px;
-  margin: 20px auto; /* Auto left and right margins */
-  color: white;
-  border-radius: 8px;
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .header {
-  margin-bottom: 20px;
   font-size: 1.5rem;
   text-align: center;
 }

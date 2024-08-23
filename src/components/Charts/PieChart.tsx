@@ -29,32 +29,42 @@ const PieChart = (props: IPieChartProps) => {
     hoverBackgroundColors = ['#FF6384', '#36A2EB', '#FFCE56'],
     title = 'Pie Chart'
   } = props;
-    const chartData: ChartData<'pie'> = {
-        labels,
-        datasets: [
-        {
-            data,
-            backgroundColor: backgroundColors,
-            hoverBackgroundColor: hoverBackgroundColors,
-        },
-        ],
-    };
+  
+  const chartData: ChartData<'pie'> = {
+    labels,
+    datasets: [
+      {
+        data,
+        backgroundColor: backgroundColors,
+        hoverBackgroundColor: hoverBackgroundColors,
+      },
+    ],
+  };
 
-    const options: ChartOptions<'pie'> = {
-        responsive: true,
-        maintainAspectRatio: true, // Maintains the aspect ratio on resize
-        plugins: {
-        legend: {
-            position: 'top',
-        },
-        title: {
-            display: !!title,
-            text: title,
-        },
-        },
-    };
+  const options: ChartOptions<'pie'> = {
+    responsive: true,
+    maintainAspectRatio: true, // Maintains the aspect ratio on resize
+    plugins: {
+      legend: {
+        display: false, // Disable the legend display in the tooltip
+      },
+      title: {
+        display: !!title,
+        text: title,
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            const label = context.label || '';
+            const value = context.raw as number;
+            return `${label}: $${value.toFixed(2)}`;
+          }
+        }
+      }
+    },
+  };
 
-    return <Pie data={chartData} options={options} />;
+  return <Pie data={chartData} options={options} />;
 };
 
 export default PieChart;

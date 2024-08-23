@@ -1,0 +1,22 @@
+.calculator-rules-of-thumb {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 20rem;
+}
+
+.rules-of-thumb-table {
+    margin-top: 20px;
+    table-layout: auto; /* Allow table to adjust to content size */
+    border-collapse: collapse;
+}
+
+.rules-of-thumb-table td {
+    color: #ffffff;
+    font-size: 18px;
+    padding: 5px; /* Reduce padding to decrease the gap between rows */
+    text-align: center;
+    width: auto; /* Ensure width adjusts to the content */
+    white-space: nowrap; /* Prevent text wrapping */
+    border: none; /* Remove borders */
+}

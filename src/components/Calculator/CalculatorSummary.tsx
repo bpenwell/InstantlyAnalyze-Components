@@ -1,14 +1,14 @@
 import React, { useState, useMemo } from 'react';
 import { IRentalCalculatorPageProps } from '../../interfaces';
-import './RCSummary.css';
+import './CalculatorSummary.css';
 import LineChart, { ILineChartProps, ILineChartDataset } from '../Charts/LineChart';
 import { CalculationUtils, displayAsMoney, IRentalCalculatorData, printObjectFields } from '@bpenwell/rei-module';
 
-export interface IRCSummary extends IRentalCalculatorPageProps {
+export interface ICalculatorSummary extends IRentalCalculatorPageProps {
   updateDataYear: (loanTermIndex: number) => void;
 }
 
-export const RCSummary: React.FC<IRCSummary> = (props: IRCSummary) => {
+export const CalculatorSummary: React.FC<ICalculatorSummary> = (props: ICalculatorSummary) => {
   const calculationUtils: CalculationUtils = new CalculationUtils();
   const { fullLoanTermRentalReportData, updateDataYear, currentYearData } = props;
   const [currentYear, updateCurrentYear] = useState<number>(0);
@@ -77,7 +77,7 @@ export const RCSummary: React.FC<IRCSummary> = (props: IRCSummary) => {
   const mortgagePayment = displayAsMoney(calculationUtils.calculateMortgagePayment(currentYearData));
 
   return (
-    <section className='rc-summary'>
+    <div className='calculator-container'>
       <div className='summary-container'>
         <h2 className='rc-header'>Cash Flow</h2>
         <div className='chart-box-small-centered'>
@@ -115,6 +115,6 @@ export const RCSummary: React.FC<IRCSummary> = (props: IRCSummary) => {
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 };

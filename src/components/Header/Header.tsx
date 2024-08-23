@@ -67,8 +67,8 @@ export const Header = (props: HeaderProps) => {
             <Button size='small' onClick={() => { redirectApi.redirectToPage(PAGE_PATH.LOGOUT) } } label='Log out' />
           ) : (
             <>
-              <Button primary size='small' onClick={() => { redirectApi.redirectToPage(PAGE_PATH.LOGIN) }} label='Log in' />
-              <Button size='small' onClick={() => { redirectApi.redirectToPage(PAGE_PATH.SIGNUP) }} label='Sign up' />
+              <Button buttonType={'primary'} size='small' onClick={() => { redirectApi.redirectToPage(PAGE_PATH.LOGIN) }} label='Log in' />
+              <Button buttonType={'third'} size='small' onClick={() => { redirectApi.redirectToPage(PAGE_PATH.SIGNUP) }} label='Sign up' />
             </>
           )}
         </div>

@@ -30,13 +30,16 @@ export interface ButtonProps {
  * Primary UI component for user interaction
  */
 export const Button = ({
-  primary = false,
+  buttonType = '',
   size = 'medium',
   backgroundColor,
   label,
   ...props
 }: ButtonProps) => {
-  const mode = primary ? 'storybook-button--primary' : 'storybook-button--secondary';
+  let mode = 'storybook-button--secondary';
+  if (buttonType !== '') { 
+    mode = `storybook-button--${buttonType}`;
+  }
   return (
     <button
       type='button'

@@ -11,12 +11,14 @@ export { AuthenticatedPage } from './components/Authentication/AuthenticatedPage
 export type { IAuthenticatedPageProps } from './components/Authentication/AuthenticatedPage';
 export { Input } from './components/Input/Input';
 export { ErrorBoundary } from './utils/ErrorBoundary';
-export { RCTitle } from './components/RentalCalculator/RCTitle';
-export { RCExpenses } from './components/RentalCalculator/RCExpenses';
-export { RCSummary, IRCSummary } from './components/RentalCalculator/RCSummary';
-export { RCCustomize } from './components/RentalCalculator/RCCustomize';
+export { CalculatorTitle } from './components/Calculator/CalculatorTitle';
+export { CalculatorExpenses } from './components/Calculator/CalculatorExpenses';
+export { CalculatorSummary, ICalculatorSummary } from './components/Calculator/CalculatorSummary';
+export { CalculatorCustomize } from './components/Calculator/CalculatorCustomize';
 export { Asterisk } from './components/Asterisk/Asterisk';
-export { SensitivityTable } from './components/RentalCalculator/SensitivityTable';
+export { CalculatorSensitivityTable } from './components/Calculator/CalculatorSensitivityTable';
 export { Spinner } from './components/Spinner/Spinner';
-export { RCRulesOfThumb } from './components/RentalCalculator/RCRulesOfThumb';
-export { RCLoanPaydown } from './components/RentalCalculator/RCLoanPaydown'
+export { CalculatorRulesOfThumb } from './components/Calculator/CalculatorRulesOfThumb';
+export { CalculatorLoanPaydown } from './components/Calculator/CalculatorLoanPaydown';
+export { TermsOfUse } from './components/Footer/TermsOfUse';
+export { Separator } from './components/Separator/Separator';

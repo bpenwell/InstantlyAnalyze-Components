@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import './SensitivityTable.css';
+import './CalculatorSensitivityTable.css';
 import { IRentalCalculatorPageProps } from '../../interfaces';
 import {
     CalculationUtils,
@@ -45,7 +45,7 @@ interface ITableEntry {
 
 const STEPS_PER_INPUT = 10;
 
-export const SensitivityTable: React.FC<IRentalCalculatorPageProps> = (props) => {
+export const CalculatorSensitivityTable: React.FC<IRentalCalculatorPageProps> = (props) => {
     const { initialRentalReportData, fullLoanTermRentalReportData } = props;
     const calculatorUtils = new CalculationUtils();
     const initialData: IRentalCalculatorData = structuredClone(initialRentalReportData);
@@ -62,17 +62,21 @@ export const SensitivityTable: React.FC<IRentalCalculatorPageProps> = (props) =>
     let [tableMinValue, setTableMinValue] = useState(Infinity);
     let [tableMaxValue, setTableMaxValue] = useState(-Infinity);
     
+    const resetTable = () => {
+        setGeneratedTable([]);
+        setLoading(false);
+        setTableValueArray([]);
+        setRowValueArray([]);
+        setTableMinValue(Infinity);
+        setTableMaxValue(-Infinity);
+        setIsTableDisplayed(false);
+    };
     //if the underlying report data changes, reset the table
     useEffect(() => {
         if (generatedTable.length > 0) {
             console.debug('[DEBUG] Removing sensitivity table');
-            setGeneratedTable([]);
             setIsTableCleared(true);
-            setTableValueArray([]);
-            setRowValueArray([]);
-            setTableMinValue(Infinity);
-            setTableMaxValue(-Infinity);
-            setIsTableDisplayed(false);
+            resetTable();
         }
     }, [initialRentalReportData]);
 
@@ -93,8 +97,8 @@ export const SensitivityTable: React.FC<IRentalCalculatorPageProps> = (props) =>
             return;
         }
 
+        resetTable();
         setLoading(true);
-        setIsTableCleared(false);
         setTimeout(generateTable, 50);
     };
     
@@ -271,8 +275,8 @@ export const SensitivityTable: React.FC<IRentalCalculatorPageProps> = (props) =>
     };
     
     return (
-        <div className="sensitivity-table-container">
-            <h2 className="header">Sensitivity Table</h2>
+        <div className="calculator-container">
+            <h3 className="header">Sensitivity Table</h3>
             <div className="form-group">
                 <label className="label bold-label">Select Input Variables:</label>
                 <div className="button-group">

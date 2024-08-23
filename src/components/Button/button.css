@@ -21,7 +21,14 @@
 
 .storybook-button--secondary {
   color: #FFFFFF; /* White text */
-  background-color: #676867; /* Robinhood bright green background */
+  background-color: #353535; /* Robinhood bright green background */
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;
+  max-width: fit-content;
+}
+
+.storybook-button--third {
+  color: #FFFFFF; /* White text */
+  background-color: #00c000; /* Robinhood bright green background */
   box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;
   max-width: fit-content;
 }

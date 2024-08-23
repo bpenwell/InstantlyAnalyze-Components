@@ -1,0 +1,14 @@
+.terms-of-use {
+    width: 70%;
+    justify-content: center;
+    color: #ffffff;
+    text-align: center;
+    padding: 10px;
+    font-size: 10px; /* Smaller font size for a less intrusive display */
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.terms-of-use p {
+    margin: 0;
+    line-height: 1.4; /* Improve readability with slightly increased line height */
+}

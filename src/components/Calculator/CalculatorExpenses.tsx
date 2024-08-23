@@ -1,11 +1,11 @@
 import React from 'react';
 import { IRentalCalculatorPageProps } from '../../interfaces';
-import './RCExpenses.css';
+import './CalculatorExpenses.css';
 import '../Charts/Chart.css';
 import { CalculationUtils } from '@bpenwell/rei-module';
 import PieChart, { IPieChartProps } from '../Charts/PieChart';
 
-export const RCExpenses: React.FC<IRentalCalculatorPageProps> = (props: IRentalCalculatorPageProps) => {
+export const CalculatorExpenses: React.FC<IRentalCalculatorPageProps> = (props: IRentalCalculatorPageProps) => {
   const calculationUtils: CalculationUtils = new CalculationUtils();
   let taxes = props.currentYearData.expenseDetails.propertyTaxes;
   let insurance = props.currentYearData.expenseDetails.insurance;
@@ -43,7 +43,7 @@ export const RCExpenses: React.FC<IRentalCalculatorPageProps> = (props: IRentalC
   const monthlyTotalExpenses = calculationUtils.calculateRentalTotalExpense(props.currentYearData);
 
   const pieChartProps: IPieChartProps = {
-    labels: [],
+    labels: ['Mortgage', 'Taxes', 'Insurance', 'Variable Expenses', 'Fixed Expenses'],
     data: [mortgage, taxes, insurance, totalVariableExpenses, totalFixedExpenses],
     backgroundColors: [
         '#4A7A40',  // Muted green
@@ -62,7 +62,7 @@ export const RCExpenses: React.FC<IRentalCalculatorPageProps> = (props: IRentalC
   };
 
   return (
-    <section className="rc-expenses">
+    <div className="calculator-container">
       <div className="expenses-container">
         <h2 className='rc-header'>Expenses</h2>
         <div className="expenses-content">
@@ -159,6 +159,6 @@ export const RCExpenses: React.FC<IRentalCalculatorPageProps> = (props: IRentalC
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 };

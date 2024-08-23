@@ -10,7 +10,7 @@ import {
 } from 'chart.js';
 import { IRentalCalculatorPageProps } from '../../interfaces';
 import { Slider } from '@mui/material';
-import './RCCustomize.css';
+import './CalculatorCustomize.css';
 import {
     CalculationUtils,
     displayAsMoney,
@@ -36,13 +36,13 @@ ChartJS.register(
     Legend
 );
 
-export const RCCustomize: React.FC<IRentalCalculatorPageProps> = (props: IRentalCalculatorPageProps) => {
+export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props: IRentalCalculatorPageProps) => {
     const { initialRentalReportData, currentYearData } = props;
     const calculatorUtils = new CalculationUtils();
     const [rentalIncome, setRentalIncome] = useState(Number(currentYearData.rentalIncome.grossMonthlyIncome.toFixed(0)));
     const [otherExpenses, setOtherExpenses] = useState(Number(currentYearData.expenseDetails.other.toFixed(0)));
-    console.debug(`[DEBUG][RCCustomize] currentYearData vacancy=${currentYearData.expenseDetails.vacancy} vacancyPercent=${currentYearData.expenseDetails.vacancyPercent}`);
-    console.debug(`[DEBUG][RCCustomize] calculatorUtils vacancy=${calculatorUtils.calculateVacancyPercentage(currentYearData)}`);
+    console.debug(`[DEBUG][Customize] currentYearData vacancy=${currentYearData.expenseDetails.vacancy} vacancyPercent=${currentYearData.expenseDetails.vacancyPercent}`);
+    console.debug(`[DEBUG][Customize] calculatorUtils vacancy=${calculatorUtils.calculateVacancyPercentage(currentYearData)}`);
     const [vacancy, setVacancy] = useState(calculatorUtils.calculateVacancyPercentage(currentYearData));
     const [managementFees, setManagementFees] = useState(Number(currentYearData.expenseDetails.managementFees.toFixed(0)));
     const [purchasePrice, setPurchasePrice] = useState(Number(currentYearData.purchaseDetails.purchasePrice.toFixed(0)));
@@ -74,7 +74,7 @@ export const RCCustomize: React.FC<IRentalCalculatorPageProps> = (props: IRental
     const interestRateSliderProps = useMemo<IDataDisplayConfig>(() => {
         return getInterestRateDisplayConfig(interestRate);
     }, []);
-    console.debug('[DEBUG] Render RCCustomize');
+    console.debug('[DEBUG] Render Customize');
 
     const handleRentalIncomeChange = (newValue: number) => {
         props.updateInitialData({
@@ -192,7 +192,7 @@ export const RCCustomize: React.FC<IRentalCalculatorPageProps> = (props: IRental
     };
 
     return (
-        <section className='rc-graph'>
+        <div className='calculator-container'>
             <h2 className='rc-header'>Test Different Scenarios</h2>
             <div className='graph-box'>
                 <div className="report-section">
@@ -235,6 +235,6 @@ export const RCCustomize: React.FC<IRentalCalculatorPageProps> = (props: IRental
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
     );
 };
