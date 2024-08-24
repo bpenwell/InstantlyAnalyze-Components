@@ -1,7 +1,7 @@
 import React from 'react';
 import { IRentalCalculatorPageProps } from '../../interfaces';
 import LineChart, { ILineChartDataset } from '../Charts/LineChart';
-import { CalculationUtils, displayAsMoney } from '@bpenwell/rei-module';
+import { CalculationUtils, displayAsMoney, displayAsPercent } from '@bpenwell/rei-module';
 import { TIME_PERIODS, CHART_COLORS } from '../../constants';
 import './CalculatorLoanPaydown.css';
 
@@ -38,6 +38,11 @@ export const CalculatorLoanPaydown: React.FC<IRentalCalculatorPageProps> = (prop
         backgroundColor: 'rgba(0, 74, 0, 0.75)',
     };
 
+    const cashFlowData = TIME_PERIODS.map(year => calculationUtils.calculateCashFlow(fullLoanTermRentalReportData[year]));
+    const mortgagePaymentData = TIME_PERIODS.map(year => calculationUtils.calculateMortgagePayment(fullLoanTermRentalReportData[year]));
+    const profitIfSoldData = TIME_PERIODS.map(year => calculationUtils.calculateProfitIfSold([fullLoanTermRentalReportData[year]]));
+    const annualizedReturnData = TIME_PERIODS.map(year => calculationUtils.calculateAnnualizedReturn([fullLoanTermRentalReportData[year]]));
+
     const chartProps = {
         datasets: [loanBalanceData, equityData, propertyValueData],
         labels: TIME_PERIODS.map(year => `${year}`),
@@ -45,7 +50,6 @@ export const CalculatorLoanPaydown: React.FC<IRentalCalculatorPageProps> = (prop
     };
 
     return (
-        //Override standard padding at the bottom of the page
         <div className="calculator-container" style={{ textAlign: 'center', marginBottom: '0px' }}>
             <div className='loan-paydown-container'>
                 <h2>Loan Paydown Overview</h2>
@@ -89,9 +93,34 @@ export const CalculatorLoanPaydown: React.FC<IRentalCalculatorPageProps> = (prop
                                 <td key={index}>{displayAsMoney(value, 0, "$", true)}</td>
                             ))}
                         </tr>
+                        {/* New Rows */}
+                        <tr>
+                            <td>Cash Flow</td>
+                            {cashFlowData.map((value, index) => (
+                                <td key={index}>{displayAsMoney(value, 0, "$", true)}</td>
+                            ))}
+                        </tr>
+                        <tr>
+                            <td>Mortgage Payment</td>
+                            {mortgagePaymentData.map((value, index) => (
+                                <td key={index}>{displayAsMoney(value, 0, "$", true)}</td>
+                            ))}
+                        </tr>
+                        <tr>
+                            <td>Profit if Sold</td>
+                            {profitIfSoldData.map((value, index) => (
+                                <td key={index}>{displayAsMoney(value, 0, "$", true)}</td>
+                            ))}
+                        </tr>
+                        <tr>
+                            <td>Annualized Return</td>
+                            {annualizedReturnData.map((value, index) => (
+                                <td key={index}>{displayAsPercent(value)}</td>
+                            ))}
+                        </tr>
                     </tbody>
                 </table>
-                </div>
+            </div>
         </div>
     );
 };
