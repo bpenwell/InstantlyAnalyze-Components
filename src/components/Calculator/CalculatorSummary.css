@@ -1,10 +1,10 @@
 .summary-container {
-    width: 100%; /* Adjust width as necessary */
+    width: 100%;
     text-align: center;
 }
 
 .summary-container h2 {
-    margin-bottom: 20px; /* Add some space below the title */
+    margin-bottom: 20px;
 }
 
 .analysis-report-cashflow-breakdown-other div {
@@ -13,7 +13,7 @@
 
 .return-header {
     margin: 0;
-    font-size: 20px;
+    font-size: 18px; /* Reduced font size for mobile */
     color: #ffffff;
     font-weight: bold;
     margin-bottom: 5px;
@@ -21,7 +21,7 @@
 
 .summary-return-container {
     display: flex;
-    gap: 40px;
+    gap: 20px; /* Reduced gap for mobile */
     align-items: center;
     justify-content: center;
 }
@@ -29,14 +29,14 @@
 .analysis-report-cashflow-breakdown-cashflow p,
 .analysis-report-cashflow-breakdown-other p {
     margin: 0;
-    font-size: 20px;
+    font-size: 18px; /* Reduced font size for mobile */
     color: #ffffff;
     font-weight: bold;
     margin-bottom: 5px;
 }
 
 .analysis-report-cashflow-aside-cashflow {
-    font-size: 32px;
+    font-size: 28px; /* Reduced font size for mobile */
 }
 
 .mortgage-payment,
@@ -44,14 +44,24 @@
 .analysis-report-cashflow-aside-expenses,
 .analysis-report-cashflow-aside-income,
 .analysis-report-cashflow-aside-coc-roi {
-    font-size: 24px;
+    font-size: 20px; /* Reduced font size for mobile */
 }
 
 .analysis-report-cashflow-aside-expenses {
     color: #fa9656;
 }
 
-.analysis-report-cashflow-aside-income
-{
+.analysis-report-cashflow-aside-income {
     color: #0ecd63;
+}
+
+@media (max-width: 768px) {
+    .summary-return-container {
+        flex-direction: column; /* Stack elements vertically on mobile */
+        gap: 10px;
+    }
+
+    .analysis-report-cashflow-aside-cashflow {
+        font-size: 24px; /* Further reduce font size for small screens */
+    }
 }

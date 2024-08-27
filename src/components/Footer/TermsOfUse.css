@@ -1,14 +1,22 @@
 .terms-of-use {
-    width: 70%;
+    width: 90%; /* Adjust width for mobile */
     justify-content: center;
     color: #ffffff;
     text-align: center;
     padding: 10px;
-    font-size: 10px; /* Smaller font size for a less intrusive display */
+    font-size: 12px; /* Adjust font size for mobile */
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.terms-of-use p {
+  }
+  
+  .terms-of-use p {
     margin: 0;
-    line-height: 1.4; /* Improve readability with slightly increased line height */
-}
+    line-height: 1.4;
+  }
+  
+  /* Media queries for mobile */
+  @media (max-width: 768px) {
+    .terms-of-use {
+      font-size: 10px;
+    }
+  }
+  

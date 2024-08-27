@@ -8,3 +8,10 @@ footer {
   color: #fff;
   margin-top: auto; /* Push the footer to the bottom */
 }
+
+/* Media queries for mobile */
+@media (max-width: 768px) {
+  footer {
+    padding: 20px;
+  }
+}

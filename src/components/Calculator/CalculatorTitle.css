@@ -1,17 +1,28 @@
 .title-container {
-    max-width: 80%; /* Adjust width as necessary */
+    max-width: 100%; /* Changed from 80% to 100% for mobile */
     text-align: center;
-    padding: 20px; /* Added padding for better spacing */
+    padding: 20px;
 }
 
 .title-container img {
     display: block;
-    margin: 0 auto 20px auto; /* Center the image and add spacing below */
-    max-width: 60%; /* Make sure the image fits within its container */
+    margin: 0 auto 20px auto;
+    max-width: 80%; /* Changed from 60% to 80% for mobile */
 }
 
 .title-container h2,
 .title-container h3 {
     margin: 0;
-    margin-bottom: 10px; /* Space between title and address */
+    margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+    .title-container img {
+        max-width: 100%; /* Ensure image takes full width on smaller screens */
+    }
+
+    .title-container h2,
+    .title-container h3 {
+        font-size: 18px; /* Reduce font size for mobile */
+    }
 }

@@ -204,7 +204,7 @@ export const CalculatorSensitivityTable: React.FC<IRentalCalculatorPageProps> = 
             setIsTableDisplayed(true);
             colorTable();
         }
-    }, [generatedTable, loading, isTableDisplayed, tableMaxValue]); // Dependency on generatedTable to detect changes
+    }, [generatedTable, loading, isTableDisplayed, tableMaxValue, tableMinValue]); // Dependency on generatedTable to detect changes
 
 
     const populateTableDataByRange = (initialData: IRentalCalculatorData, displayConfig: IDataDisplayConfig): number[] => {
@@ -251,7 +251,7 @@ export const CalculatorSensitivityTable: React.FC<IRentalCalculatorPageProps> = 
                     displayConfig = getPurchasePriceDisplayConfig(Number(initialData.purchaseDetails.purchasePrice.toFixed(0)));
                     break;
                 case 'Management Fees':
-                    displayConfig = getManagementFeesDisplayConfig(initialData.expenseDetails.managementFees, true);
+                    displayConfig = getManagementFeesDisplayConfig(initialData.expenseDetails.managementFee, true);
                     break;
                 case 'Loan To Value %':
                     displayConfig = getLoanToValuePercentDisplayConfig(calculatorUtils.calculateLoanPercentage(props.currentYearData));

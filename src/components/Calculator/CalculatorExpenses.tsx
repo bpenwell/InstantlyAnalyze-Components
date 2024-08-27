@@ -34,13 +34,13 @@ export const CalculatorExpenses: React.FC<IRentalCalculatorPageProps> = (props: 
   );
 
   const totalVariableExpenses = (
-    props.currentYearData.expenseDetails.capitalExpenditures +
-    props.currentYearData.expenseDetails.managementFees +
-    props.currentYearData.expenseDetails.repairsAndMaintenance +
+    props.currentYearData.expenseDetails.capitalExpenditure +
+    props.currentYearData.expenseDetails.managementFee +
+    props.currentYearData.expenseDetails.maintenance +
     props.currentYearData.expenseDetails.vacancy
   );
 
-  const monthlyTotalExpenses = calculationUtils.calculateRentalTotalExpense(props.currentYearData);
+  const monthlyTotalExpenses: number = calculationUtils.calculateRentalTotalExpense(props.currentYearData);
 
   const pieChartProps: IPieChartProps = {
     labels: ['Mortgage', 'Taxes', 'Insurance', 'Variable Expenses', 'Fixed Expenses'],
@@ -145,15 +145,15 @@ export const CalculatorExpenses: React.FC<IRentalCalculatorPageProps> = (props: 
               </div>
               <div className="expense-item">
                 <h5>Maintenance</h5>
-                <p>${props.currentYearData.expenseDetails.repairsAndMaintenance.toFixed(0)}</p>
+                <p>${props.currentYearData.expenseDetails.maintenance.toFixed(0)}</p>
               </div>
               <div className="expense-item">
                 <h5>CapEx</h5>
-                <p>${props.currentYearData.expenseDetails.capitalExpenditures.toFixed(0)}</p>
+                <p>${props.currentYearData.expenseDetails.capitalExpenditure.toFixed(0)}</p>
               </div>
               <div className="expense-item">
                 <h5>Management</h5>
-                <p>${props.currentYearData.expenseDetails.managementFees.toFixed(0)}</p>
+                <p>${props.currentYearData.expenseDetails.managementFee.toFixed(0)}</p>
               </div>
             </div>
           </div>

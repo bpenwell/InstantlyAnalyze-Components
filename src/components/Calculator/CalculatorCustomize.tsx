@@ -23,7 +23,9 @@ import {
     getLoanToValuePercentDisplayConfig,
     getPurchasePriceDisplayConfig,
     getManagementFeesDisplayConfig,
-    printObjectFields
+    printObjectFields,
+    IRentalCalculatorData,
+    displayAsPercent
 } from '@bpenwell/rei-module';
 
 // Register the necessary components
@@ -41,10 +43,8 @@ export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props:
     const calculatorUtils = new CalculationUtils();
     const [rentalIncome, setRentalIncome] = useState(Number(currentYearData.rentalIncome.grossMonthlyIncome.toFixed(0)));
     const [otherExpenses, setOtherExpenses] = useState(Number(currentYearData.expenseDetails.other.toFixed(0)));
-    console.debug(`[DEBUG][Customize] currentYearData vacancy=${currentYearData.expenseDetails.vacancy} vacancyPercent=${currentYearData.expenseDetails.vacancyPercent}`);
-    console.debug(`[DEBUG][Customize] calculatorUtils vacancy=${calculatorUtils.calculateVacancyPercentage(currentYearData)}`);
-    const [vacancy, setVacancy] = useState(calculatorUtils.calculateVacancyPercentage(currentYearData));
-    const [managementFees, setManagementFees] = useState(Number(currentYearData.expenseDetails.managementFees.toFixed(0)));
+    const [vacancy, setVacancy] = useState(currentYearData.expenseDetails.vacancyPercent);
+    const [managementFees, setManagementFees] = useState(currentYearData.expenseDetails.managementFeePercent);
     const [purchasePrice, setPurchasePrice] = useState(Number(currentYearData.purchaseDetails.purchasePrice.toFixed(0)));
     const [loanToValuePercent, setLoanToValuePercent] = useState(currentYearData.loanDetails.loanToValuePercent);
     const [loanTerm, setLoanTerm] = useState(currentYearData.loanDetails.loanTerm);
@@ -74,7 +74,6 @@ export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props:
     const interestRateSliderProps = useMemo<IDataDisplayConfig>(() => {
         return getInterestRateDisplayConfig(interestRate);
     }, []);
-    console.debug('[DEBUG] Render Customize');
 
     const handleRentalIncomeChange = (newValue: number) => {
         props.updateInitialData({
@@ -95,7 +94,7 @@ export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props:
         });
     };
     const handleVacancyChange = (newValue: number) => {
-        const newData = {
+        const newData: IRentalCalculatorData = {
             ...initialRentalReportData, 
             expenseDetails: {
                 ...initialRentalReportData.expenseDetails,
@@ -106,13 +105,15 @@ export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props:
         props.updateInitialData(newData);
     };
     const handleManagementFeesChange = (newValue: number) => {
-        props.updateInitialData({
+        const newData: IRentalCalculatorData = {
             ...initialRentalReportData, 
             expenseDetails: {
                 ...initialRentalReportData.expenseDetails,
-                managementFees: newValue as number
+                managementFeePercent: newValue as number,
             }
-        });
+        };
+        newData.expenseDetails.managementFee = calculatorUtils.calculateManagementFeeAbsoluteValue(newData);
+        props.updateInitialData(newData);
     };
     const handlePurchasePriceChange = (newValue: number) => {
         props.updateInitialData({
@@ -225,7 +226,7 @@ export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props:
                         {makeSliderContainer('Purchase price: ', `${displayAsMoney(purchasePrice)}`, purchasePrice, purchasePriceSliderProps, setPurchasePrice, handlePurchasePriceChange)}
                     </div>
                     <div className="section-body">
-                        {makeSliderContainer('Loan To Value (LTV): ', `${displayAsMoney(loanToValuePercent * purchasePrice)}`, loanToValuePercent, loanToValuePercentSliderProps, setLoanToValuePercent, handleLoanPercentageChange)}
+                        {makeSliderContainer('Loan To Value (LTV): ', `${displayAsPercent(loanToValuePercent, 0, true)}`, loanToValuePercent, loanToValuePercentSliderProps, setLoanToValuePercent, handleLoanPercentageChange)}
                     </div>
                     <div className="section-body">
                         {makeSliderContainer('Loan term: ', `${loanTerm} years`, loanTerm, loanTermSliderProps, setLoanTerm, handleLoanTermChange)}
