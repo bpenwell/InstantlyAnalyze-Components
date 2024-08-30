@@ -1,4 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React, {
+    useState,
+    useMemo,
+    Dispatch,
+    SetStateAction
+} from 'react';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -25,7 +30,9 @@ import {
     getManagementFeesDisplayConfig,
     printObjectFields,
     IRentalCalculatorData,
-    displayAsPercent
+    displayAsPercent,
+    Percentage,
+    ValueType
 } from '@bpenwell/rei-module';
 
 // Register the necessary components
@@ -75,7 +82,7 @@ export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props:
         return getInterestRateDisplayConfig(interestRate);
     }, []);
 
-    const handleRentalIncomeChange = (newValue: number) => {
+    const handleRentalIncomeChange = (newValue: ValueType) => {
         props.updateInitialData({
             ...initialRentalReportData, 
             rentalIncome: {
@@ -84,7 +91,7 @@ export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props:
             }
         });
     };
-    const handleOtherExpensesChange = (newValue: number) => {
+    const handleOtherExpensesChange = (newValue: ValueType) => {
         props.updateInitialData({
             ...initialRentalReportData, 
             expenseDetails: {
@@ -93,29 +100,29 @@ export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props:
             }
         });
     };
-    const handleVacancyChange = (newValue: number) => {
+    const handleVacancyChange = (newValue: ValueType) => {
         const newData: IRentalCalculatorData = {
             ...initialRentalReportData, 
             expenseDetails: {
                 ...initialRentalReportData.expenseDetails,
-                vacancyPercent: newValue as number,
+                vacancyPercent: newValue as Percentage,
             }
         };
         newData.expenseDetails.vacancy = calculatorUtils.calculateVacancyAbsoluteValue(newData);
         props.updateInitialData(newData);
     };
-    const handleManagementFeesChange = (newValue: number) => {
+    const handleManagementFeesChange = (newValue: ValueType) => {
         const newData: IRentalCalculatorData = {
             ...initialRentalReportData, 
             expenseDetails: {
                 ...initialRentalReportData.expenseDetails,
-                managementFeePercent: newValue as number,
+                managementFeePercent: newValue as Percentage,
             }
         };
         newData.expenseDetails.managementFee = calculatorUtils.calculateManagementFeeAbsoluteValue(newData);
         props.updateInitialData(newData);
     };
-    const handlePurchasePriceChange = (newValue: number) => {
+    const handlePurchasePriceChange = (newValue: ValueType) => {
         props.updateInitialData({
             ...initialRentalReportData, 
             purchaseDetails: {
@@ -124,7 +131,7 @@ export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props:
             }
         });
     };
-    const handleLoanPercentageChange = (newValue: number) => {
+    const handleLoanPercentageChange = (newValue: ValueType) => {
         props.updateInitialData({
             ...initialRentalReportData, 
             loanDetails: {
@@ -133,16 +140,16 @@ export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props:
             }
         });
     };
-    const handleInterestRateChange = (newValue: number) => {
+    const handleInterestRateChange = (newValue: ValueType) => {
         props.updateInitialData({
             ...initialRentalReportData, 
             loanDetails: {
                 ...initialRentalReportData.loanDetails,
-                interestRate: newValue,
+                interestRate: newValue as Percentage,
             }
         });
     };
-    const handleLoanTermChange = (newValue: number) => {
+    const handleLoanTermChange = (newValue: ValueType) => {
         props.updateInitialData({
             ...initialRentalReportData, 
             loanDetails: {
@@ -158,7 +165,7 @@ export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props:
      * @param sliderLabel exact label suffix (might need to include spaces as needed)
      * @returns 
      */
-    const makeSliderContainer = (sectionTitle: string, sliderLabel: string, currentSliderValue: number, dataDisplayConfig: IDataDisplayConfig, handleOnChange: React.Dispatch<React.SetStateAction<number>>, handleValueChange: (newValue: number) => void) => {
+    const makeSliderContainer = (sectionTitle: string, sliderLabel: string, currentSliderValue: number, dataDisplayConfig: IDataDisplayConfig, handleOnChange: Dispatch<SetStateAction<number>>, handleValueChange: (newValue: ValueType) => void) => {
         return (
             <div className="slider-container">
                 <span className="analysis-form-label">
@@ -185,7 +192,7 @@ export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props:
                     if ((newValue as number[]).length > 1) {
                         throw Error(`Weird newValue: ${newValue}`);
                     }
-                    handleOnChange(newValue as number)
+                    handleOnChange(newValue as number);
                 }}
                 />
             </div>
@@ -212,10 +219,10 @@ export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props:
                         {makeSliderContainer('Custom Expenses: ', `${displayAsMoney(otherExpenses)}`, otherExpenses, otherExpensesSliderProps, setOtherExpenses, handleOtherExpensesChange)}
                     </div>
                     <div className="section-body">
-                        {makeSliderContainer('Vacancy: ', `${vacancy}%`, vacancy, vacancySliderProps, setVacancy, handleVacancyChange)}
+                        {makeSliderContainer('Vacancy: ', `${vacancy}%`, vacancy, vacancySliderProps, setVacancy as Dispatch<SetStateAction<number>>, handleVacancyChange)}
                     </div>
                     <div className="section-body">
-                        {makeSliderContainer('Management Fees: ', `${managementFees}%`, managementFees, managementFeesSliderProps, setManagementFees, handleManagementFeesChange)}
+                        {makeSliderContainer('Management Fees: ', `${managementFees}%`, managementFees, managementFeesSliderProps, setManagementFees as Dispatch<SetStateAction<number>>, handleManagementFeesChange)}
                     </div>
                 </div>
                 <div className="report-section">
@@ -226,13 +233,13 @@ export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props:
                         {makeSliderContainer('Purchase price: ', `${displayAsMoney(purchasePrice)}`, purchasePrice, purchasePriceSliderProps, setPurchasePrice, handlePurchasePriceChange)}
                     </div>
                     <div className="section-body">
-                        {makeSliderContainer('Loan To Value (LTV): ', `${displayAsPercent(loanToValuePercent, 0, true)}`, loanToValuePercent, loanToValuePercentSliderProps, setLoanToValuePercent, handleLoanPercentageChange)}
+                        {makeSliderContainer('Loan To Value (LTV): ', `${displayAsPercent(loanToValuePercent, 0, true)}`, loanToValuePercent, loanToValuePercentSliderProps, setLoanToValuePercent as Dispatch<SetStateAction<number>>, handleLoanPercentageChange)}
                     </div>
                     <div className="section-body">
                         {makeSliderContainer('Loan term: ', `${loanTerm} years`, loanTerm, loanTermSliderProps, setLoanTerm, handleLoanTermChange)}
                     </div>
                     <div className="section-body">
-                        {makeSliderContainer('Interest rate: ', `${interestRate}%`, interestRate, interestRateSliderProps, setInterestRate, handleInterestRateChange)}
+                        {makeSliderContainer('Interest rate: ', `${interestRate}%`, interestRate, interestRateSliderProps, setInterestRate as Dispatch<SetStateAction<number>>, handleInterestRateChange)}
                     </div>
                 </div>
             </div>

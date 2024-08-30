@@ -2,7 +2,7 @@ import React from 'react';
 import { IRentalCalculatorPageProps } from '../../interfaces';
 import './CalculatorExpenses.css';
 import '../Charts/Chart.css';
-import { CalculationUtils } from '@bpenwell/rei-module';
+import { CalculationUtils, Frequency } from '@bpenwell/rei-module';
 import PieChart, { IPieChartProps } from '../Charts/PieChart';
 
 export const CalculatorExpenses: React.FC<IRentalCalculatorPageProps> = (props: IRentalCalculatorPageProps) => {
@@ -17,10 +17,10 @@ export const CalculatorExpenses: React.FC<IRentalCalculatorPageProps> = (props: 
   
   const mortgage = calculationUtils.calculateMortgagePayment(props.currentYearData);
 
-  if (props.currentYearData.expenseDetails.propertyTaxFrequency === 'annual') {
+  if (props.currentYearData.expenseDetails.propertyTaxFrequency === Frequency.Annual) {
     taxes /= 12;
   }
-  if (props.currentYearData.expenseDetails.insuranceFrequency === 'annual') {
+  if (props.currentYearData.expenseDetails.insuranceFrequency === Frequency.Annual) {
     insurance /= 12;
   }
 
