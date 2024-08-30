@@ -132,13 +132,20 @@ export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props:
         });
     };
     const handleLoanPercentageChange = (newValue: ValueType) => {
-        props.updateInitialData({
+        const ltvPercent: Percentage = (newValue * 100) as Percentage;
+        const downPaymentPercent = 100 - ltvPercent;
+        const downPayment = (downPaymentPercent / 100) * initialRentalReportData.purchaseDetails.purchasePrice;
+    
+        let newData: IRentalCalculatorData = {
             ...initialRentalReportData, 
             loanDetails: {
                 ...initialRentalReportData.loanDetails,
-                downPayment: newValue * initialRentalReportData.purchaseDetails.purchasePrice,
+                downPayment: downPayment, 
+                downPaymentPercent: downPaymentPercent as Percentage,
+                loanToValuePercent: ltvPercent,
             }
-        });
+        };
+        props.updateInitialData(newData);
     };
     const handleInterestRateChange = (newValue: ValueType) => {
         props.updateInitialData({
@@ -219,10 +226,10 @@ export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props:
                         {makeSliderContainer('Custom Expenses: ', `${displayAsMoney(otherExpenses)}`, otherExpenses, otherExpensesSliderProps, setOtherExpenses, handleOtherExpensesChange)}
                     </div>
                     <div className="section-body">
-                        {makeSliderContainer('Vacancy: ', `${vacancy}%`, vacancy, vacancySliderProps, setVacancy as Dispatch<SetStateAction<number>>, handleVacancyChange)}
+                        {makeSliderContainer('Vacancy: ', `${displayAsPercent(vacancy, 0)}`, vacancy, vacancySliderProps, setVacancy as Dispatch<SetStateAction<number>>, handleVacancyChange)}
                     </div>
                     <div className="section-body">
-                        {makeSliderContainer('Management Fees: ', `${managementFees}%`, managementFees, managementFeesSliderProps, setManagementFees as Dispatch<SetStateAction<number>>, handleManagementFeesChange)}
+                        {makeSliderContainer('Management Fees: ', `${displayAsPercent(managementFees, 0)}`, managementFees, managementFeesSliderProps, setManagementFees as Dispatch<SetStateAction<number>>, handleManagementFeesChange)}
                     </div>
                 </div>
                 <div className="report-section">
@@ -239,7 +246,7 @@ export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props:
                         {makeSliderContainer('Loan term: ', `${loanTerm} years`, loanTerm, loanTermSliderProps, setLoanTerm, handleLoanTermChange)}
                     </div>
                     <div className="section-body">
-                        {makeSliderContainer('Interest rate: ', `${interestRate}%`, interestRate, interestRateSliderProps, setInterestRate as Dispatch<SetStateAction<number>>, handleInterestRateChange)}
+                        {makeSliderContainer('Interest rate: ', `${displayAsPercent(interestRate, 0)}`, interestRate, interestRateSliderProps, setInterestRate as Dispatch<SetStateAction<number>>, handleInterestRateChange)}
                     </div>
                 </div>
             </div>
