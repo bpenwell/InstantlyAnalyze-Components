@@ -144,16 +144,15 @@ export const CalculatorSensitivityTable: React.FC<IRentalCalculatorPageProps> = 
     
                 const hypotheticalBusinessMetric = calculatorUtils.calculateBusinessMetricOnFullLoanTermRentalReportData(hypotheticalReportData, selectedOutput as DataClassifier);
     
-                const initialColumnValue = calculatorUtils.getDataByDataClassifier(initialDataClone, tableColumnData.displayFormat.dataClassifier);
-                const initialRowValue = calculatorUtils.getDataByDataClassifier(initialDataClone, tableRowData.displayFormat.dataClassifier);
-    
                 let cellValue;
+                /*const initialColumnValue = calculatorUtils.getDataByDataClassifier(initialDataClone, tableColumnData.displayFormat.dataClassifier);
+                const initialRowValue = calculatorUtils.getDataByDataClassifier(initialDataClone, tableRowData.displayFormat.dataClassifier);
                 if (initialColumnValue === columnInputData && initialRowValue === rowInputData) {
                     const fullLoanTermRentalReportDataBusinessMetric = calculatorUtils.calculateBusinessMetricOnFullLoanTermRentalReportData(fullLoanTermRentalReportData, selectedOutput as DataClassifier);
                     cellValue = fullLoanTermRentalReportDataBusinessMetric;
-                } else {
-                    cellValue = hypotheticalBusinessMetric;
-                }
+                } else {*/
+                cellValue = hypotheticalBusinessMetric;
+                //}
                 localRowValueArray.push(Number(cellValue));  // Add to the array for gradient calculation
                 row.push(getDisplayByDataClassifier(cellValue, outputOption));
             });
@@ -220,14 +219,14 @@ export const CalculatorSensitivityTable: React.FC<IRentalCalculatorPageProps> = 
         const data: number[] = [];
         for (let i = 0; i < STEPS_PER_INPUT; i++) {
             const nextValue = displayConfig.min + i * stepSize;
-            if (i === (STEPS_PER_INPUT/2)) {
+            /*if (i === (STEPS_PER_INPUT/2)) {
                 const currentDataEntry = calculatorUtils.getDataByDataClassifier(initialData, displayConfig.dataClassifier);
                 //Inject current initialData data into table
                 data.push(currentDataEntry);
             }
-            else {
-                data.push(nextValue);
-            }
+            else {*/
+            data.push(nextValue);
+            //}
         }
         return data;
     };
