@@ -41,10 +41,11 @@
   grid-template-columns: auto 1fr;
   grid-template-rows: auto 1fr;
   gap: 0;
+  margin-right: 75px; /* side-header is 75px, push container to the right to center it */
 }
 
 .top-header {
-  grid-column: 1 / -1; /* Start from the first column and span across all columns */
+  grid-column: 2 / 2;
   grid-row: 1 / 2;
   color: white;
   text-align: center;
@@ -69,6 +70,7 @@
   justify-content: center;
   align-items: center;
   height: 100%; /* Ensure it stretches to match the table's height */
+  width: 75px;
 }
 
 .table-wrapper {
@@ -76,10 +78,13 @@
   grid-row: 2 / 3;
   display: flex;
   justify-content: center;
+  max-width: 80%; /* Limit the width of the table container */
+  margin: 0 auto; /* Center the container within its grid cell */
 }
 
 .sensitivity-table {
   width: 100%;
+  max-width: 100%; /* Ensure the table doesn't exceed the container width */
   border-collapse: collapse;
 }
 
@@ -94,4 +99,24 @@
 .sensitivity-table .bold-cell {
   font-weight: bold;
   background-color: #004A00;
+}
+
+.legend-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+}
+
+.legend-color-box {
+  width: 20px;
+  height: 20px;
+  background-color: #8a8d00;
+  border: 1px solid #303030;
+  margin-right: 8px;
 }

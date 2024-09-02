@@ -73,6 +73,8 @@ export const CalculatorSummary: React.FC<ICalculatorSummary> = (props: ICalculat
   const expenses = calculationUtils.calculateRentalTotalExpense(currentYearData);
   const monthlyCashFlow = income - expenses;
   const cashOnCashROI = calculationUtils.calculateCoCROI(currentYearData);
+
+  const fiveYearOrLessYear = fullLoanTermRentalReportData.length >= 5 ? 5 : fullLoanTermRentalReportData.length;
   const fiveYearReturn = displayAsMoney(calculationUtils.calculateFiveYearAnnualizedReturn(fullLoanTermRentalReportData), 2, '');
   const mortgagePayment = displayAsMoney(calculationUtils.calculateMortgagePayment(currentYearData));
 
@@ -110,7 +112,7 @@ export const CalculatorSummary: React.FC<ICalculatorSummary> = (props: ICalculat
             <span className='mortgage-payment'>{mortgagePayment}</span>
           </div>
           <div>
-            <p className='return-header'>5-Year Annualized Return:</p>
+            <p className='return-header'>{`${fiveYearOrLessYear}-Year Annualized Return:`}</p>
             <span className='five-year-return'>{fiveYearReturn}%</span>
           </div>
         </div>

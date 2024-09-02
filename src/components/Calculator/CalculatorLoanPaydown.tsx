@@ -1,13 +1,18 @@
 import React from 'react';
 import { IRentalCalculatorPageProps } from '../../interfaces';
 import LineChart, { ILineChartDataset } from '../Charts/LineChart';
-import { CalculationUtils, displayAsMoney, displayAsPercent } from '@bpenwell/rei-module';
-import { TIME_PERIODS, CHART_COLORS } from '../../constants';
+import { TIME_PERIODS, CalculationUtils, displayAsMoney, displayAsPercent } from '@bpenwell/rei-module';
+import { CHART_COLORS } from '../../constants';
 import './CalculatorLoanPaydown.css';
 
 export const CalculatorLoanPaydown: React.FC<IRentalCalculatorPageProps> = (props) => {
     const calculationUtils = new CalculationUtils();
-    const { fullLoanTermRentalReportData } = props;
+    const { initialRentalReportData, fullLoanTermRentalReportData } = props;
+
+    const applicableLoanTermTimePeriods = TIME_PERIODS.filter((period) => {
+        return period <= initialRentalReportData.loanDetails.loanTerm ||
+            !TIME_PERIODS.includes(initialRentalReportData.loanDetails.loanTerm);
+    });
 
     const loanAmount = (year: number): number => {
         return calculationUtils.calculateRemainingLoanAmount(fullLoanTermRentalReportData[year], year);
@@ -15,14 +20,14 @@ export const CalculatorLoanPaydown: React.FC<IRentalCalculatorPageProps> = (prop
 
     const loanBalanceData: ILineChartDataset = {
         label: 'Loan Balance',
-        data: TIME_PERIODS.map(year => loanAmount(year)),
+        data: applicableLoanTermTimePeriods.map(year => loanAmount(year)),
         borderColor: CHART_COLORS.complementaryRed,
         backgroundColor: 'rgba(164, 0, 0, 0.75)',
     };
 
     const equityData: ILineChartDataset = {
         label: 'Equity',
-        data: TIME_PERIODS.map(year => {
+        data: applicableLoanTermTimePeriods.map(year => {
             const propertyValue = fullLoanTermRentalReportData[year]?.purchaseDetails.reportPropertyValue || 0;
             const loanBalance = loanAmount(year);
             return propertyValue - loanBalance;
@@ -33,19 +38,19 @@ export const CalculatorLoanPaydown: React.FC<IRentalCalculatorPageProps> = (prop
 
     const propertyValueData: ILineChartDataset = {
         label: 'Property Value',
-        data: TIME_PERIODS.map(year => fullLoanTermRentalReportData[year]?.purchaseDetails.reportPropertyValue || 0),
+        data: applicableLoanTermTimePeriods.map(year => fullLoanTermRentalReportData[year]?.purchaseDetails.reportPropertyValue || 0),
         borderColor: CHART_COLORS.mainGreen,
         backgroundColor: 'rgba(0, 74, 0, 0.75)',
     };
 
-    const cashFlowData = TIME_PERIODS.map(year => calculationUtils.calculateCashFlow(fullLoanTermRentalReportData[year]));
-    const mortgagePaymentData = TIME_PERIODS.map(year => calculationUtils.calculateMortgagePayment(fullLoanTermRentalReportData[year]));
-    const profitIfSoldData = TIME_PERIODS.map(year => calculationUtils.calculateProfitIfSold([fullLoanTermRentalReportData[year]]));
-    const annualizedReturnData = TIME_PERIODS.map(year => calculationUtils.calculateAnnualizedReturn([fullLoanTermRentalReportData[year]]));
+    const cashFlowData = applicableLoanTermTimePeriods.map(year => calculationUtils.calculateCashFlow(fullLoanTermRentalReportData[year]));
+    const mortgagePaymentData = applicableLoanTermTimePeriods.map(year => calculationUtils.calculateMortgagePayment(fullLoanTermRentalReportData[year]));
+    const profitIfSoldData = applicableLoanTermTimePeriods.map(year => calculationUtils.calculateProfitIfSold([fullLoanTermRentalReportData[year]]));
+    const annualizedReturnData = applicableLoanTermTimePeriods.map(year => calculationUtils.calculateAnnualizedReturn([fullLoanTermRentalReportData[year]]));
 
     const chartProps = {
         datasets: [loanBalanceData, equityData, propertyValueData],
-        labels: TIME_PERIODS.map(year => `${year}`),
+        labels: applicableLoanTermTimePeriods.map(year => `${year}`),
         interactive: false,
     };
 
@@ -60,7 +65,7 @@ export const CalculatorLoanPaydown: React.FC<IRentalCalculatorPageProps> = (prop
                     <thead>
                         <tr>
                             <td></td>
-                            {TIME_PERIODS.map((year, index) => (
+                            {applicableLoanTermTimePeriods.map((year, index) => (
                                 <td key={index}>Year {year}</td>
                             ))}
                         </tr>
