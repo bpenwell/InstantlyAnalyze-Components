@@ -1,0 +1,70 @@
+.flydown-menu {
+  width: 100%;
+  background-color: #2e2e2e;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  z-index: 2000;
+  transition: max-height 0.3s ease-in-out;
+  padding: 10px;
+}
+
+.flydown-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two columns */
+  gap: 10px; /* Space between columns */
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.flydown-item {
+  display: flex;
+  align-items: center;
+  background-color: #3a3a3a;
+  border-radius: 5px;
+  padding: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.flydown-item:hover {
+  background-color: #4a4a4a;
+}
+
+.flydown-item a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #e2f1e8;
+  width: 100%;
+}
+
+.flydown-icon {
+  margin-right: 10px;
+}
+
+.flydown-content {
+  flex: 1;
+}
+
+.flydown-title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.flydown-description {
+  font-size: 14px;
+  color: #b0b0b0;
+}
+
+.flydown-arrow {
+  margin-left: auto;
+}
+
+.flydown-arrow-turn {
+  transform: rotate(270deg);
+}
+
+.material-icons {
+  max-width: 32px;
+  max-height: 32px;
+}

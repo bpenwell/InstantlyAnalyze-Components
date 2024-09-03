@@ -1,0 +1,39 @@
+/* CalculatorUpdate.css */
+.calculator-update-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.calculator-update-buttons {
+    display: flex;
+    gap: 20px; /* Decent gap between buttons */
+}
+
+.save-button {
+    background-color: #004A00; /* GreenHex color */
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.save-button:disabled {
+    background-color: #808080; /* Gray color when disabled */
+    cursor: not-allowed;
+}
+
+.delete-button {
+    background-color: #A40000; /* RedHex color */
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}

@@ -1,80 +1,55 @@
-/* Dropdown button container */
+/* Adjust the dropdown button to fill the entire height of the header */
 .dropdown-button {
-    position: relative;
-    display: inline-block;
-    cursor: pointer;
-    margin-left: 10px;
-    padding: 10px;
-  }
-  
-  /* Label styling */
-  .dropdown-button-label {
-    padding: 20px 10px;
-    color: #e2f1e8; /* Light greenish text */
-    text-decoration: none;
-    font-size: 16px;
-    position: relative;
-  }
-  
-  /* Hover effect for the button */
-  .dropdown-button-label:hover {
-    color: #4CAF50; /* Change text color on hover */
-  }
-  
-  .dropdown-button-label:hover::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background-color: #4CAF50; /* Bar color */
-    transform: scaleX(1);
-    transition: transform 0.3s ease;
-  }
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-left: 10px;
+  width: auto; /* Auto width unless you want full width of container */
+  height: 100%; /* Ensure the dropdown button takes full height */
+  padding: 0 10px; /* Add padding for better clickability */
+}
 
-  /* Wrapper for dropdown menu to control its margin */
-  .dropdown-button-wrapper {
-      position: absolute; /* Position the wrapper absolutely */
-      top: 100%; /* Flush with the bottom of the header */
-      left: 0; /* Align to the left of the button */
-      margin-top: 5px; /* Adjust the margin for padding effect */
-      width: 200px;
-  }
-  /* Dropdown menu */
-  .dropdown-menu {
-    background-color: #2e2e2e; /* Dark gray background */
-    border: 1px solid #4CAF50; /* Dark green border */
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Darker shadow */
-    z-index: 1000;
-    display: block;
-  }
-  
-  .dropdown-menu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .dropdown-menu li {
-    border-bottom: 1px solid #4CAF50; /* Dark green border */
-    text-align: center; /* Center items in their rows */
-  }
-  
-  .dropdown-menu li:last-child {
-    border-bottom: none;
-  }
-  
-  .dropdown-menu a {
-    display: block;
-    padding: 10px;
-    color: #e2f1e8; /* Light greenish text */
-    text-decoration: none;
-    font-size: 16px;
-  }
-  
-  .dropdown-menu a:hover {
-    background-color: #3a3a3a; /* Slightly lighter gray */
-  }
-  
+/* Label styling - ensure it is centered vertically */
+.dropdown-button-label {
+  color: #e2f1e8;
+  text-decoration: none;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  height: 100%; /* Ensure label stretches to full height */
+}
+
+/* SVG arrow styling - center it vertically */
+.dropdown-arrow {
+  margin-left: 8px;
+  transition: transform 0.3s ease-in-out;
+  width: 16px;
+  height: 16px;
+  fill: white;
+}
+
+.dropdown-arrow.open {
+  transform: rotate(180deg);
+}
+
+/* Wrapper for dropdown menu to control its margin */
+.dropdown-button-wrapper {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%; /* Full width of the parent container */
+  z-index: 2000; /* Ensure it shows above other elements */
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+  background-color: #2e2e2e;
+  border: 1px solid #4CAF50;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  display: block;
+  overflow: auto;
+  width: 100%; /* Ensure it takes full width of the wrapper */
+  height: 25vh; /* Make this 25% of the viewport height */
+}

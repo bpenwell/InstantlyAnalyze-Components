@@ -1,67 +1,57 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import './DropdownButton.css';
 import { PAGE_PATH, RedirectAPI } from '@bpenwell/rei-module';
+import { IFlyoutDropdownProps } from '../FlyoutDropdown/FlyoutDropdown';
 
 interface DropdownButtonProps {
   label: string;
-  items: { label: string; link: string }[];
+  flyoutProps: IFlyoutDropdownProps;
+  handleDropdownToggle?: (isOpen: boolean) => void;
+  isOpen?: boolean;
 }
 
-export const DropdownButton: React.FC<DropdownButtonProps> = ({ label, items }) => {
-  const [isDropdownOpen, setDropdownOpen] = useState(false);
+export const DropdownButton: React.FC<DropdownButtonProps> = ({
+  label,
+  flyoutProps,
+  handleDropdownToggle,
+  isOpen,
+  ...props
+}) => {
   const buttonRef = useRef<HTMLDivElement>(null);
   const redirectAPI = new RedirectAPI();
 
-  const shouldNotOpenDropdown = items.length === 1;
+  const shouldNotOpenDropdown = flyoutProps.items.length === 1;
 
-  const handleDropdownToggle = () => {
-    if (shouldNotOpenDropdown) return;
-    setDropdownOpen((prevState) => !prevState);
-  };
-
-  const handleClickOutside = (event: MouseEvent) => {
-    if (shouldNotOpenDropdown) return;
-    if (buttonRef.current && !buttonRef.current.contains(event.target as Node)) {
-      setDropdownOpen(false);
-    }
-  };
-
-  useEffect(() => {
-    if (shouldNotOpenDropdown) return;
-
-    if (isDropdownOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isDropdownOpen]);
-
-  const handleOnClick = (event: any): void => {
+  const handleOnClick = (): void => {
     if (shouldNotOpenDropdown) {
-      redirectAPI.redirectToPage(items[0].link as PAGE_PATH);
+      redirectAPI.redirectToPage(flyoutProps.items[0].link as PAGE_PATH);
+    } else {
+      handleDropdownToggle?.(!isOpen);
     }
-  }
+  };
 
   return (
-    <div className='dropdown-button' ref={buttonRef} onClick={handleOnClick} onMouseEnter={handleDropdownToggle} onMouseLeave={() => setDropdownOpen(false)}>
-      <span className='dropdown-button-label'>{label}</span>
-      {isDropdownOpen && (
-        <div className='dropdown-button-wrapper'>
-            <nav className='dropdown-menu'>
-            <ul>
-                {items.map((item, index) => (
-                <li key={index}>
-                    <a href={item.link}>{item.label}</a>
-                </li>
-                ))}
-            </ul>
-            </nav>
-        </div>
-      )}
+    <div
+      className="dropdown-button"
+      ref={buttonRef}
+      onClick={handleOnClick}
+      onMouseLeave={() => handleDropdownToggle?.(false)}
+    >
+      <span className="dropdown-button-label">
+        {label}
+        {!shouldNotOpenDropdown && (
+          <svg
+            className={`dropdown-arrow ${isOpen ? "open" : ""}`}
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="white"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M12 16l-6-6h12z" />
+          </svg>
+        )}
+      </span>
     </div>
   );
 };

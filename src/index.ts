@@ -13,6 +13,8 @@ export { Input } from './components/Input/Input';
 export { ErrorBoundary } from './utils/ErrorBoundary';
 export { CalculatorTitle } from './components/Calculator/CalculatorTitle';
 export { CalculatorExpenses } from './components/Calculator/CalculatorExpenses';
+export { CalculatorHeader, ICalculatorHeaderProps } from './components/Calculator/CalculatorHeader';
+export { CalculatorUpdate, ICalculatorUpdateProps } from './components/Calculator/CalculatorUpdate';
 export { CalculatorSummary, ICalculatorSummary } from './components/Calculator/CalculatorSummary';
 export { CalculatorCustomize } from './components/Calculator/CalculatorCustomize';
 export { Asterisk } from './components/Asterisk/Asterisk';

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { IRentalCalculatorPageProps } from '../../interfaces';
 import './CalculatorExpenses.css';
 import '../Charts/Chart.css';
@@ -7,59 +7,84 @@ import PieChart, { IPieChartProps } from '../Charts/PieChart';
 
 export const CalculatorExpenses: React.FC<IRentalCalculatorPageProps> = (props: IRentalCalculatorPageProps) => {
   const calculationUtils: CalculationUtils = new CalculationUtils();
-  let taxes = props.currentYearData.expenseDetails.propertyTaxes;
-  let insurance = props.currentYearData.expenseDetails.insurance;
-
-  let rehabCost = 0;
-  if (props.currentYearData.purchaseDetails.rehabbingProperty && props.currentYearData.purchaseDetails.rehabRepairCosts) {
-    rehabCost = props.currentYearData.purchaseDetails.rehabRepairCosts;
-  }
   
-  const mortgage = calculationUtils.calculateMortgagePayment(props.currentYearData);
+  const [taxes, setTaxes] = useState(props.currentYearData.expenseDetails.propertyTaxes);
+  const [insurance, setInsurance] = useState(props.currentYearData.expenseDetails.insurance);
+  const [rehabCost, setRehabCost] = useState(0);
+  const [mortgage, setMortgage] = useState(0);
+  const [totalFixedExpenses, setTotalFixedExpenses] = useState(0);
+  const [totalVariableExpenses, setTotalVariableExpenses] = useState(0);
+  const [monthlyTotalExpenses, setMonthlyTotalExpenses] = useState(0);
+  const [pieChartProps, setPieChartProps] = useState<IPieChartProps>({
+    labels: [],
+    data: [],
+    backgroundColors: [],
+    hoverBackgroundColors: [],
+  });
 
-  if (props.currentYearData.expenseDetails.propertyTaxFrequency === Frequency.Annual) {
-    taxes /= 12;
-  }
-  if (props.currentYearData.expenseDetails.insuranceFrequency === Frequency.Annual) {
-    insurance /= 12;
-  }
+  useEffect(() => {
+    let updatedTaxes = props.currentYearData.expenseDetails.propertyTaxes;
+    let updatedInsurance = props.currentYearData.expenseDetails.insurance;
 
-  const totalFixedExpenses = (
-    props.currentYearData.expenseDetails.electricity +
-    props.currentYearData.expenseDetails.garbage +
-    props.currentYearData.expenseDetails.gas +
-    props.currentYearData.expenseDetails.other +
-    props.currentYearData.expenseDetails.hoaFees +
-    props.currentYearData.expenseDetails.waterAndSewer
-  );
+    if (props.currentYearData.purchaseDetails.rehabbingProperty && props.currentYearData.purchaseDetails.rehabRepairCosts) {
+      setRehabCost(props.currentYearData.purchaseDetails.rehabRepairCosts);
+    }
+    
+    const updatedMortgage = calculationUtils.calculateMortgagePayment(props.currentYearData);
+    setMortgage(updatedMortgage);
 
-  const totalVariableExpenses = (
-    props.currentYearData.expenseDetails.capitalExpenditure +
-    props.currentYearData.expenseDetails.managementFee +
-    props.currentYearData.expenseDetails.maintenance +
-    props.currentYearData.expenseDetails.vacancy
-  );
+    if (props.currentYearData.expenseDetails.propertyTaxFrequency === Frequency.Annual) {
+      updatedTaxes /= 12;
+    }
+    if (props.currentYearData.expenseDetails.insuranceFrequency === Frequency.Annual) {
+      updatedInsurance /= 12;
+    }
 
-  const monthlyTotalExpenses: number = calculationUtils.calculateRentalTotalExpense(props.currentYearData);
+    const updatedTotalFixedExpenses = (
+      props.currentYearData.expenseDetails.electricity +
+      props.currentYearData.expenseDetails.garbage +
+      props.currentYearData.expenseDetails.gas +
+      props.currentYearData.expenseDetails.other +
+      props.currentYearData.expenseDetails.hoaFees +
+      props.currentYearData.expenseDetails.waterAndSewer
+    );
+    setTotalFixedExpenses(updatedTotalFixedExpenses);
 
-  const pieChartProps: IPieChartProps = {
-    labels: ['Mortgage', 'Taxes', 'Insurance', 'Variable Expenses', 'Fixed Expenses'],
-    data: [mortgage, taxes, insurance, totalVariableExpenses, totalFixedExpenses],
-    backgroundColors: [
-        '#4A7A40',  // Muted green
-        '#C47766',  // Muted reddish-brown
-        '#D9B98A',  // Muted beige
-        '#617A40',  // Dark olive green
-        '#A4BBA0'   // Muted light green
-    ],
-    hoverBackgroundColors: [
-        '#4A7A40',
-        '#C47766',
-        '#D9B98A',
-        '#617A40',
-        '#A4BBA0'
-    ],
-  };
+    const updatedTotalVariableExpenses = (
+      props.currentYearData.expenseDetails.capitalExpenditure +
+      props.currentYearData.expenseDetails.managementFee +
+      props.currentYearData.expenseDetails.maintenance +
+      props.currentYearData.expenseDetails.vacancy
+    );
+    setTotalVariableExpenses(updatedTotalVariableExpenses);
+
+    const updatedMonthlyTotalExpenses = calculationUtils.calculateRentalTotalExpense(props.currentYearData);
+    setMonthlyTotalExpenses(updatedMonthlyTotalExpenses);
+
+    const updatedPieChartProps: IPieChartProps = {
+      labels: ['Mortgage', 'Taxes', 'Insurance', 'Variable Expenses', 'Fixed Expenses'],
+      data: [updatedMortgage, updatedTaxes, updatedInsurance, updatedTotalVariableExpenses, updatedTotalFixedExpenses],
+      backgroundColors: [
+          '#4A7A40',  // Muted green
+          '#C47766',  // Muted reddish-brown
+          '#D9B98A',  // Muted beige
+          '#617A40',  // Dark olive green
+          '#A4BBA0'   // Muted light green
+      ],
+      hoverBackgroundColors: [
+          '#4A7A40',
+          '#C47766',
+          '#D9B98A',
+          '#617A40',
+          '#A4BBA0'
+      ],
+    };
+    setPieChartProps(updatedPieChartProps);
+
+    setTaxes(updatedTaxes);
+    setInsurance(updatedInsurance);
+
+  }, [props.currentYearData]); // Dependency array to trigger useEffect on props change
 
   return (
     <div className="calculator-container">

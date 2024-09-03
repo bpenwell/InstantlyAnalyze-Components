@@ -83,13 +83,19 @@ export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props:
     }, []);
 
     const handleRentalIncomeChange = (newValue: ValueType) => {
-        props.updateInitialData({
+        const newData: IRentalCalculatorData = {
             ...initialRentalReportData, 
             rentalIncome: {
                 ...initialRentalReportData.rentalIncome,
                 grossMonthlyIncome: newValue as number
-            }
-        });
+            },
+        };
+        newData.expenseDetails.capitalExpenditure = calculatorUtils.calculateCapitalExpenditureAbsoluteValue(newData);
+        newData.expenseDetails.maintenance = calculatorUtils.calculateMaintanenceAbsoluteValue(newData);
+        newData.expenseDetails.managementFee = calculatorUtils.calculateManagementFeeAbsoluteValue(newData);
+        newData.expenseDetails.vacancy = calculatorUtils.calculateVacancyAbsoluteValue(newData);
+
+        props.updateInitialData(newData);
     };
     const handleOtherExpensesChange = (newValue: ValueType) => {
         props.updateInitialData({
