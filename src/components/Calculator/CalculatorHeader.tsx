@@ -56,7 +56,7 @@ export const CalculatorHeader: React.FC<ICalculatorHeaderProps> = ({
     return (
         <div className="combined-container">
             <div className="image-container">
-                <img src={getImageSrc(initialData) } alt="Property" />
+                <img src={getImageSrc(initialData) } alt="Property" className='image-property' />
             </div>
             <div className="address-container">
                 <h2 className="text-3xl font-bold">{initialData.propertyInformation.streetAddress}</h2>

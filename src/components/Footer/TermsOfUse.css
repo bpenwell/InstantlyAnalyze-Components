@@ -1,16 +1,11 @@
 .terms-of-use {
-    width: 90%; /* Adjust width for mobile */
+    width: 100%;
     justify-content: center;
     color: #ffffff;
     text-align: center;
     padding: 10px;
-    font-size: 12px; /* Adjust font size for mobile */
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .terms-of-use p {
-    margin: 0;
-    line-height: 1.4;
+    font-size: 12px;
+    /*box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);*/
   }
   
   /* Media queries for mobile */

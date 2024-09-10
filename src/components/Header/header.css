@@ -1,12 +1,33 @@
-.header-container {
-  display: flex;
-  align-items: stretch; /* Ensure children can stretch to full height */
-  justify-content: space-between;
+body {
+  padding-top: 64px; /* Adjust this to match the header height */
+}
+
+.header-background {
+  width: 100%;
   background-color: #353535;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  padding-top: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
+  transition: box-shadow 0.1s ease-in-out; /* Smooth transition for shadow */
+}
+
+/* Shadow applied when scrolled */
+.header-shadow {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.header-container {
+  width: 1440px;
+  margin: 0 auto; /* Center the header content */
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
   color: #e2f1e8;
-  position: relative;
-  flex-wrap: nowrap; /* Prevent wrapping */
-  height: 60px; /* Or whatever height your header needs to be */
+  flex-wrap: nowrap;
 }
 
 h1 {
@@ -30,6 +51,15 @@ h1 {
   gap: 5px;
   justify-content: flex-end;
 }
+
+.header-left h1 {
+  padding-left: 5px;
+}
+
+.header-left a {
+  max-height: 100%;
+}
+
 
 @media (max-width: 768px) {
   .header-container {

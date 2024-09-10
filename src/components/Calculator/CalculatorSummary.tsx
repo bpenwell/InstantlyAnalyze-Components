@@ -10,13 +10,11 @@ export interface ICalculatorSummary extends IRentalCalculatorPageProps {
 
 export const CalculatorSummary: React.FC<ICalculatorSummary> = (props: ICalculatorSummary) => {
   const calculationUtils: CalculationUtils = new CalculationUtils();
-  const { fullLoanTermRentalReportData, updateDataYear, currentYearData } = props;
-  const [currentYear, updateCurrentYear] = useState<number>(0);
+  const { fullLoanTermRentalReportData, updateDataYear, currentYearData, currentYear } = props;
 
   const handlePointClick = (index: number, value: number, label: string) => {
     const newYear: number = Number(label);
     updateDataYear(newYear);
-    updateCurrentYear(newYear);
   };
 
   const shouldDisplayChartTermYear = (termYear: number): boolean => {
@@ -76,7 +74,7 @@ export const CalculatorSummary: React.FC<ICalculatorSummary> = (props: ICalculat
 
   const fiveYearOrLessYear = fullLoanTermRentalReportData.length >= 5 ? 5 : fullLoanTermRentalReportData.length;
   const fiveYearReturn = displayAsMoney(calculationUtils.calculateFiveYearAnnualizedReturn(fullLoanTermRentalReportData), 2, '');
-  const mortgagePayment = displayAsMoney(calculationUtils.calculateMortgagePayment(currentYearData));
+  const mortgagePayment = displayAsMoney(calculationUtils.calculateMortgagePayment(currentYearData), 2);
 
   return (
     <div className='calculator-container'>
@@ -86,17 +84,17 @@ export const CalculatorSummary: React.FC<ICalculatorSummary> = (props: ICalculat
           <LineChart {...summaryChartProps} />
           <div className="analysis-report-cashflow-aside">
             <div className="analysis-report-cashflow-breakdown-cashflow">
-              <p>Monthly Cashflow</p>
-              <span className="analysis-report-cashflow-aside-cashflow">${monthlyCashFlow.toFixed(0)}</span>
+              <p>{`Monthly Cashflow${currentYear !== 0 ? ` (at year ${currentYear})` : ''}`}</p>
+              <span className="analysis-report-cashflow-aside-cashflow">${monthlyCashFlow.toFixed(0)} /mo</span>
             </div>
             <div className="analysis-report-cashflow-breakdown-other">
               <div>
                 <p>Income</p>
-                <span className="analysis-report-cashflow-aside-income">${income.toFixed(0)}</span>
+                <span className="analysis-report-cashflow-aside-income">${income.toFixed(0)} /mo</span>
               </div>
               <div>
                 <p>Expenses</p>
-                <span className="analysis-report-cashflow-aside-expenses">${expenses.toFixed(0)}</span>
+                <span className="analysis-report-cashflow-aside-expenses">${expenses.toFixed(0)} /mo</span>
               </div>
               <div>
                 <p>CoC ROI</p>

@@ -20,7 +20,10 @@ export const FlyoutDropdown: React.FC<IFlyoutDropdownProps> = ({ items }) => {
           <li key={index} className="flydown-item">
             <a href={item.link}>
               <div className="flydown-icon">
-                <img className="material-icons" src={item.iconSrc} style={{ color: '#E546D9' }}/>
+                <img
+                  className="material-icons"
+                  src={item.iconSrc}
+                />
               </div>
               <div className="flydown-content">
                 <div className="flydown-title">

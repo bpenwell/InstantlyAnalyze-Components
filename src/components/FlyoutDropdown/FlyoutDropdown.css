@@ -1,11 +1,10 @@
 .flydown-menu {
-  width: 100%;
+  width: 99vw;
   background-color: #2e2e2e;
-  border-radius: 5px;
+  border-radius: 0px 0px 0.25vw 0.25vw;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   z-index: 2000;
   transition: max-height 0.3s ease-in-out;
-  padding: 10px;
 }
 
 .flydown-grid {
@@ -13,7 +12,7 @@
   grid-template-columns: 1fr 1fr; /* Two columns */
   gap: 10px; /* Space between columns */
   list-style: none;
-  padding: 0;
+  padding: 10px;
   margin: 0;
 }
 

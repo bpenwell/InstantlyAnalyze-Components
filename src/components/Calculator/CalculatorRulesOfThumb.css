@@ -2,7 +2,6 @@
     display: flex;
     justify-content: center;
     flex-direction: column;
-    width: 100%; /* Changed from 20rem to 100% for mobile */
 }
 
 .rules-of-thumb-table {
@@ -16,7 +15,7 @@
     font-size: 16px; /* Reduced font size for mobile */
     padding: 5px;
     text-align: center;
-    width: auto;
+    /*width: auto;*/
     white-space: nowrap;
     border: none;
 }

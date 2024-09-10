@@ -1,6 +1,6 @@
 import React from 'react';
 import { IRentalCalculatorPageProps } from '../../interfaces';
-import LineChart, { ILineChartDataset } from '../Charts/LineChart';
+import LineChart, { ILineChartDataset, ILineChartProps } from '../Charts/LineChart';
 import { TIME_PERIODS, CalculationUtils, displayAsMoney, displayAsPercent } from '@bpenwell/rei-module';
 import { CHART_COLORS } from '../../constants';
 import './CalculatorLoanPaydown.css';
@@ -48,7 +48,7 @@ export const CalculatorLoanPaydown: React.FC<IRentalCalculatorPageProps> = (prop
     const profitIfSoldData = applicableLoanTermTimePeriods.map(year => calculationUtils.calculateProfitIfSold([fullLoanTermRentalReportData[year]]));
     const annualizedReturnData = applicableLoanTermTimePeriods.map(year => calculationUtils.calculateAnnualizedReturn([fullLoanTermRentalReportData[year]]));
 
-    const chartProps = {
+    const chartProps: ILineChartProps = {
         datasets: [loanBalanceData, equityData, propertyValueData],
         labels: applicableLoanTermTimePeriods.map(year => `${year}`),
         interactive: false,
@@ -66,7 +66,7 @@ export const CalculatorLoanPaydown: React.FC<IRentalCalculatorPageProps> = (prop
                         <tr>
                             <td></td>
                             {applicableLoanTermTimePeriods.map((year, index) => (
-                                <td key={index}>Year {year}</td>
+                                <td key={index}>{index === 0 ? '-' : `Year ${year}`}</td>
                             ))}
                         </tr>
                     </thead>
@@ -95,14 +95,14 @@ export const CalculatorLoanPaydown: React.FC<IRentalCalculatorPageProps> = (prop
                                 Loan Balance
                             </td>
                             {loanBalanceData.data.map((value, index) => (
-                                <td key={index}>{displayAsMoney(value, 0, "$", true)}</td>
+                                <td key={index}>{displayAsMoney(value, 0, "$", false, true)}</td>
                             ))}
                         </tr>
                         {/* New Rows */}
                         <tr>
                             <td>Cash Flow</td>
                             {cashFlowData.map((value, index) => (
-                                <td key={index}>{displayAsMoney(value, 0, "$", true)}</td>
+                                <td key={index}>{displayAsMoney(value, 0, "$", false, true)}</td>
                             ))}
                         </tr>
                         <tr>
@@ -120,7 +120,7 @@ export const CalculatorLoanPaydown: React.FC<IRentalCalculatorPageProps> = (prop
                         <tr>
                             <td>Annualized Return</td>
                             {annualizedReturnData.map((value, index) => (
-                                <td key={index}>{displayAsPercent(value)}</td>
+                                <td key={index}>{index === 0 ? '-' : `${displayAsPercent(value)}`}</td>
                             ))}
                         </tr>
                     </tbody>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '../Button/Button';
 import {
   TOOL_IDS,
@@ -21,7 +21,7 @@ export const Header: React.FC<HeaderProps> = (props) => {
   const { user } = props;
   const redirectApi: RedirectAPI = new RedirectAPI();
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
-  console.log(`isDropdownOpen=${isDropdownOpen}`);
+  const [isScrolled, setIsScrolled] = useState<boolean>(false);
 
   const handleDropdownToggle = (isOpen: boolean) => {
     setIsDropdownOpen(isOpen);
@@ -47,13 +47,25 @@ export const Header: React.FC<HeaderProps> = (props) => {
     }],
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
-    <header>
+    <header id='header-background' className={`header-background ${isScrolled ? 'header-shadow' : ''}`}>
       <div className="header-container">
         <div className="header-left">
           <a href="/">
             <img
-              src="/public/logo103.png"
+              src="/public/logo69.png"
               alt="REI Automated"
               className="header-logo"
             />
@@ -101,7 +113,7 @@ export const Header: React.FC<HeaderProps> = (props) => {
           )}
         </div>
       </div>
-      {isDropdownOpen ? (
+      {isDropdownOpen && (
         <div
           className="flyout-container"
           onMouseEnter={() => setIsDropdownOpen(true)}
@@ -109,7 +121,7 @@ export const Header: React.FC<HeaderProps> = (props) => {
         >
           <FlyoutDropdown {...productFlyoutProps} />
         </div>
-      ) : <></>}
+      )}
     </header>
   );
 };

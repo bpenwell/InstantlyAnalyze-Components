@@ -20,6 +20,10 @@
     display: block;
 }
 
+.image-property {
+    border-radius: 10px;
+}
+
 .address-container {
     flex: 1;
     flex-direction: column;

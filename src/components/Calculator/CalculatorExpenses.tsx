@@ -86,6 +86,7 @@ export const CalculatorExpenses: React.FC<IRentalCalculatorPageProps> = (props: 
 
   }, [props.currentYearData]); // Dependency array to trigger useEffect on props change
 
+  console.debug(`taxes.toFixed=${taxes.toFixed}`)
   return (
     <div className="calculator-container">
       <div className="expenses-container">

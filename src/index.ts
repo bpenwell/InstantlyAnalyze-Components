@@ -24,3 +24,4 @@ export { CalculatorRulesOfThumb } from './components/Calculator/CalculatorRulesO
 export { CalculatorLoanPaydown } from './components/Calculator/CalculatorLoanPaydown';
 export { TermsOfUse } from './components/Footer/TermsOfUse';
 export { Separator } from './components/Separator/Separator';
+export { ImageUploadContainer, IImageUploadContainerProps } from './components/ImageUploadContainer/ImageUploadContainer';

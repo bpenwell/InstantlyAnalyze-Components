@@ -13,6 +13,7 @@ import {
   ChartOptions,
 } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
+import { displayAsMoney } from '@bpenwell/rei-module';
 
 ChartJS.register(LineElement, PointElement, Tooltip, Legend, Title, CategoryScale, LinearScale, annotationPlugin);
 
@@ -29,10 +30,16 @@ export interface ILineChartProps {
   title?: string;
   onPointClick?: (index: number, value: number, label: string) => void;
   interactive?: boolean; // New prop to control interaction
+  //Defaults to true. In conflict with addCommas. Only pick one
+  compressData?: boolean;
+  //Defaults to false. In conflict with compressData. Only pick one
+  addCommas?: boolean;
+  //Defaults to 0, applies to Y-axis.
+  decimalCount?: number;
 }
 
 const LineChart: React.FC<ILineChartProps> = (props) => {
-  const { datasets, labels, onPointClick, interactive = true } = props;
+  const { datasets, labels, onPointClick, interactive = true, compressData = true, addCommas = false, decimalCount = 0 } = props;
   const chartRef = useRef<any>(null);
   const [activeAnnotationId, setActiveAnnotationId] = useState<string | null>(null);
   let minY = Infinity;
@@ -165,7 +172,7 @@ const LineChart: React.FC<ILineChartProps> = (props) => {
           font: {
             size: 12,
           },
-          callback: (value: any) => `$${value}`,
+          callback: (value: any) => displayAsMoney(value, decimalCount, '$', compressData, addCommas),
         },
         grid: {
           display: false,

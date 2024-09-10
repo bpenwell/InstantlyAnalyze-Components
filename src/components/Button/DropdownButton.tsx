@@ -36,6 +36,7 @@ export const DropdownButton: React.FC<DropdownButtonProps> = ({
       ref={buttonRef}
       onClick={handleOnClick}
       onMouseLeave={() => handleDropdownToggle?.(false)}
+      onMouseEnter={() => handleDropdownToggle?.(true)}
     >
       <span className="dropdown-button-label">
         {label}

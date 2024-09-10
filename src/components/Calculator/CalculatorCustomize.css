@@ -7,6 +7,19 @@
     margin-bottom: 20px;
 }
 
+.total-cash-header,
+.total-cash-value {
+    text-align: center;
+    margin-bottom: 10px; /* Adds spacing between the new header and the section below */
+    font-size: 1.2em; /* Adjust this to make the header smaller */
+    font-weight: bold;
+}
+
+.total-cash-header h3 {
+    font-size: 1.2em; /* Adjust this to make the header smaller */
+    font-weight: bold;
+}
+
 /* Grid layout for each .report-section, items stack vertically */
 .report-section {
     display: grid;
@@ -50,6 +63,7 @@
 .section-title {
     font-size: 20px; /* Reduced font size for mobile */
     align-content: center;
+    text-align: center;
     width: 100%;
 }
 
