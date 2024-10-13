@@ -22,6 +22,7 @@ export interface ButtonProps {
    * Optional click handler
    */
   onClick?: () => void;
+  loading?: boolean;
 
   [key: string]: any;
 }
@@ -34,6 +35,7 @@ export const Button = ({
   size = 'medium',
   backgroundColor,
   label,
+  loading = false, // Default is not loading
   ...props
 }: ButtonProps) => {
   let mode = 'storybook-button--secondary';
@@ -42,12 +44,19 @@ export const Button = ({
   }
   return (
     <button
-      type='button'
+      type="button"
       className={['storybook-button', `storybook-button--${size}`, mode].join(' ')}
       style={{ backgroundColor }}
       {...props}
+      disabled={loading} // Disable button when loading
     >
-      {label}
+      <div className="button-content">
+        {loading ? (
+          <div className="loading-spinner"></div> // Render loading spinner if loading
+        ) : (
+          label
+        )}
+      </div>
     </button>
   );
 };

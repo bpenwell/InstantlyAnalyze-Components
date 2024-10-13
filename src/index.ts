@@ -26,3 +26,5 @@ export { TermsOfUse } from './components/Footer/TermsOfUse';
 export { Separator } from './components/Separator/Separator';
 export { ImageUploadContainer, IImageUploadContainerProps } from './components/ImageUploadContainer/ImageUploadContainer';
 export { AddressForm } from './components/AddressForm/AddressForm';
+/*export { AddressFormV2 } from './components/AddressForm/AddressFormV2';*/
+export { Dropdown } from './components/Dropdown/Dropdown';

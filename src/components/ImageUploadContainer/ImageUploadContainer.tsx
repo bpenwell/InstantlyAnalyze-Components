@@ -1,18 +1,14 @@
-import { IRentalCalculatorData } from '@bpenwell/rei-module';
+import { IRentalCalculatorData, setRentalCalculatorFormState } from '@bpenwell/rei-module';
 import React, { useEffect, useState } from 'react';
 import './ImageUploadContainer.css';
 
 export interface IImageUploadContainerProps {
     image: string | undefined; //base64 image
-    setRentalCalculatorFormState: <T extends keyof IRentalCalculatorData>(
-        section: T,
-        field: keyof IRentalCalculatorData[T],
-        value: IRentalCalculatorData[T][keyof IRentalCalculatorData[T]]
-    ) => void;
+    setState: Function;
 };
 
 export const ImageUploadContainer = (props: IImageUploadContainerProps) => {
-    const { image, setRentalCalculatorFormState } = props;
+    const { image, setState } = props;
     
     const handleImageChange = (event: any) => {
         const file = event.target.files?.[0];
@@ -20,7 +16,7 @@ export const ImageUploadContainer = (props: IImageUploadContainerProps) => {
             const reader = new FileReader();
             reader.onloadend = () => {
                 const base64Image = reader.result;
-                setRentalCalculatorFormState('propertyInformation', 'image', base64Image as string);
+                setRentalCalculatorFormState(setState, 'propertyInformation', 'image', base64Image as string);
             };
             reader.readAsDataURL(file); // Convert image to base64 string
         }

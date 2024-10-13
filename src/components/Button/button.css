@@ -4,7 +4,9 @@
   border: 0;
   border-radius: 3em;
   cursor: pointer;
-  display: inline-block;
+  display: inline-flex; /* Changed to flexbox for consistent layout */
+  align-items: center;  /* Center content vertically */
+  justify-content: center; /* Center content horizontally */
   line-height: 1;
 }
 
@@ -21,14 +23,14 @@
 
 .storybook-button--secondary {
   color: #FFFFFF; /* White text */
-  background-color: #353535; /* Robinhood bright green background */
+  background-color: #353535; /* Dark grey background */
   box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;
   max-width: fit-content;
 }
 
 .storybook-button--third {
   color: #FFFFFF; /* White text */
-  background-color: #00c000; /* Robinhood bright green background */
+  background-color: #00c000; /* Bright green background */
   box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;
   max-width: fit-content;
 }
@@ -55,4 +57,29 @@
 
 .storybook-button--selected:hover {
   background-color: #004A00; /* Lighter green on hover */
+}
+
+.loading-spinner {
+  width: 8px; /* Set a fixed size for the spinner */
+  height: 8px; /* Set a fixed size for the spinner */
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid #ffffff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.button-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* Add spacing if needed between spinner and label */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

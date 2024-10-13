@@ -26,8 +26,8 @@ export const CalculatorExpenses: React.FC<IRentalCalculatorPageProps> = (props: 
     let updatedTaxes = props.currentYearData.expenseDetails.propertyTaxes;
     let updatedInsurance = props.currentYearData.expenseDetails.insurance;
 
-    if (props.currentYearData.purchaseDetails.rehabbingProperty && props.currentYearData.purchaseDetails.rehabRepairCosts) {
-      setRehabCost(props.currentYearData.purchaseDetails.rehabRepairCosts);
+    if (props.currentYearData.strategyDetails.isRehabbingProperty && props.currentYearData.strategyDetails.rehabRepairCosts) {
+      setRehabCost(props.currentYearData.strategyDetails.rehabRepairCosts);
     }
     
     const updatedMortgage = calculationUtils.calculateMortgagePayment(props.currentYearData);

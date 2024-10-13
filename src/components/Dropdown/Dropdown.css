@@ -1,0 +1,22 @@
+/* components/Dropdown.css */
+
+/* Style for the container of each input field */
+.input-container {
+    margin-bottom: 15px;
+}
+
+/* Style for the label above the dropdown */
+.label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Style for the dropdown select field */
+.input-field {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box; /* Ensures padding and border are included in the total width/height */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}

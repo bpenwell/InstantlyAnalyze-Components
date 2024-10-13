@@ -39,8 +39,13 @@ export const Input = (props: InputProps) => {
       const parsedValue = sanitizedValue ? parseFloat(sanitizedValue).toString() : '';
       setDisplayValue(parsedValue ? `${parsedValue}%` : ''); // Only append % if valid number exists
       adjustCaretPosition(type);
-    } else {
+    } else if (type === 'checkbox') {
+      //nothing
+    } else if (type === 'text' || type === 'select' || type === 'number') {
       setDisplayValue(valueNotUndefined.toString());
+    }
+    else {
+      throw new Error(`Invalid Input type: ${type}. Use currency, checkbox, percent, select, or dont set this value.`)
     }
   }, [valueNotUndefined]);
 
