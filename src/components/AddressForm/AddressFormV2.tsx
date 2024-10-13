@@ -2,7 +2,7 @@
 import '@webcomponents/webcomponentsjs/webcomponents-bundle.js';
 import 'construct-style-sheets-polyfill';
 import React, { useState } from 'react';
-import { AddressAutofill } from '@mapbox/search-js-react';
+//import { AddressAutofill } from '@mapbox/search-js-react';
 
 export const AddressFormV2 = () => {
   const [address, setAddress] = useState('');
@@ -14,6 +14,10 @@ export const AddressFormV2 = () => {
   };
 
   return (
+    <>
+    </>
+  );
+  /*return (
     <AddressAutofill
       accessToken="YOUR_MAPBOX_ACCESS_TOKEN"
       onRetrieve={handleRetrieve}
@@ -26,5 +30,5 @@ export const AddressFormV2 = () => {
         autoComplete="shipping street-address"
       />
     </AddressAutofill>
-  );
+  );*/
 }
