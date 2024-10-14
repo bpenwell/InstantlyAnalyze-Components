@@ -2,15 +2,13 @@ import React from 'react';
 
 import { Header } from '../Header/Header';
 import './page.css';
-import { IUserData } from '@bpenwell/rei-module';
 
 export interface PageProps {
-  user?: IUserData;
 }
 
-export const Page = ({ user }: PageProps) => (
+export const Page = (props: PageProps) => (
   <article>
-    <Header user={user}/>
+    <Header />
 
     <section className='pageSection'>
       <h2>Pages in Storybook</h2>

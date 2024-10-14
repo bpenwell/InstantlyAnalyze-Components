@@ -51,6 +51,7 @@
     "dist"
   ],
   "dependencies": {
+    "@auth0/auth0-react": "^2.2.4",
     "@bpenwell/rei-module": "file:../REI-Module",
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",

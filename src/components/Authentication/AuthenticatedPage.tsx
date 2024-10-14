@@ -2,23 +2,19 @@ import React, { Dispatch, Fragment } from 'react';
 import {
   RedirectAPI,
   PAGE_PATH,
-  IUserData
 } from '@bpenwell/rei-module';
 import { Children } from 'react';
-
-export interface IAuthenticatedPageProps {
-  user?: IUserData,
-  setUser?: (Dispatch<React.SetStateAction<IUserData | undefined>>),
-};
+import { useAuth0 } from "@auth0/auth0-react";
 
 /**
  * Primary UI component for user interaction
  */
 export const AuthenticatedPage = (props: any) => {
-  const { user, children } = props;
-  if(!user) {
-    const redirectApi: RedirectAPI = new RedirectAPI();
-    redirectApi.redirectToPage(PAGE_PATH.LOGIN);
+  const { children } = props;
+  const { isAuthenticated, loginWithRedirect } = useAuth0();
+
+  if(!isAuthenticated) {
+    loginWithRedirect();
     return <div/>;
   }
 
