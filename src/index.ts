@@ -8,7 +8,6 @@ export { Page } from './components/Page/Page';
 export type { PageProps } from './components/Page/Page';
 export { Footer } from './components/Footer/Footer';
 export { AuthenticatedPage } from './components/Authentication/AuthenticatedPage';
-export type { IAuthenticatedPageProps } from './components/Authentication/AuthenticatedPage';
 export { Input } from './components/Input/Input';
 export { ErrorBoundary } from './utils/ErrorBoundary';
 export { CalculatorTitle } from './components/Calculator/CalculatorTitle';

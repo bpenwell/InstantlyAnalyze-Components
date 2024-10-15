@@ -6,11 +6,12 @@ import {
   TOOL_ID_TO_TOOL_DESCRIPTION_MAP,
   TOOL_ID_TO_TOOL_LOGO_MAP,
   PAGE_PATH,
+  auth0Props,
 } from '@bpenwell/rei-module';
 import './header.css';
 import { DropdownButton } from '../Button/DropdownButton';
 import { IFlyoutDropdownProps, FlyoutDropdown, IFlydownData } from '../FlyoutDropdown/FlyoutDropdown';
-import { useAuth0 } from "@auth0/auth0-react";
+import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
 
 export interface HeaderProps {
 }
@@ -119,8 +120,7 @@ export const Header: React.FC<HeaderProps> = (props) => {
       {isDropdownOpen && (
         <div
           className="flyout-container"
-          onMouseEnter={() => setIsDropdownOpen(true)}
-          onMouseLeave={() => setIsDropdownOpen(false)}
+          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
         >
           <FlyoutDropdown {...productFlyoutProps} />
         </div>
