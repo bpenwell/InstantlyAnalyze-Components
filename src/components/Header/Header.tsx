@@ -96,7 +96,7 @@ export const Header: React.FC<HeaderProps> = (props) => {
               label="Log out"
             />*/
           ) : (
-            <>
+            <Auth0Provider {...auth0Props} >
               <Button
                 buttonType={"primary"}
                 size="small"
@@ -113,7 +113,7 @@ export const Header: React.FC<HeaderProps> = (props) => {
                 }}
                 label="Sign up"
               />
-            </>
+            </Auth0Provider>
           )}
         </div>
       </div>
