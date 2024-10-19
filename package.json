@@ -13,6 +13,7 @@
   "author": "bpenwell",
   "license": "ISC",
   "peerDependencies": {
+    "@auth0/auth0-react": "^2.2.4",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.25.1"
@@ -50,8 +51,8 @@
     "dist"
   ],
   "dependencies": {
-    "@auth0/auth0-react": "^2.2.4",
     "@bpenwell/rei-module": "file:../REI-Module",
+    "@cloudscape-design/components": "^3.0.793",
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
     "@mapbox/search-js-react": "^1.0.0-beta.22",

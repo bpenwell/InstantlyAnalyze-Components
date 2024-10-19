@@ -3,7 +3,6 @@ export { SelectableButton } from './components/Button/SelectableButton';
 export { DropdownButton } from './components/Button/DropdownButton';
 export type { ButtonProps } from './components/Button/Button';
 export { Header } from './components/Header/Header';
-export type { HeaderProps } from './components/Header/Header';
 export { Page } from './components/Page/Page';
 export type { PageProps } from './components/Page/Page';
 export { Footer } from './components/Footer/Footer';
@@ -27,3 +26,4 @@ export { ImageUploadContainer, IImageUploadContainerProps } from './components/I
 export { AddressForm } from './components/AddressForm/AddressForm';
 /*export { AddressFormV2 } from './components/AddressForm/AddressFormV2';*/
 export { Dropdown } from './components/Dropdown/Dropdown';
+export { AppLayoutPreview } from './components/AppLayout/AppLayout';
