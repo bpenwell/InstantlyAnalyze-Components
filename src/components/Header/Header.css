@@ -1,0 +1,38 @@
+/* Global header styles */
+header {
+    background-color: var(--header-background-color) !important;
+    color: var(--primary-text-color) !important;
+    padding: 10px 20px;
+}
+  
+header .top-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+  
+header .top-navigation .logo img {
+    max-height: 40px;
+}
+  
+header .top-navigation .identity {
+    color: var(--primary-text-color) !important;
+}
+  
+header .top-navigation .utilities {
+    display: flex;
+    gap: 10px;
+}
+  
+header .top-navigation .utilities .menu-dropdown {
+    background-color: var(--primary-button-color) !important;
+    color: #fff !important;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+  
+header .top-navigation .utilities .menu-dropdown:hover {
+    background-color: #5200cc !important;
+}  
