@@ -29,6 +29,10 @@ module.exports = {
     externals: {
       react: 'react',
       'react-dom': 'react-dom',
-      '@auth0/auth0-react': '@auth0/auth0-react'
+      '@auth0/auth0-react': '@auth0/auth0-react',
+      '@mui/material': '@mui/material',
+      '@mui/icons-material': '@mui/icons-material',
+      '@emotion/react': '@emotion/react',
+      '@emotion/styled': '@emotion/styled',
     },
 };

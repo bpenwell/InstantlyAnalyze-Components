@@ -14,6 +14,7 @@ import {
 } from '@cloudscape-design/components';
 import { I18nProvider } from '@cloudscape-design/components/i18n';
 import messages from '@cloudscape-design/components/i18n/messages/all.en';
+import { PAGE_PATH } from '@bpenwell/rei-module';
 
 const LOCALE = 'en';
 
@@ -21,25 +22,27 @@ export const AppLayoutPreview = () => {
   return (
     <I18nProvider locale={LOCALE} messages={[messages]}>
       <AppLayout
-        breadcrumbs={
+        /*breadcrumbs={
           <BreadcrumbGroup
             items={[
               { text: 'Home', href: '#' },
               { text: 'Service', href: '#' },
             ]}
           />
-        }
-        navigationOpen={true}
+        }*/
         navigation={
           <SideNavigation
             header={{
-              href: '#',
-              text: 'Service name',
+              href: '',
+              text: 'Products',
             }}
-            items={[{ type: 'link', text: `Page #1`, href: `#` }]}
+            items={[
+              { type: 'link', text: `Rental Report`, href: `${PAGE_PATH.RENTAL_CALCULATOR_HOME}` },
+              { type: 'link', text: `Zillow Scraper`, href: `${PAGE_PATH.ZILLOW_SCRAPER}` },
+            ]}
           />
         }
-        notifications={
+        /*notifications={
           <Flashbar
             items={[
               {
@@ -50,14 +53,14 @@ export const AppLayoutPreview = () => {
               },
             ]}
           />
-        }
+        }*/
         toolsOpen={true}
-        tools={<HelpPanel header={<h2>Overview</h2>}>Help content</HelpPanel>}
+        /*tools={<HelpPanel header={<h2>Overview</h2>}>Help content</HelpPanel>}*/
         content={
           <ContentLayout
             header={
               <Header variant="h1" info={<Link variant="info">Info</Link>}>
-                Page header
+                Home Page
               </Header>
             }
           >
@@ -72,7 +75,7 @@ export const AppLayoutPreview = () => {
             </Container>
           </ContentLayout>
         }
-        splitPanel={<SplitPanel header="Split panel header">Split panel content</SplitPanel>}
+        /*splitPanel={<SplitPanel header="Split panel header">Split panel content</SplitPanel>}*/
       />
     </I18nProvider>
   );
