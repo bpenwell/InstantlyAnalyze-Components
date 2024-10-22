@@ -67,7 +67,7 @@ export const AppLayoutPreview = (props: IAppLayoutPreview) => {
             ]}
           />
         }*/
-        toolsOpen={true}
+        toolsHide={true}
         /*tools={<HelpPanel header={<h2>Overview</h2>}>Help content</HelpPanel>}*/
         content={children}
         /*splitPanel={<SplitPanel header="Split panel header">Split panel content</SplitPanel>}*/
