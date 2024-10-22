@@ -30,6 +30,7 @@ module.exports = {
       react: 'react',
       'react-dom': 'react-dom',
       '@auth0/auth0-react': '@auth0/auth0-react',
+      '@cloudscape-design/global-styles': '@cloudscape-design/global-styles',
       '@mui/material': '@mui/material',
       '@mui/icons-material': '@mui/icons-material',
       '@emotion/react': '@emotion/react',

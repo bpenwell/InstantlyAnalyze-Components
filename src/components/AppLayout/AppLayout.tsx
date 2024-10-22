@@ -50,8 +50,13 @@ export const AppLayoutPreview = (props: IAppLayoutPreview) => {
               text: 'Products',
             }}
             items={[
-              { type: 'link', text: `Rental Report`, href: `#${PAGE_PATH.RENTAL_CALCULATOR_HOME}` },
-              { type: 'link', text: `Zillow Scraper`, href: `#${PAGE_PATH.ZILLOW_SCRAPER}` },
+              { defaultExpanded: window.location.hash.includes(PAGE_PATH.RENTAL_CALCULATOR_HOME), type: 'expandable-link-group', text: `Rental Property Calculator`, href: `#${PAGE_PATH.RENTAL_CALCULATOR_HOME}`, items: [
+                { type: 'link', text: `Dashboard`, href: `#${PAGE_PATH.RENTAL_CALCULATOR_VIEW}` },
+                { type: 'link', text: `Create`, href: `#${PAGE_PATH.RENTAL_CALCULATOR_CREATE}` },
+              ]},
+              { defaultExpanded: window.location.hash.includes(PAGE_PATH.ZILLOW_SCRAPER), type: 'expandable-link-group', text: `Zillow Scraper`, href: `#${PAGE_PATH.ZILLOW_SCRAPER}`, items: [
+                { type: 'link', text: `[BROKEN] Dashboard`, href: `#${PAGE_PATH.ZILLOW_SCRAPER}` },
+              ]},
             ]}
           />
         }
