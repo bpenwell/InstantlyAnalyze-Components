@@ -14,6 +14,8 @@
   "license": "ISC",
   "peerDependencies": {
     "@auth0/auth0-react": "^2.2.4",
+    "@cloudscape-design/chat-components": "^1.0.13",
+    "@cloudscape-design/components": "^3.0.793",
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
     "@mui/icons-material": "^6.0.0",
@@ -56,7 +58,6 @@
   ],
   "dependencies": {
     "@bpenwell/rei-module": "file:../REI-Module",
-    "@cloudscape-design/components": "^3.0.793",
     "@mapbox/search-js-react": "^1.0.0-beta.22",
     "@types/react-slick": "^0.23.13",
     "@webcomponents/webcomponentsjs": "^2.8.0",

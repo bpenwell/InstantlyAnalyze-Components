@@ -17,7 +17,7 @@ import {
     DataClassifier,
 } from '@bpenwell/rei-module';
 import { SelectableButton } from '../Button/SelectableButton';
-import { Spinner } from '../Spinner/Spinner';
+import { LoadingBar } from '../LoadingBar/LoadingBar';
 import { getApplicableLoanTermTimePeriods } from '@bpenwell/rei-module';
 
 const inputOptions: DataClassifier[] = [
@@ -366,7 +366,7 @@ export const CalculatorSensitivityTable: React.FC<IRentalCalculatorPageProps> = 
             </button>
             {isTableCleared ? <p>Table cleared due to report data updating.</p> : null}
             {loading ? (
-                <Spinner/>
+                <LoadingBar />
             ) : (
                 generatedTable.length > 0 && (
                     <>

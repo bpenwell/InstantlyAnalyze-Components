@@ -3,6 +3,7 @@ import React from 'react';
 import {
   AppLayout,
   BreadcrumbGroup,
+  BreadcrumbGroupProps,
   Container,
   ContentLayout,
   Flashbar,
@@ -18,18 +19,30 @@ import { PAGE_PATH } from '@bpenwell/rei-module';
 
 const LOCALE = 'en';
 
-export const AppLayoutPreview = () => {
+//Generate prop interface which passes children
+export interface IAppLayoutPreview {
+  children: React.ReactNode;
+};
+
+export const AppLayoutPreview = (props: IAppLayoutPreview) => {
+  const { children } = props;
+  const path = window.location.hash;
+  const breadcrumbPath = path.split('/');
+  let breadcrumbItems: {text: string, href:string}[] = [];
+  breadcrumbPath.forEach((p) => {
+    if(p.includes('#')) { return; }
+    const redirectPath = path.split(p)[0]; //everything before the current path
+    breadcrumbItems.push({ text: p.toUpperCase(), href: `${redirectPath}${p}` });
+  });
+
   return (
     <I18nProvider locale={LOCALE} messages={[messages]}>
       <AppLayout
-        /*breadcrumbs={
+        breadcrumbs={
           <BreadcrumbGroup
-            items={[
-              { text: 'Home', href: '#' },
-              { text: 'Service', href: '#' },
-            ]}
+            items={breadcrumbItems}
           />
-        }*/
+        }
         navigation={
           <SideNavigation
             header={{
@@ -37,8 +50,8 @@ export const AppLayoutPreview = () => {
               text: 'Products',
             }}
             items={[
-              { type: 'link', text: `Rental Report`, href: `${PAGE_PATH.RENTAL_CALCULATOR_HOME}` },
-              { type: 'link', text: `Zillow Scraper`, href: `${PAGE_PATH.ZILLOW_SCRAPER}` },
+              { type: 'link', text: `Rental Report`, href: `#${PAGE_PATH.RENTAL_CALCULATOR_HOME}` },
+              { type: 'link', text: `Zillow Scraper`, href: `#${PAGE_PATH.ZILLOW_SCRAPER}` },
             ]}
           />
         }
@@ -56,25 +69,7 @@ export const AppLayoutPreview = () => {
         }*/
         toolsOpen={true}
         /*tools={<HelpPanel header={<h2>Overview</h2>}>Help content</HelpPanel>}*/
-        content={
-          <ContentLayout
-            header={
-              <Header variant="h1" info={<Link variant="info">Info</Link>}>
-                Home Page
-              </Header>
-            }
-          >
-            <Container
-              header={
-                <Header variant="h2" description="Container description">
-                  Container header
-                </Header>
-              }
-            >
-              <div className="contentPlaceholder" />
-            </Container>
-          </ContentLayout>
-        }
+        content={children}
         /*splitPanel={<SplitPanel header="Split panel header">Split panel content</SplitPanel>}*/
       />
     </I18nProvider>

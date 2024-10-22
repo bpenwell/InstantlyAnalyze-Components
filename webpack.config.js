@@ -34,5 +34,7 @@ module.exports = {
       '@mui/icons-material': '@mui/icons-material',
       '@emotion/react': '@emotion/react',
       '@emotion/styled': '@emotion/styled',
+      '@cloudscape-design/chat-components': '@cloudscape-design/chat-components',
+      '@cloudscape-design/components': '@cloudscape-design/components',
     },
 };

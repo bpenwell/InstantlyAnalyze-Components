@@ -9,8 +9,8 @@ export const Header: React.FC = () => {
     return (
     <TopNavigation
       identity={{
-        href: '/',
-        title: 'Instantly Analyze',
+        href: PAGE_PATH.HOME,
+        title: 'Instantly AAnalyze',
         logo: {
           src: '/public/logo69.png',
           alt: 'Instantly Analyze',
@@ -59,7 +59,7 @@ export const Header: React.FC = () => {
     <div>
       <TopNavigation
         identity={{
-          href: '/',
+          href: PAGE_PATH.HOME,
           title: 'Instantly Analyze',
           logo: {
             src: '/public/logo69.png',
