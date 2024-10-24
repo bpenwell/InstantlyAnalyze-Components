@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useMemo } from 'react';
-import { useLocalStorage } from '@bpenwell/rei-module';
+import { PAGE_PATH, RedirectAPI, useLocalStorage } from '@bpenwell/rei-module';
 import { Box, Button, Header, HeaderProps, SpaceBetween } from '@cloudscape-design/components';
+import { DeleteWithConfirmation, Item } from '../DeleteWithConfirmation/DeleteWithConfirmation';
 
 export const TableNoMatchState = ({ onClearFilter }: { onClearFilter: () => void }) => (
     <Box margin={{ vertical: 'xs' }} textAlign="center" color="inherit">
@@ -16,36 +17,63 @@ export const TableNoMatchState = ({ onClearFilter }: { onClearFilter: () => void
       </SpaceBetween>
     </Box>
   );
-  
-  export const TableEmptyState = ({ resourceName }: { resourceName: string }) => (
+
+export const TableEmptyState = ({ resourceName }: { resourceName: string }) => {
+  const redirectAPI = new RedirectAPI();
+  const redirectToCreate = () => {
+    redirectAPI.redirectToPage(PAGE_PATH.RENTAL_CALCULATOR_CREATE);
+  };
+
+  return (
     <Box margin={{ vertical: 'xs' }} textAlign="center" color="inherit">
       <SpaceBetween size="xxs">
         <div>
           <b>No {resourceName.toLowerCase()}s</b>
           <Box variant="p" color="inherit">
-            No {resourceName.toLowerCase()}s associated with this resource.
+            No {resourceName.toLowerCase()}s associated with this address.
           </Box>
         </div>
         <Button>Create {resourceName.toLowerCase()}</Button>
       </SpaceBetween>
     </Box>
-);
+  );
+}
 
 interface FullPageHeaderProps extends HeaderProps {
   title?: string;
   createButtonText?: string;
   extraActions?: React.ReactNode;
-  selectedItemsCount: number;
+  selectedItems: readonly Item[];
+  handleDelete: () => void;
 }
 
 export function FullPageHeader({
-  title = 'Distributions',
-  createButtonText = 'Create distribution',
+  title = 'Reports',
+  createButtonText = 'Create report',
+  handleDelete,
   extraActions = null,
-  selectedItemsCount,
+  selectedItems,
   ...props
 }: FullPageHeaderProps) {
-  const isOnlyOneSelected = selectedItemsCount === 1;
+  const isOnlyOneSelected = selectedItems.length === 1;
+  const redirectAPI = new RedirectAPI();
+
+  const redirectToCreate = () => {
+    redirectAPI.redirectToPage(PAGE_PATH.RENTAL_CALCULATOR_CREATE);
+  };
+  
+  const redirectToEdit = () => {
+    redirectAPI.redirectToPage(PAGE_PATH.RENTAL_CALCULATOR_EDIT + `/${selectedItems[0].id}` as PAGE_PATH);
+  };
+
+
+  const deleteWithConfirmationRef = useRef<{ openModal: () => void }>(null);
+
+  const handleDeleteButtonClicked = () => {
+    if (deleteWithConfirmationRef.current) {
+      deleteWithConfirmationRef.current.openModal();
+    }
+  };
 
   return (
     <Header
@@ -53,16 +81,21 @@ export function FullPageHeader({
       actions={
         <SpaceBetween size="xs" direction="horizontal">
           {extraActions}
-          <Button data-testid="header-btn-view-details" disabled={!isOnlyOneSelected}>
-            View details
-          </Button>
-          <Button data-testid="header-btn-edit" disabled={!isOnlyOneSelected}>
+          <Button data-testid="header-btn-edit" disabled={!isOnlyOneSelected} onClick={redirectToEdit}>
             Edit
           </Button>
-          <Button data-testid="header-btn-delete" disabled={selectedItemsCount === 0}>
+          <Button data-testid="header-btn-delete" disabled={selectedItems.length === 0} onClick={handleDeleteButtonClicked}>
             Delete
           </Button>
-          <Button data-testid="header-btn-create" variant="primary">
+          <DeleteWithConfirmation
+            itemFieldNameForName='address'
+            itemType='report'
+            ref={deleteWithConfirmationRef}
+            itemsToDelete={selectedItems}
+            onDeleteConfirmed={handleDelete}
+          />
+
+          <Button data-testid="header-btn-create" variant="primary" onClick={redirectToCreate}>
             {createButtonText}
           </Button>
         </SpaceBetween>

@@ -35,3 +35,5 @@ export {
     mapWithColumnDefinitionIds,
     useColumnWidths,
 } from './components/Table/TableHelpers';
+export { ManualRefresh } from './components/ManualRefresh/ManualRefresh';
+export { DeleteWithConfirmation } from './components/DeleteWithConfirmation/DeleteWithConfirmation';
