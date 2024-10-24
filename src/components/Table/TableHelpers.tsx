@@ -33,7 +33,7 @@ export const TableEmptyState = ({ resourceName }: { resourceName: string }) => {
             No {resourceName.toLowerCase()}s associated with this address.
           </Box>
         </div>
-        <Button>Create {resourceName.toLowerCase()}</Button>
+        <Button onClick={redirectToCreate}>Create {resourceName.toLowerCase()}</Button>
       </SpaceBetween>
     </Box>
   );
