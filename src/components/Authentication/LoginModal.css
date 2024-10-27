@@ -28,7 +28,7 @@
   flex-direction: column;
   justify-content: center; /* Content stays centered vertically within this 40% section */
   align-items: center;
-  padding: 2rem;
+  padding: 10rem;
   background-color: rgba(46, 59, 78, 0.9); /* Slightly transparent dark background */
   backdrop-filter: blur(5px); /* Additional frosting on the modal content itself */
   border-top-left-radius: 10px;

@@ -15,7 +15,7 @@ import {
 } from '@cloudscape-design/components';
 import { I18nProvider } from '@cloudscape-design/components/i18n';
 import messages from '@cloudscape-design/components/i18n/messages/all.en';
-import { PAGE_PATH, toUpperCamelCase } from '@bpenwell/rei-module';
+import { getBreadcrumbsUUIDPageName, PAGE_PATH, toUpperCamelCase } from '@bpenwell/rei-module';
 
 const LOCALE = 'en';
 
@@ -26,14 +26,38 @@ export interface IAppLayoutPreview {
 
 export const AppLayoutPreview = (props: IAppLayoutPreview) => {
   const { children } = props;
-  const path = window.location.hash;
-  const breadcrumbPath = path.split('/');
-  let breadcrumbItems: {text: string, href:string}[] = [];
+  const path = window.location.hash.replace('#', '');
+  const breadcrumbPath = path.split('/').filter(segment => segment !== '');
+  let breadcrumbItems: { text: string; href: string }[] = [];
   let previousPath = '';
-  breadcrumbPath.forEach((path) => {
-    if(path.includes('#')) { return; }
-    breadcrumbItems.push({ text: toUpperCamelCase(path).replace('-', ' '), href: `#/${previousPath}${path}` });
-    previousPath += `${path}/`;
+  
+  function isUUID(segment: string): boolean {
+    const regex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    return regex.test(segment);
+  }
+  
+  breadcrumbPath.forEach((segment) => {
+    if (segment.includes('#')) {
+      return;
+    }
+  
+    let displayText = '';
+  
+    // Check if the segment is a UUID
+    if (isUUID(segment)) {
+      // Use the previousPath to determine the mapping
+      const mappedPath = getBreadcrumbsUUIDPageName(segment);
+      displayText = mappedPath;
+    } else {
+      displayText = toUpperCamelCase(segment).replace('-', ' ');
+    }
+  
+    breadcrumbItems.push({
+      text: displayText,
+      href: `#${previousPath}/${segment}`,
+    });
+  
+    previousPath += `/${segment}`;
   });
 
   return (

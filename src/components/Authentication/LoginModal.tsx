@@ -11,11 +11,11 @@ import { LOCAL_STORAGE_KEYS, useLocalStorage } from '@bpenwell/rei-module';
 import './LoginModal.css';
 
 export interface ILoginModalProps {
-  loginWithPopup: Function;
+  login: () => Promise<void>;
 }
 
-export const LoginModal: React.FC = (props: ILoginModalProps) => {
-  const { loginWithPopup } = props;
+export const LoginModal = (props: ILoginModalProps) => {
+  const { login } = props;
   const { isAuthenticated, user } = useAuth0();
   const [appMode] = useLocalStorage<Mode>(LOCAL_STORAGE_KEYS.APP_MODE, Mode.Light);
   const [showModal, setShowModal] = useState(true); // Control modal visibility
@@ -23,7 +23,7 @@ export const LoginModal: React.FC = (props: ILoginModalProps) => {
   const handleLogin = async () => {
     console.log('handleLogin');
     try {
-      await loginWithPopup();
+      await login();
       if (isAuthenticated) {
         console.log('User is authenticated:', user);
         // Hide the modal after successful login
@@ -43,13 +43,13 @@ export const LoginModal: React.FC = (props: ILoginModalProps) => {
       <Box textAlign="center" padding={{ top: "l" }} className={`login-background-container`}>
         <div className={`login-background ${appMode === Mode.Light ? 'login-background-light' : 'login-background-dark'}`}>
           <TextContent className={`info-${appMode}`}>
-            <h1 className={`info-${appMode}`}>
-              Get a massive edge up on the competition by hiring our <strong>eAgent</strong>.
-            </h1>
-            <p className={`info-${appMode}`}>
-              See why our eAgent will revolutionize your job as an investor, help you pick the best strategy to pursue on a deal, all while providing world-class analysis tools to inform your decision.
-            </p>
-            <SpaceBetween direction="vertical" size="l">
+            <SpaceBetween direction="vertical" size="xxl">
+              <h1 className={`info-${appMode}`}>
+                Get a massive edge up on the competition by hiring our <strong>eAgent</strong>.
+              </h1>
+              <p className={`info-${appMode}`}>
+                See why our eAgent will revolutionize your job as an investor, help you pick the best strategy to pursue on a deal, all while providing world-class analysis tools to inform your decision.
+              </p>
               <Button iconName="external" variant="primary" onClick={handleLogin}>
                 Authenticate
               </Button>

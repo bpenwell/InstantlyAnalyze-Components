@@ -37,7 +37,7 @@ export const AuthenticatedPage = (props: any) => {
         {Children.map(children, (child) => (
           <Fragment>{child}</Fragment>
         ))}
-        <LoginModal loginWithPopup={handleLoginClick} />
+        <LoginModal login={handleLoginClick} />
       </Fragment>
     );
   }
