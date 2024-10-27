@@ -1,8 +1,0 @@
-.loading-spinner {
-    width: 8px; /* Set a fixed size for the spinner */
-    height: 8px; /* Set a fixed size for the spinner */
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    border-top: 3px solid #ffffff;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}

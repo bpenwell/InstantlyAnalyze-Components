@@ -71,7 +71,11 @@ export const Header: React.FC = () => {
       onItemClick: (event: any) => {
         if (event.detail.id === 'logout') {
           event.preventDefault();
-          logout();
+          logout({
+            logoutParams: {
+              returnTo: window.location.origin
+            }
+          });
         }
       },
     });
