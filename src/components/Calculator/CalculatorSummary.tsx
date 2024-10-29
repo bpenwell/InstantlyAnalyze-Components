@@ -1,3 +1,5 @@
+// CalculatorSummary.tsx
+
 import React from 'react';
 import { IRentalCalculatorPageProps } from '../../interfaces';
 import { CalculationUtils, displayAsMoney, IRentalCalculatorData } from '@bpenwell/rei-module';
@@ -8,9 +10,8 @@ import {
   ColumnLayout,
   SpaceBetween,
   TextContent,
-  /*LineChart as CloudscapeLineChart,*/
 } from '@cloudscape-design/components';
-import LineChart, { ILineChartDataset, ILineChartProps } from '../Charts/LineChart';
+import { CloudscapeLineChart, ILineChartDataset, ILineChartProps} from './../Charts/CloudscapeLineChart';
 import './CalculatorSummary.css';
 
 export interface ICalculatorSummary extends IRentalCalculatorPageProps {
@@ -29,7 +30,10 @@ export const CalculatorSummary: React.FC<ICalculatorSummary> = (props: ICalculat
   const shouldDisplayChartTermYear = (termYear: number): boolean => {
     const overrideAcceptedYears = [0, 1, 2, 3, 4];
     const generalAcceptedYearMultiplier = 5;
-    return overrideAcceptedYears.includes(termYear) || termYear % generalAcceptedYearMultiplier === 0;
+    return (
+      overrideAcceptedYears.includes(termYear) ||
+      termYear % generalAcceptedYearMultiplier === 0
+    );
   };
 
   const getSummaryChartInputs = (): ILineChartProps => {
@@ -51,7 +55,7 @@ export const CalculatorSummary: React.FC<ICalculatorSummary> = (props: ICalculat
       borderColor: '#000000', // Black for cash flow
       backgroundColor: 'rgba(0, 0, 0, 0.75)', // Transparent black background
     };
-    
+
     const labels: string[] = [];
 
     fullLoanTermRentalReportData.forEach((data: IRentalCalculatorData, index: number) => {
@@ -93,12 +97,11 @@ export const CalculatorSummary: React.FC<ICalculatorSummary> = (props: ICalculat
   );
 
   return (
-    <Container header={<Header variant="h2">Cash Flow</Header>}>
+    <Container /*header={<Header variant="h2">Cash Flow</Header>}*/>
       <SpaceBetween size="l">
-        <div className='line-container'>
-          <LineChart {...summaryChartProps} />
+        <div className="line-container">
+          <CloudscapeLineChart {...summaryChartProps} />
         </div>
-        {/*<CloudscapeLineChart {...summaryChartProps} />*/}
         <Box>
           <TextContent>
             <h3>
