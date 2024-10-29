@@ -9,7 +9,7 @@ import { LoginModal } from './LoginModal';
  */
 export const AuthenticatedPage = (props: any) => {
   const { children } = props;
-  const { user, isAuthenticated, isLoading, error, loginWithPopup } = useAuth0();
+  const { isAuthenticated, isLoading, error, loginWithPopup } = useAuth0();
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const handleLoginClick = async () => {

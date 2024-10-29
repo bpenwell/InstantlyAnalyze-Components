@@ -1,15 +1,24 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import { IRentalCalculatorPageProps } from '../../interfaces';
+import { CalculationUtils, displayAsMoney, IRentalCalculatorData } from '@bpenwell/rei-module';
+import {
+  Container,
+  Header,
+  Box,
+  ColumnLayout,
+  SpaceBetween,
+  TextContent,
+  /*LineChart as CloudscapeLineChart,*/
+} from '@cloudscape-design/components';
+import LineChart, { ILineChartDataset, ILineChartProps } from '../Charts/LineChart';
 import './CalculatorSummary.css';
-import LineChart, { ILineChartProps, ILineChartDataset } from '../Charts/LineChart';
-import { CalculationUtils, displayAsMoney, IRentalCalculatorData, printObjectFields } from '@bpenwell/rei-module';
 
 export interface ICalculatorSummary extends IRentalCalculatorPageProps {
   updateDataYear: (loanTermIndex: number) => void;
 }
 
 export const CalculatorSummary: React.FC<ICalculatorSummary> = (props: ICalculatorSummary) => {
-  const calculationUtils: CalculationUtils = new CalculationUtils();
+  const calculationUtils = new CalculationUtils();
   const { fullLoanTermRentalReportData, updateDataYear, currentYearData, currentYear } = props;
 
   const handlePointClick = (index: number, value: number, label: string) => {
@@ -18,11 +27,11 @@ export const CalculatorSummary: React.FC<ICalculatorSummary> = (props: ICalculat
   };
 
   const shouldDisplayChartTermYear = (termYear: number): boolean => {
-    const overrideAcceptedYears: number[] = [0, 1, 2, 3, 4];
-    const generalAcceptedYearMultiplier: number = 5;
+    const overrideAcceptedYears = [0, 1, 2, 3, 4];
+    const generalAcceptedYearMultiplier = 5;
     return overrideAcceptedYears.includes(termYear) || termYear % generalAcceptedYearMultiplier === 0;
   };
-  
+
   const getSummaryChartInputs = (): ILineChartProps => {
     const incomeData: ILineChartDataset = {
       label: 'Income Data',
@@ -51,6 +60,7 @@ export const CalculatorSummary: React.FC<ICalculatorSummary> = (props: ICalculat
         const totalIncome = calculationUtils.calculateRentalIncome(data);
         const totalExpenses = calculationUtils.calculateRentalTotalExpense(data);
         const cashFlow = totalIncome - totalExpenses;
+
         incomeData.data.push(totalIncome);
         expenseData.data.push(totalExpenses);
         cashFlowData.data.push(cashFlow);
@@ -72,49 +82,68 @@ export const CalculatorSummary: React.FC<ICalculatorSummary> = (props: ICalculat
   const monthlyCashFlow = income - expenses;
   const cashOnCashROI = calculationUtils.calculateCoCROI(currentYearData);
 
-  const fiveYearOrLessYear = fullLoanTermRentalReportData.length >= 5 ? 5 : fullLoanTermRentalReportData.length;
-  const fiveYearReturn = displayAsMoney(calculationUtils.calculateFiveYearAnnualizedReturn(fullLoanTermRentalReportData), 2, '');
-  const mortgagePayment = displayAsMoney(calculationUtils.calculateMortgagePayment(currentYearData), 2);
+  const fiveYearOrLessYear =
+    fullLoanTermRentalReportData.length >= 5 ? 5 : fullLoanTermRentalReportData.length;
+  const fiveYearReturn = calculationUtils
+    .calculateFiveYearAnnualizedReturn(fullLoanTermRentalReportData)
+    .toFixed(2);
+  const mortgagePayment = displayAsMoney(
+    calculationUtils.calculateMortgagePayment(currentYearData),
+    2
+  );
 
   return (
-    <div className='calculator-container'>
-      <div className='summary-container'>
-        <h2 className='rc-header'>Cash Flow</h2>
-        <div className='chart-box-small-centered'>
+    <Container header={<Header variant="h2">Cash Flow</Header>}>
+      <SpaceBetween size="l">
+        <div className='line-container'>
           <LineChart {...summaryChartProps} />
-          <div className="analysis-report-cashflow-aside">
-            <div className="analysis-report-cashflow-breakdown-cashflow">
-              <p>{`Monthly Cashflow${currentYear !== 0 ? ` (at year ${currentYear})` : ''}`}</p>
-              <span className="analysis-report-cashflow-aside-cashflow">${monthlyCashFlow.toFixed(0)} /mo</span>
-            </div>
-            <div className="analysis-report-cashflow-breakdown-other">
-              <div>
-                <p>Income</p>
-                <span className="analysis-report-cashflow-aside-income">${income.toFixed(0)} /mo</span>
-              </div>
-              <div>
-                <p>Expenses</p>
-                <span className="analysis-report-cashflow-aside-expenses">${expenses.toFixed(0)} /mo</span>
-              </div>
-              <div>
-                <p>CoC ROI</p>
-                <span className="analysis-report-cashflow-aside-coc-roi">{cashOnCashROI.toFixed(2)}%</span>
-              </div>
-            </div>
-          </div>
         </div>
-        {/* Add the Mortgage payment and 5-year annualized return below the charts */}
-        <div className="summary-return-container">
-          <div>
-            <p className='return-header'>Mortgage Payment:</p>
-            <span className='mortgage-payment'>{mortgagePayment}</span>
-          </div>
-          <div>
-            <p className='return-header'>{`${fiveYearOrLessYear}-Year Annualized Return:`}</p>
-            <span className='five-year-return'>{fiveYearReturn}%</span>
-          </div>
-        </div>
-      </div>
-    </div>
+        {/*<CloudscapeLineChart {...summaryChartProps} />*/}
+        <Box>
+          <TextContent>
+            <h3>
+              {`Monthly Cash Flow${currentYear !== 0 ? ` (at year ${currentYear})` : ''}`}
+            </h3>
+            <Box variant="strong" fontSize="display-l">
+              ${monthlyCashFlow.toFixed(0)} /mo
+            </Box>
+          </TextContent>
+        </Box>
+        <ColumnLayout columns={3} variant="text-grid">
+          <Box>
+            <TextContent>
+              <h4>Income</h4>
+              <Box>${income.toFixed(0)} /mo</Box>
+            </TextContent>
+          </Box>
+          <Box>
+            <TextContent>
+              <h4>Expenses</h4>
+              <Box>${expenses.toFixed(0)} /mo</Box>
+            </TextContent>
+          </Box>
+          <Box>
+            <TextContent>
+              <h4>CoC ROI</h4>
+              <Box>{cashOnCashROI.toFixed(2)}%</Box>
+            </TextContent>
+          </Box>
+        </ColumnLayout>
+        <ColumnLayout columns={2}>
+          <Box>
+            <TextContent>
+              <h4>Mortgage Payment</h4>
+              <Box variant="strong">{mortgagePayment}</Box>
+            </TextContent>
+          </Box>
+          <Box>
+            <TextContent>
+              <h4>{`${fiveYearOrLessYear}-Year Annualized Return`}</h4>
+              <Box variant="strong">{fiveYearReturn}%</Box>
+            </TextContent>
+          </Box>
+        </ColumnLayout>
+      </SpaceBetween>
+    </Container>
   );
 };

@@ -100,21 +100,22 @@ export const CalculatorHeader: React.FC<ICalculatorHeaderProps> = ({
         </div>
 
         {/* Text input spanning middle and right columns */}
+        {/*
         <Box>
             <Header variant="h2">
                 Advice from your eAgent
             </Header>
-            
             <Textarea
                 value="This deal is quite difficult to make work"
-                /*onChange={({ detail }) => setStreamedText(detail.value)}*/
+                //onChange={({ detail }) => setStreamedText(detail.value)}
                 rows={10}
                 readOnly
                 placeholder="AI response will appear here..."
                 spellcheck={false}
-                /*style={{ fontFamily: 'monospace' }}*/s
+                //style={{ fontFamily: 'monospace' }}
                 />
         </Box>
+        */}
         </Grid>
     </Box>
     );
