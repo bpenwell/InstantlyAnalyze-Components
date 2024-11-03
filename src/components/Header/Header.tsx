@@ -63,7 +63,7 @@ export const Header: React.FC = () => {
       text: 'Market Reports',
       onClick: (event: any) => {
         event.preventDefault();
-        redirectApi.redirectToPage(PAGE_PATH.ZILLOW_SCRAPER);
+        redirectApi.redirectToPage(PAGE_PATH.MARKET_REPORTS);
       },
     },
     {

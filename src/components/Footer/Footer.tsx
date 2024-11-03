@@ -4,7 +4,7 @@ import './Footer.css';
 export function Footer() {
     return (
       <footer>
-        <p>&copy; 2024 REI Project. All rights reserved.</p>
+        <p>&copy; 2024 Instantly Analyze. All rights reserved.</p>
       </footer>
     );
 }

@@ -79,8 +79,8 @@ export const AppLayoutPreview = (props: IAppLayoutPreview) => {
               { defaultExpanded: window.location.hash.includes(PAGE_PATH.RENTAL_CALCULATOR_HOME), type: 'expandable-link-group', text: `Rental Property Calculator`, href: `#${PAGE_PATH.RENTAL_CALCULATOR_HOME}`, items: [
                 { type: 'link', text: `Dashboard`, href: `#${PAGE_PATH.RENTAL_CALCULATOR_VIEW}` },
               ]},
-              { defaultExpanded: window.location.hash.includes(PAGE_PATH.ZILLOW_SCRAPER), type: 'expandable-link-group', text: `Zillow Scraper`, href: `#${PAGE_PATH.ZILLOW_SCRAPER}`, items: [
-                { type: 'link', text: `[BROKEN] Dashboard`, href: `#${PAGE_PATH.ZILLOW_SCRAPER}` },
+              { defaultExpanded: window.location.hash.includes(PAGE_PATH.MARKET_REPORTS), type: 'expandable-link-group', text: `Zillow Scraper`, href: `#${PAGE_PATH.MARKET_REPORTS}`, items: [
+                { type: 'link', text: `[BROKEN] Dashboard`, href: `#${PAGE_PATH.MARKET_REPORTS}` },
               ]},
             ]}
           />
