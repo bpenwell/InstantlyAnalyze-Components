@@ -71,7 +71,7 @@ export const CloudscapeLineChart: React.FC<ILineChartProps> = (props) => {
       displayAsMoney(yTick, decimalCount, '$', compressData, addCommas),
   };
 
-  const handleChartClick = (event: React.MouseEvent<HTMLDivElement>) => {
+  /*const handleChartClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!onPointClick || !chartRef.current) return;
   
     // Replace '.awsui-line-chart__plot-container' with the actual class name of the plotting area
@@ -118,7 +118,7 @@ export const CloudscapeLineChart: React.FC<ILineChartProps> = (props) => {
     if (closestPoint.index !== -1) {
       onPointClick(closestPoint.index, closestPoint.y, closestPoint.label);
     }
-  };  
+  };*/
 
   return (
     <div
@@ -138,7 +138,7 @@ export const CloudscapeLineChart: React.FC<ILineChartProps> = (props) => {
         legendTitle="Legend"
         hideFilter={true}
       />
-      {interactive && (
+      {/*interactive && (
         <div
           onClick={handleChartClick}
           style={{
@@ -151,7 +151,7 @@ export const CloudscapeLineChart: React.FC<ILineChartProps> = (props) => {
             backgroundColor: 'transparent',
           }}
         />
-      )}
+      )*/}
     </div>
   );
 };

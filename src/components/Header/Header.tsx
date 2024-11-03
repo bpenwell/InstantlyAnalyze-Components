@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import { LOCAL_STORAGE_KEYS, PAGE_PATH, useLocalStorage } from "@bpenwell/rei-module";
+import { LOCAL_STORAGE_KEYS, PAGE_PATH, RedirectAPI, useLocalStorage } from "@bpenwell/rei-module";
 import {
   TopNavigation,
   TopNavigationProps,
@@ -15,6 +15,7 @@ export const Header: React.FC = () => {
   const { user, isAuthenticated, isLoading, loginWithRedirect, logout } = useAuth0();
   const [appMode, setAppMode] = useLocalStorage<Mode>(LOCAL_STORAGE_KEYS.APP_MODE, Mode.Light);
   const [appDensity, setAppDensity] = useLocalStorage<Density>(LOCAL_STORAGE_KEYS.APP_DENSITY, Density.Comfortable);
+  const redirectApi: RedirectAPI = new RedirectAPI();
   
   // State to manage modal visibility and theme selection
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -47,17 +48,33 @@ export const Header: React.FC = () => {
       }}
     />);
   }
-
   // Define utilities for the TopNavigation component
-  const authUtility: TopNavigationProps.Utility[] = [];
-  authUtility.push({
-    type: 'button',
-    iconName: 'settings',
-    onClick: (event: any) => {
-      event.preventDefault();
-      setIsModalVisible(true); // Show the modal when settings is clicked
+  const authUtility: TopNavigationProps.Utility[] = [
+    {
+      type: 'button',
+      text: 'Rental Reports',
+      onClick: (event: any) => {
+        event.preventDefault();
+        redirectApi.redirectToPage(PAGE_PATH.RENTAL_CALCULATOR_HOME);
+      },
     },
-  });
+    {
+      type: 'button',
+      text: 'Market Reports',
+      onClick: (event: any) => {
+        event.preventDefault();
+        redirectApi.redirectToPage(PAGE_PATH.ZILLOW_SCRAPER);
+      },
+    },
+    {
+      type: 'button',
+      iconName: 'settings',
+      onClick: (event: any) => {
+        event.preventDefault();
+        setIsModalVisible(true); // Show the modal when settings is clicked
+      },
+    },
+  ];
 
   if (isAuthenticated && user) {
     authUtility.push({
@@ -91,6 +108,40 @@ export const Header: React.FC = () => {
         }
       },
     });
+
+    authUtility.push({
+      type: 'button',
+      iconName: 'settings',
+      onClick: (event: any) => {
+        event.preventDefault();
+        setIsModalVisible(true); // Show the modal when settings is clicked
+      },
+    },);
+    /*
+
+    [
+      {
+        type: 'button',
+        iconName: 'settings',
+        onClick: (event: any) => {
+          event.preventDefault();
+          setIsModalVisible(true); // Show the modal when settings is clicked
+        },
+      },
+      {
+        type: 'link',
+        text: 'Home',
+        href: PAGE_PATH.HOME,
+      },
+      {
+        type: 'link',
+        text: 'About',
+        href: PAGE_PATH.ABOUT,
+      },
+      // Add the login/logout utility conditionally as you already have.
+    ]
+
+    */
   }
 
   return (

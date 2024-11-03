@@ -48,7 +48,8 @@ export const AppLayoutPreview = (props: IAppLayoutPreview) => {
       // Use the previousPath to determine the mapping
       const mappedPath = getBreadcrumbsUUIDPageName(segment);
       displayText = mappedPath;
-    } else {
+    }
+    else {
       displayText = toUpperCamelCase(segment).replace('-', ' ');
     }
   
@@ -68,7 +69,7 @@ export const AppLayoutPreview = (props: IAppLayoutPreview) => {
             items={breadcrumbItems}
           />
         }
-        navigation={
+        /*navigation={
           <SideNavigation
             header={{
               href: '',
@@ -83,7 +84,7 @@ export const AppLayoutPreview = (props: IAppLayoutPreview) => {
               ]},
             ]}
           />
-        }
+        }*/
         /*notifications={
           <Flashbar
             items={[
@@ -97,6 +98,7 @@ export const AppLayoutPreview = (props: IAppLayoutPreview) => {
           />
         }*/
         toolsHide={true}
+        navigationHide={true}
         /*tools={<HelpPanel header={<h2>Overview</h2>}>Help content</HelpPanel>}*/
         content={children}
         /*splitPanel={<SplitPanel header="Split panel header">Split panel content</SplitPanel>}*/
