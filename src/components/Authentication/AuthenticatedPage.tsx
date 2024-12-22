@@ -3,6 +3,7 @@ import React, { Fragment, useState } from 'react';
 import { useAuth0 } from "@auth0/auth0-react";
 import { Children } from 'react';
 import { LoginModal } from './LoginModal';
+import { Oval } from 'react-loader-spinner';
 
 /**
  * Primary UI component for user interaction
@@ -28,7 +29,22 @@ export const AuthenticatedPage = (props: any) => {
 
   if (isLoading && !isLoggingIn) {
     // While Auth0 is loading, show a loading indicator
-    return <div className="loading-spinner">Loading...</div>;
+    return (
+      <div className="loading-spinner">
+        <Oval
+          height={80}
+          width={80}
+          color="#4fa94d"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
+          ariaLabel="oval-loading"
+          secondaryColor="#4fa94d"
+          strokeWidth={2}
+          strokeWidthSecondary={2}
+        />
+      </div>
+    );
   }
   
   if (!isAuthenticated || isLoggingIn || error) {

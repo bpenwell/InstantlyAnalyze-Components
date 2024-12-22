@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Button, Header, SpaceBetween, Grid, Textarea } from '@cloudscape-design/components';
-import { BackendAPI, getImageSrc, IRentalCalculatorData, PAGE_PATH, printObjectFields, RedirectAPI } from '@bpenwell/rei-module';
+import { BackendAPI, getImageSrc, IRentalCalculatorData, PAGE_PATH, printObjectFields, RedirectAPI } from '@bpenwell/instantlyanalyze-module';
 import './CalculatorHeader.css';
 
 export interface ICalculatorHeaderProps {
@@ -92,6 +92,9 @@ export const CalculatorHeader: React.FC<ICalculatorHeaderProps> = ({
             <SpaceBetween size="s" direction="horizontal">
                 <Button variant="primary" onClick={handleSave} disabled={!isModified}>
                     Save
+                </Button>
+                <Button variant="normal" href={redirectAPI.createRentalCalculatorEditRedirectUrl()}>
+                    Edit
                 </Button>
                 <Button variant="normal" onClick={handleDelete}>
                     Delete Report

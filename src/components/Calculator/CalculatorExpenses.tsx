@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { IRentalCalculatorPageProps } from '../../interfaces';
 import './CalculatorExpenses.css';
 import '../Charts/Chart.css';
-import { CalculationUtils, Frequency } from '@bpenwell/rei-module';
+import { CalculationUtils, Frequency } from '@bpenwell/instantlyanalyze-module';
 import PieChart, { IPieChartProps } from '../Charts/PieChart';
 
 export const CalculatorExpenses: React.FC<IRentalCalculatorPageProps> = (props: IRentalCalculatorPageProps) => {

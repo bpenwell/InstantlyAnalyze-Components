@@ -13,7 +13,7 @@ import {
   ChartOptions,
 } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
-import { displayAsMoney } from '@bpenwell/rei-module';
+import { displayAsMoney } from '@bpenwell/instantlyanalyze-module';
 
 ChartJS.register(LineElement, PointElement, Tooltip, Legend, Title, CategoryScale, LinearScale, annotationPlugin);
 

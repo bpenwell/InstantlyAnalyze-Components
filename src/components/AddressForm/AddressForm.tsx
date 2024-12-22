@@ -6,7 +6,7 @@ import {
   PropertyAddress,
   USState,
   IRentcastPropertyData,
-} from '@bpenwell/rei-module';
+} from '@bpenwell/instantlyanalyze-module';
 import { Button } from '../Button/Button';
 import './AddressForm.css';
 import { LoadingBar } from '../LoadingBar/LoadingBar';

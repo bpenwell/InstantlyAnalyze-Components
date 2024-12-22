@@ -7,7 +7,7 @@ import {
   TextContent,
 } from '@cloudscape-design/components';
 import { Mode } from '@cloudscape-design/global-styles';
-import { LOCAL_STORAGE_KEYS, useLocalStorage } from '@bpenwell/rei-module';
+import { LOCAL_STORAGE_KEYS, useLocalStorage } from '@bpenwell/instantlyanalyze-module';
 import './LoginModal.css';
 
 export interface ILoginModalProps {

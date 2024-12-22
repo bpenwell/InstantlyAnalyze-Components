@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import {
     IRentalCalculatorData,
     BackendAPI,
-} from '@bpenwell/rei-module';
+    RedirectAPI,
+} from '@bpenwell/instantlyanalyze-module';
 import './CalculatorUpdate.css'; 
+import { Button } from '@cloudscape-design/components';
 
 export interface ICalculatorUpdateProps {
     reportId: string;
@@ -14,6 +16,7 @@ export const CalculatorUpdate: React.FC<ICalculatorUpdateProps> = ({ reportId, i
     const [formData, setFormData] = useState<IRentalCalculatorData>(initialRentalReportData);
     const [isModified, setIsModified] = useState(false);
     const backendAPI = new BackendAPI();
+    const redirectAPI = new RedirectAPI();
 
     useEffect(() => {
         // Compare initial data with current formData to determine if modifications have been made
@@ -55,19 +58,25 @@ export const CalculatorUpdate: React.FC<ICalculatorUpdateProps> = ({ reportId, i
     return (
         <div className="calculator-update-container">
             <div className="calculator-update-buttons">
-                <button 
+                <Button
                     className="save-button" 
                     onClick={handleSave} 
                     disabled={!isModified}
                 >
                     Save
-                </button>
-                <button 
+                </Button>
+                <Button
+                    className="edit-button" 
+                    href={redirectAPI.createRentalCalculatorEditRedirectUrl()}
+                >
+                    Edit
+                </Button>
+                <Button 
                     className="delete-button" 
                     onClick={handleDelete}
                 >
                     Delete
-                </button>
+                </Button>
             </div>
         </div>
     );

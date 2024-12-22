@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { useMemo } from 'react';
-import { PAGE_PATH, RedirectAPI, useLocalStorage } from '@bpenwell/rei-module';
+import { PAGE_PATH, RedirectAPI, useLocalStorage } from '@bpenwell/instantlyanalyze-module';
 import { Box, Button, Header, HeaderProps, SpaceBetween } from '@cloudscape-design/components';
 import { DeleteWithConfirmation, Item } from '../DeleteWithConfirmation/DeleteWithConfirmation';
 
@@ -66,7 +66,6 @@ export function FullPageHeader({
     redirectAPI.redirectToPage(PAGE_PATH.RENTAL_CALCULATOR_EDIT + `/${selectedItems[0].id}` as PAGE_PATH);
   };
 
-
   const deleteWithConfirmationRef = useRef<{ openModal: () => void }>(null);
 
   const handleDeleteButtonClicked = () => {
@@ -81,7 +80,7 @@ export function FullPageHeader({
       actions={
         <SpaceBetween size="xs" direction="horizontal">
           {extraActions}
-          <Button data-testid="header-btn-edit" disabled={!isOnlyOneSelected} onClick={redirectToEdit}>
+          <Button data-testid="header-btn-edit" disabled={!isOnlyOneSelected}  onClick={redirectToEdit}>
             Edit
           </Button>
           <Button data-testid="header-btn-delete" disabled={selectedItems.length === 0} onClick={handleDeleteButtonClicked}>

@@ -5,7 +5,7 @@ import {
   LineChart,
   MixedLineBarChartProps,
 } from '@cloudscape-design/components';
-import { displayAsMoney } from '@bpenwell/rei-module';
+import { displayAsMoney } from '@bpenwell/instantlyanalyze-module';
 
 export interface ILineChartDataset {
   label: string;
@@ -123,7 +123,7 @@ export const CloudscapeLineChart: React.FC<ILineChartProps> = (props) => {
   return (
     <div
       ref={chartRef}
-      style={{ position: 'relative', width: '100%', height: '300px' }}
+      style={{ position: 'relative', width: '100%', height: '300px', paddingBottom: '50px' }}
     >
       <LineChart
         series={series}

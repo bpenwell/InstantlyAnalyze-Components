@@ -1,6 +1,6 @@
 import React from 'react';
 import { IRentalCalculatorPageProps } from '../../interfaces';
-import { CalculationUtils, displayAsMoney, displayAsPercent } from '@bpenwell/rei-module';
+import { CalculationUtils, displayAsMoney, displayAsPercent } from '@bpenwell/instantlyanalyze-module';
 import './CalculatorRulesOfThumb.css';
 
 export const CalculatorRulesOfThumb: React.FC<IRentalCalculatorPageProps> = (props) => {

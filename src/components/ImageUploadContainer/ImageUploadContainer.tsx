@@ -1,4 +1,4 @@
-import { IRentalCalculatorData, setRentalCalculatorFormState } from '@bpenwell/rei-module';
+import { IRentalCalculatorData, setRentalCalculatorFormState } from '@bpenwell/instantlyanalyze-module';
 import React, { useEffect, useState } from 'react';
 import './ImageUploadContainer.css';
 

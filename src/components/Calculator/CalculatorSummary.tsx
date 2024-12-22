@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { IRentalCalculatorPageProps } from '../../interfaces';
-import { CalculationUtils, displayAsMoney, IRentalCalculatorData } from '@bpenwell/rei-module';
+import { CalculationUtils, displayAsMoney, IRentalCalculatorData } from '@bpenwell/instantlyanalyze-module';
 import {
   Container,
   Header,

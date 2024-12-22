@@ -15,10 +15,10 @@ import {
     getDisplayByDataClassifier,
     IRentalCalculatorData,
     DataClassifier,
-} from '@bpenwell/rei-module';
+} from '@bpenwell/instantlyanalyze-module';
 import { SelectableButton } from '../Button/SelectableButton';
 import { LoadingBar } from '../LoadingBar/LoadingBar';
-import { getApplicableLoanTermTimePeriods } from '@bpenwell/rei-module';
+import { getApplicableLoanTermTimePeriods } from '@bpenwell/instantlyanalyze-module';
 
 const inputOptions: DataClassifier[] = [
     DataClassifier.RentalIncome,

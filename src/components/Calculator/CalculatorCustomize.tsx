@@ -33,7 +33,7 @@ import {
     displayAsPercent,
     Percentage,
     ValueType
-} from '@bpenwell/rei-module';
+} from '@bpenwell/instantlyanalyze-module';
 
 // Register the necessary components
 ChartJS.register(

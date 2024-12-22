@@ -1,7 +1,7 @@
 import React from 'react';
 import { IRentalCalculatorPageProps } from '../../interfaces';
 import LineChart, { ILineChartDataset, ILineChartProps } from '../Charts/LineChart';
-import { TIME_PERIODS, CalculationUtils, displayAsMoney, displayAsPercent } from '@bpenwell/rei-module';
+import { TIME_PERIODS, CalculationUtils, displayAsMoney, displayAsPercent } from '@bpenwell/instantlyanalyze-module';
 import { CHART_COLORS } from '../../constants';
 import './CalculatorLoanPaydown.css';
 
