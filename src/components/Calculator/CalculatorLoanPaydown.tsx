@@ -4,6 +4,7 @@ import LineChart, { ILineChartDataset, ILineChartProps } from '../Charts/LineCha
 import { TIME_PERIODS, CalculationUtils, displayAsMoney, displayAsPercent } from '@bpenwell/instantlyanalyze-module';
 import { CHART_COLORS } from '../../constants';
 import './CalculatorLoanPaydown.css';
+import { Container, Header, TextContent } from '@cloudscape-design/components';
 
 export const CalculatorLoanPaydown: React.FC<IRentalCalculatorPageProps> = (props) => {
     const calculationUtils = new CalculationUtils();
@@ -55,77 +56,79 @@ export const CalculatorLoanPaydown: React.FC<IRentalCalculatorPageProps> = (prop
     };
 
     return (
-        <div className="calculator-container" style={{ textAlign: 'center', marginBottom: '0px' }}>
+        <Container /*className="calculator-container"*/>
             <div className='loan-paydown-container'>
-                <h2>Loan Paydown Overview</h2>
+                <Header variant="h2">Loan Paydown Overview</Header>
                 <div className="chart-container" style={{ maxWidth: '50%', height: '20%' }}>
                     <LineChart {...chartProps} />
                 </div>
-                <table className="loan-paydown-table">
-                    <thead>
-                        <tr>
-                            <td></td>
-                            {applicableLoanTermTimePeriods.map((year, index) => (
-                                <td key={index}>{index === 0 ? '-' : `Year ${year}`}</td>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <span className="color-box" style={{ backgroundColor: CHART_COLORS.mainGreen }}></span>
-                                Property Value
-                            </td>
-                            {propertyValueData.data.map((value, index) => (
-                                <td key={index}>{displayAsMoney(value, 0, "$", true)}</td>
-                            ))}
-                        </tr>
-                        <tr>
-                            <td>
-                                <span className="color-box" style={{ backgroundColor: CHART_COLORS.variableExpensesOrange }}></span>
-                                Equity
-                            </td>
-                            {equityData.data.map((value, index) => (
-                                <td key={index}>{displayAsMoney(value, 0, "$", true)}</td>
-                            ))}
-                        </tr>
-                        <tr>
-                            <td>
-                                <span className="color-box" style={{ backgroundColor: CHART_COLORS.complementaryRed }}></span>
-                                Loan Balance
-                            </td>
-                            {loanBalanceData.data.map((value, index) => (
-                                <td key={index}>{displayAsMoney(value, 0, "$", false, true)}</td>
-                            ))}
-                        </tr>
-                        {/* New Rows */}
-                        <tr>
-                            <td>Cash Flow</td>
-                            {cashFlowData.map((value, index) => (
-                                <td key={index}>{displayAsMoney(value, 0, "$", false, true)}</td>
-                            ))}
-                        </tr>
-                        <tr>
-                            <td>Mortgage Payment</td>
-                            {mortgagePaymentData.map((value, index) => (
-                                <td key={index}>{displayAsMoney(value, 0, "$", true)}</td>
-                            ))}
-                        </tr>
-                        <tr>
-                            <td>Profit if Sold</td>
-                            {profitIfSoldData.map((value, index) => (
-                                <td key={index}>{displayAsMoney(value, 0, "$", true)}</td>
-                            ))}
-                        </tr>
-                        <tr>
-                            <td>Annualized Return</td>
-                            {annualizedReturnData.map((value, index) => (
-                                <td key={index}>{index === 0 ? '-' : `${displayAsPercent(value)}`}</td>
-                            ))}
-                        </tr>
-                    </tbody>
-                </table>
+                <TextContent>
+                    <table className="loan-paydown-table">
+                        <thead>
+                            <tr>
+                                <td></td>
+                                {applicableLoanTermTimePeriods.map((year, index) => (
+                                    <td key={index}>{index === 0 ? '-' : `Year ${year}`}</td>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <span className="color-box" style={{ backgroundColor: CHART_COLORS.mainGreen }}></span>
+                                    Property Value
+                                </td>
+                                {propertyValueData.data.map((value, index) => (
+                                    <td key={index}>{displayAsMoney(value, 0, "$", true)}</td>
+                                ))}
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span className="color-box" style={{ backgroundColor: CHART_COLORS.variableExpensesOrange }}></span>
+                                    Equity
+                                </td>
+                                {equityData.data.map((value, index) => (
+                                    <td key={index}>{displayAsMoney(value, 0, "$", true)}</td>
+                                ))}
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span className="color-box" style={{ backgroundColor: CHART_COLORS.complementaryRed }}></span>
+                                    Loan Balance
+                                </td>
+                                {loanBalanceData.data.map((value, index) => (
+                                    <td key={index}>{displayAsMoney(value, 0, "$", false, true)}</td>
+                                ))}
+                            </tr>
+                            {/* New Rows */}
+                            <tr>
+                                <td>Cash Flow</td>
+                                {cashFlowData.map((value, index) => (
+                                    <td key={index}>{displayAsMoney(value, 0, "$", false, true)}</td>
+                                ))}
+                            </tr>
+                            <tr>
+                                <td>Mortgage Payment</td>
+                                {mortgagePaymentData.map((value, index) => (
+                                    <td key={index}>{displayAsMoney(value, 0, "$", true)}</td>
+                                ))}
+                            </tr>
+                            <tr>
+                                <td>Profit if Sold</td>
+                                {profitIfSoldData.map((value, index) => (
+                                    <td key={index}>{displayAsMoney(value, 0, "$", true)}</td>
+                                ))}
+                            </tr>
+                            <tr>
+                                <td>Annualized Return</td>
+                                {annualizedReturnData.map((value, index) => (
+                                    <td key={index}>{index === 0 ? '-' : `${displayAsPercent(value)}`}</td>
+                                ))}
+                            </tr>
+                        </tbody>
+                    </table>
+                </TextContent>
             </div>
-        </div>
+        </Container>
     );
 };

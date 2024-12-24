@@ -34,6 +34,7 @@ import {
     Percentage,
     ValueType
 } from '@bpenwell/instantlyanalyze-module';
+import { Container, Header, TextContent } from '@cloudscape-design/components';
 
 // Register the necessary components
 ChartJS.register(
@@ -214,53 +215,55 @@ export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props:
     };
 
     return (
-        <div className='calculator-container'>
-            <h2 className='rc-header'>Test Different Scenarios</h2>
-            <div className='graph-box'>
-                <div className="report-section">
-                    <div className="section-header">
-                        <h3 className="section-title">Rental income</h3>
+        <Container className="calculator-container">
+            <Header variant="h2">Test Different Scenarios</Header>
+            <TextContent>
+                <div className='graph-box'>
+                    <div className="report-section">
+                        <div className="section-header">
+                            <h3 className="section-title">Rental income</h3>
+                        </div>
+                        <div className="section-body">
+                            {makeSliderContainer('Rental Income: ', `${displayAsMoney(rentalIncome)}`, rentalIncome, rentalIncomeSliderProps, setRentalIncome, handleRentalIncomeChange)}
+                        </div>
                     </div>
-                    <div className="section-body">
-                        {makeSliderContainer('Rental Income: ', `${displayAsMoney(rentalIncome)}`, rentalIncome, rentalIncomeSliderProps, setRentalIncome, handleRentalIncomeChange)}
+                    <div className="report-section">
+                        <div className="section-header">
+                            <h3 className="section-title">Expenses</h3>
+                        </div>
+                        <div className="section-body">
+                            {makeSliderContainer('Custom Expenses: ', `${displayAsMoney(otherExpenses)}`, otherExpenses, otherExpensesSliderProps, setOtherExpenses, handleOtherExpensesChange)}
+                        </div>
+                        <div className="section-body">
+                            {makeSliderContainer('Vacancy: ', `${displayAsPercent(vacancy, 0)}`, vacancy, vacancySliderProps, setVacancy as Dispatch<SetStateAction<number>>, handleVacancyChange)}
+                        </div>
+                        <div className="section-body">
+                            {makeSliderContainer('Management Fees: ', `${displayAsPercent(managementFees, 0)}`, managementFees, managementFeesSliderProps, setManagementFees as Dispatch<SetStateAction<number>>, handleManagementFeesChange)}
+                        </div>
+                    </div>
+                    <div className="report-section">
+                        <h3 className='section-title'>Total Cash Needed</h3>
+                        <div className='total-cash-value'>
+                            {displayAsMoney(totalCashNeeded, 0, '$', false, true)}
+                        </div>
+                        <div className="section-header">
+                            <h3 className="section-title">Loan details</h3>
+                        </div>
+                        <div className="section-body">
+                            {makeSliderContainer('Purchase price: ', `${displayAsMoney(purchasePrice)}`, purchasePrice, purchasePriceSliderProps, setPurchasePrice, handlePurchasePriceChange)}
+                        </div>
+                        <div className="section-body">
+                            {makeSliderContainer('Loan To Value (LTV): ', `${displayAsPercent(loanToValuePercent, 0, true)}`, loanToValuePercent * 100, loanToValuePercentSliderProps, setLoanToValuePercent as Dispatch<SetStateAction<number>>, handleLoanPercentageChange)}
+                        </div>
+                        <div className="section-body">
+                            {makeSliderContainer('Loan term: ', `${loanTerm} years`, loanTerm, loanTermSliderProps, setLoanTerm, handleLoanTermChange)}
+                        </div>
+                        <div className="section-body">
+                            {makeSliderContainer('Interest rate: ', `${displayAsPercent(interestRate, 0)}`, interestRate, interestRateSliderProps, setInterestRate as Dispatch<SetStateAction<number>>, handleInterestRateChange)}
+                        </div>
                     </div>
                 </div>
-                <div className="report-section">
-                    <div className="section-header">
-                        <h3 className="section-title">Expenses</h3>
-                    </div>
-                    <div className="section-body">
-                        {makeSliderContainer('Custom Expenses: ', `${displayAsMoney(otherExpenses)}`, otherExpenses, otherExpensesSliderProps, setOtherExpenses, handleOtherExpensesChange)}
-                    </div>
-                    <div className="section-body">
-                        {makeSliderContainer('Vacancy: ', `${displayAsPercent(vacancy, 0)}`, vacancy, vacancySliderProps, setVacancy as Dispatch<SetStateAction<number>>, handleVacancyChange)}
-                    </div>
-                    <div className="section-body">
-                        {makeSliderContainer('Management Fees: ', `${displayAsPercent(managementFees, 0)}`, managementFees, managementFeesSliderProps, setManagementFees as Dispatch<SetStateAction<number>>, handleManagementFeesChange)}
-                    </div>
-                </div>
-                <div className="report-section">
-                    <h3 className='section-title'>Total Cash Needed</h3>
-                    <div className='total-cash-value'>
-                        {displayAsMoney(totalCashNeeded, 0, '$', false, true)}
-                    </div>
-                    <div className="section-header">
-                        <h3 className="section-title">Loan details</h3>
-                    </div>
-                    <div className="section-body">
-                        {makeSliderContainer('Purchase price: ', `${displayAsMoney(purchasePrice)}`, purchasePrice, purchasePriceSliderProps, setPurchasePrice, handlePurchasePriceChange)}
-                    </div>
-                    <div className="section-body">
-                        {makeSliderContainer('Loan To Value (LTV): ', `${displayAsPercent(loanToValuePercent, 0, true)}`, loanToValuePercent * 100, loanToValuePercentSliderProps, setLoanToValuePercent as Dispatch<SetStateAction<number>>, handleLoanPercentageChange)}
-                    </div>
-                    <div className="section-body">
-                        {makeSliderContainer('Loan term: ', `${loanTerm} years`, loanTerm, loanTermSliderProps, setLoanTerm, handleLoanTermChange)}
-                    </div>
-                    <div className="section-body">
-                        {makeSliderContainer('Interest rate: ', `${displayAsPercent(interestRate, 0)}`, interestRate, interestRateSliderProps, setInterestRate as Dispatch<SetStateAction<number>>, handleInterestRateChange)}
-                    </div>
-                </div>
-            </div>
-        </div>
+            </TextContent>
+        </Container>
     );
 };

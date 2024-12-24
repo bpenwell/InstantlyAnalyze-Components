@@ -1,16 +1,19 @@
-// AuthenticatedPage.jsx
-import React, { Fragment, useState } from 'react';
+// AuthenticatedPage.tsx
+import React, { Fragment, useState, useEffect } from 'react';
 import { useAuth0 } from "@auth0/auth0-react";
 import { Children } from 'react';
 import { LoginModal } from './LoginModal';
 import { Oval } from 'react-loader-spinner';
 
-/**
- * Primary UI component for user interaction
- */
 export const AuthenticatedPage = (props: any) => {
   const { children } = props;
-  const { isAuthenticated, isLoading, error, loginWithPopup } = useAuth0();
+  const {
+    isAuthenticated,
+    isLoading,
+    error,
+    loginWithPopup,
+  } = useAuth0();
+
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const handleLoginClick = async () => {
@@ -28,7 +31,6 @@ export const AuthenticatedPage = (props: any) => {
   };
 
   if (isLoading && !isLoggingIn) {
-    // While Auth0 is loading, show a loading indicator
     return (
       <div className="loading-spinner">
         <Oval
@@ -36,7 +38,6 @@ export const AuthenticatedPage = (props: any) => {
           width={80}
           color="#4fa94d"
           wrapperStyle={{}}
-          wrapperClass=""
           visible={true}
           ariaLabel="oval-loading"
           secondaryColor="#4fa94d"
@@ -46,22 +47,23 @@ export const AuthenticatedPage = (props: any) => {
       </div>
     );
   }
-  
+
   if (!isAuthenticated || isLoggingIn || error) {
     return (
       <Fragment>
         {Children.map(children, (child) => (
-          <Fragment>{child}</Fragment>
+          <Fragment key={child.id}>{child}</Fragment>
         ))}
         <LoginModal login={handleLoginClick} />
       </Fragment>
     );
   }
-    
+
+  // Authenticated view
   return (
     <Fragment>
       {Children.map(children, (child) => (
-        <Fragment>{child}</Fragment>
+        <Fragment key={child.id}>{child}</Fragment>
       ))}
     </Fragment>
   );

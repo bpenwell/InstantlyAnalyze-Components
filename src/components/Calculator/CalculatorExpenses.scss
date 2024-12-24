@@ -1,0 +1,30 @@
+@use '@cloudscape-design/design-tokens/index' as awsui;
+@import '@cloudscape-design/global-styles/index.css';
+@import '@cloudscape-design/design-tokens/index.scss';
+
+.expenses-container {
+  width: 100%;
+  padding: 20px;
+}
+
+.expenses-content {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap; /* Ensure content wraps on smaller screens */
+}
+
+.expenses-box {
+  background-color: awsui.$color-background-container-content;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  flex: 1 1 calc(25% - 20px); /* Ensure four columns in a row */
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .expenses-box {
+    flex: 1 1 100%; /* Ensure full width on mobile */
+  }
+}

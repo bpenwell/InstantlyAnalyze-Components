@@ -30,10 +30,12 @@
 /* Adjusted layout for report sections to align items horizontally */
 .graph-box {
     display: grid; /* Changed from grid to flex */
-    width: 75%;
-    align-items: start;
+    width: 90%;
+    align-items: center;
     grid-template-columns: repeat(3, 1fr);
+
     gap: 30px;
+    padding: 10px;
 }
 
 /* Section header style */
@@ -83,7 +85,6 @@
 
 .slider-value {
     font-weight: bold;
-    color: #FFFFFF;
 }
 
 /* Custom styles for the slider */

@@ -37,7 +37,7 @@ export const AppLayoutPreview = (props: IAppLayoutPreview) => {
   }
   
   breadcrumbPath.forEach((segment) => {
-    if (segment.includes('#')) {
+    if (segment.includes('#') || segment.includes('profile')) {
       return;
     }
   

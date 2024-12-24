@@ -4,9 +4,8 @@ footer {
   align-items: center;
   text-align: center;
   padding: 10px;
-  background-color: #353535;
-  color: #fff;
   margin-top: auto; /* Push the footer to the bottom */
+  background-color: var(--color-background-layout-main-nqw91u, #ffffff);
 }
 
 /* Media queries for mobile */

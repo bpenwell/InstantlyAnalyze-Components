@@ -15,10 +15,11 @@ import {
     getDisplayByDataClassifier,
     IRentalCalculatorData,
     DataClassifier,
+    getApplicableLoanTermTimePeriods
 } from '@bpenwell/instantlyanalyze-module';
 import { SelectableButton } from '../Button/SelectableButton';
 import { LoadingBar } from '../LoadingBar/LoadingBar';
-import { getApplicableLoanTermTimePeriods } from '@bpenwell/instantlyanalyze-module';
+import { Container, Header, TextContent } from '@cloudscape-design/components';
 
 const inputOptions: DataClassifier[] = [
     DataClassifier.RentalIncome,
@@ -329,79 +330,81 @@ export const CalculatorSensitivityTable: React.FC<IRentalCalculatorPageProps> = 
     };
 
     return (
-        <div className="calculator-container">
-            <h3 className="header">Sensitivity Table</h3>
-            <div className="form-group">
-                <label className="label bold-label">Select Input Variables:</label>
-                <div className="button-group">
-                    {inputOptions.map((input) => (
-                        <SelectableButton
-                            key={input}
-                            label={input}
-                            isSelected={selectedInputs.includes(input)}
-                            onClick={() => handleInputChange(input)}
-                            isDisabled={selectedInputs.length >= 2 && !selectedInputs.includes(input)}
-                            className="selectable-button"
-                        />
-                    ))}
+        <Container className="calculator-container">
+            <Header variant="h2">Sensitivity Table</Header>
+            <TextContent>
+                <div className="form-group">
+                    <label className="label bold-label">Select Input Variables:</label>
+                    <div className="button-group">
+                        {inputOptions.map((input) => (
+                            <SelectableButton
+                                key={input}
+                                label={input}
+                                isSelected={selectedInputs.includes(input)}
+                                onClick={() => handleInputChange(input)}
+                                isDisabled={selectedInputs.length >= 2 && !selectedInputs.includes(input)}
+                                className="selectable-button"
+                            />
+                        ))}
+                    </div>
                 </div>
-            </div>
-            <div className="form-group">
-                <label className="label bold-label">Select Output Variables:</label>
-                <div className="button-group">
-                    {outputOptions.map((output) => (
-                        <SelectableButton
-                            key={output}
-                            label={output}
-                            isSelected={selectedOutput === output}
-                            onClick={() => handleOutputChange(output)}
-                            isDisabled={selectedOutput !== null && selectedOutput !== output}
-                            className="selectable-button"
-                        />
-                    ))}
+                <div className="form-group">
+                    <label className="label bold-label">Select Output Variables:</label>
+                    <div className="button-group">
+                        {outputOptions.map((output) => (
+                            <SelectableButton
+                                key={output}
+                                label={output}
+                                isSelected={selectedOutput === output}
+                                onClick={() => handleOutputChange(output)}
+                                isDisabled={selectedOutput !== null && selectedOutput !== output}
+                                className="selectable-button"
+                            />
+                        ))}
+                    </div>
                 </div>
-            </div>
-            <button className="submit-button" onClick={handleGenerateTable}>
-                Generate Table
-            </button>
-            {isTableCleared ? <p>Table cleared due to report data updating.</p> : null}
-            {loading ? (
-                <LoadingBar />
-            ) : (
-                generatedTable.length > 0 && (
-                    <>
-                        <div className="grid-container">
-                            <div className="top-header">
-                                {tableData[0]?.displayFormat.label}
+                <button className="submit-button" onClick={handleGenerateTable}>
+                    Generate Table
+                </button>
+                {isTableCleared ? <p>Table cleared due to report data updating.</p> : null}
+                {loading ? (
+                    <LoadingBar />
+                ) : (
+                    generatedTable.length > 0 && (
+                        <>
+                            <div className="grid-container">
+                                <div className="top-header">
+                                    {tableData[0]?.displayFormat.label}
+                                </div>
+                                <div className="side-header">
+                                    {tableData[1]?.displayFormat.label}
+                                </div>
+                                <div className="table-wrapper">
+                                    <table className="sensitivity-table">
+                                        <tbody>
+                                            {generatedTable.map((row, rowIndex) => (
+                                                <tr key={rowIndex}>
+                                                    {row.map((cell, cellIndex) => (
+                                                        <td key={cellIndex} className={rowIndex === 0 || cellIndex === 0 ? 'bold-cell' : ''}>
+                                                            {cell}
+                                                        </td>
+                                                    ))}
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                            <div className="side-header">
-                                {tableData[1]?.displayFormat.label}
+                            <div className="legend-container">
+                                <div className="legend">
+                                    <div className="legend-color-box"></div>
+                                    <span>Closest/Current Configuration</span>
+                                </div>
                             </div>
-                            <div className="table-wrapper">
-                                <table className="sensitivity-table">
-                                    <tbody>
-                                        {generatedTable.map((row, rowIndex) => (
-                                            <tr key={rowIndex}>
-                                                {row.map((cell, cellIndex) => (
-                                                    <td key={cellIndex} className={rowIndex === 0 || cellIndex === 0 ? 'bold-cell' : ''}>
-                                                        {cell}
-                                                    </td>
-                                                ))}
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div className="legend-container">
-                            <div className="legend">
-                                <div className="legend-color-box"></div>
-                                <span>Closest/Current Configuration</span>
-                            </div>
-                        </div>
-                    </>
-                )
-            )}
-        </div>
+                        </>
+                    )
+                )}
+            </TextContent>
+        </Container>
     );
 };
