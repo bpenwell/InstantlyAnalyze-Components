@@ -3,8 +3,6 @@ export { SelectableButton } from './components/Button/SelectableButton';
 export { DropdownButton } from './components/Button/DropdownButton';
 export type { ButtonProps } from './components/Button/Button';
 export { Header } from './components/Header/Header';
-export { Page } from './components/Page/Page';
-export type { PageProps } from './components/Page/Page';
 export { Footer } from './components/Footer/Footer';
 export { AuthenticatedPage } from './components/Authentication/AuthenticatedPage';
 export { Input } from './components/Input/Input';
@@ -37,4 +35,4 @@ export {
 } from './components/Table/TableHelpers';
 export { ManualRefresh } from './components/ManualRefresh/ManualRefresh';
 export { DeleteWithConfirmation } from './components/DeleteWithConfirmation/DeleteWithConfirmation';
-export { Profile } from './components/Profile/Profile';
+export { AppContextProvider } from './utils/AppContextProvider';

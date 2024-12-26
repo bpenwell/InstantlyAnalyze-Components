@@ -75,3 +75,10 @@ body {
   color: #000 !important;   /* Or #fff, depending on background */
   margin: 0 8px;
 }
+
+.go-pro-button {
+    margin-right: '1rem';
+    background-color: #FFD700 !important;
+    color: #000 !important;
+    border: 1px solid #DAA520 !important;
+  }

@@ -40,6 +40,7 @@ import { applyMode, applyDensity, Density, Mode } from '@cloudscape-design/globa
 
 // Our custom CSS
 import './Header.css';
+import { useAppContext } from '../../utils/AppContextProvider';
 
 export const Header: React.FC = () => {
   const { user, isAuthenticated, isLoading, loginWithRedirect, logout } = useAuth0();
@@ -51,14 +52,7 @@ export const Header: React.FC = () => {
     LOCAL_STORAGE_KEYS.APP_DENSITY,
     Density.Comfortable
   );
-  const [userConfigs, setUserConfigs] = useLocalStorage<IUserConfigs>(
-    LOCAL_STORAGE_KEYS.USER_CONFIGS,
-    {
-      userId: '',
-      status: 'free',
-      freeReportsAvailable: 5,
-    }
-  );
+  const { userConfig, setUserConfig } = useAppContext();
 
   const redirectApi: RedirectAPI = new RedirectAPI();
   const backendAPI: BackendAPI = new BackendAPI();
@@ -93,10 +87,11 @@ export const Header: React.FC = () => {
   };
 
   useEffect(() => {
+    /*
+    FOR DEBUGGING THE HEADER INITIALIZATION ISSUE
     console.log(`isLoading: ${isLoading}`);
     console.log(`isAuthenticated: ${isAuthenticated}`);
-    console.log(`user: `, user);
-    console.log(`userConfigs: `, userConfigs);
+    console.log(`user: `, user);*/
 
     const fetchUserConfigs = async () => {
       if (isAuthenticated && user) {
@@ -105,9 +100,9 @@ export const Header: React.FC = () => {
 
         if (configs.message === 'User not found') {
           const newUserConfig = await backendAPI.createUserConfig(userId);
-          setUserConfigs(newUserConfig);
+          setUserConfig(newUserConfig);
         } else {
-          setUserConfigs(configs);
+          setUserConfig(configs);
         }
       }
     };
@@ -117,7 +112,6 @@ export const Header: React.FC = () => {
 
   // If Auth0 is still loading, show a placeholder
   if (isLoading) {
-
     return (
       <AppBar position="static" className="custom-app-bar" elevation={0}>
         <Toolbar className="custom-toolbar">
@@ -135,88 +129,108 @@ export const Header: React.FC = () => {
       </AppBar>
     );
   }
+
   return (
     <>
       <AppBar position="static" className="custom-app-bar" elevation={0}>
         <Toolbar className="custom-toolbar">
-            {/* Left: Logo */}
-            <Box
-              className="left-section"
-              onClick={() => redirectApi.redirectToPage(PAGE_PATH.HOME)}
+          {/* Left: Logo */}
+          <Box
+            className="left-section"
+            onClick={() => redirectApi.redirectToPage(PAGE_PATH.HOME)}
+          >
+            <img
+              src="/public/logo69.png"
+              alt="Instantly Analyze"
+              className="app-logo"
+            />
+          </Box>
+
+          {/* Center: Nav buttons */}
+          <Box className="center-section">
+            <Button
+              variant="inline-link"
+              className="nav-button"
+              onClick={() => redirectApi.redirectToPage(PAGE_PATH.RENTAL_CALCULATOR_HOME)}
             >
-              <img
-                src="/public/logo69.png"
-                alt="Instantly Analyze"
-                className="app-logo"
-              />
-            </Box>
+              Rental Reports
+            </Button>
+            <Button
+              variant="inline-link"
+              className="nav-button"
+              onClick={() => redirectApi.redirectToPage(PAGE_PATH.MARKET_REPORTS)}
+            >
+              Market Reports
+            </Button>
+          </Box>
 
-            {/* Center: Nav buttons */}
-            <Box className="center-section">
+          {/* Right: Settings & User profile */}
+          <Box className="right-section">
+            {/* 
+                If user is authenticated and status == 'free',
+                display a special "Go Pro" button 
+            */}
+            {isAuthenticated && userConfig?.status === 'free' && (
               <Button
-                variant='inline-link'
-                className="nav-button"
-                onClick={() => redirectApi.redirectToPage(PAGE_PATH.RENTAL_CALCULATOR_HOME)}
+                className="go-pro-button"
+                href={redirectApi.createRedirectUrl(PAGE_PATH.SUBSCRIBE)}
               >
-                Rental Reports
+                Go Pro
               </Button>
-                <Button
-                  variant='inline-link'
-                  className="nav-button"
-                  onClick={() => redirectApi.redirectToPage(PAGE_PATH.MARKET_REPORTS)}
+            )}
+
+            <IconButton onClick={openSettingsModal} className="settings-icon">
+              <SettingsIcon
+                // Invert icon color if dark mode
+                sx={[ appMode === Mode.Dark && { filter: 'invert(1)' }]}
+              />
+            </IconButton>
+
+            {isAuthenticated && user && userConfig ? (
+              <>
+                <IconButton onClick={handleOpenUserMenu} className="account-icon">
+                  <AccountCircle
+                    // Invert icon color if dark mode
+                    sx={[ appMode === Mode.Dark && { filter: 'invert(1)' }]}
+                  />
+                </IconButton>
+                <Menu
+                  anchorEl={anchorElUser}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                  transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                 >
-                  Market Reports
-                </Button>
-            </Box>
-
-            {/* Right: Settings & User profile */}
-            <Box className="right-section">
-              <IconButton onClick={openSettingsModal} className="settings-icon">
-                <SettingsIcon />
-              </IconButton>
-
-              {isAuthenticated && user && userConfigs ? (
-                <>
-                  <IconButton onClick={handleOpenUserMenu} className="account-icon">
-                    <AccountCircle />
-                  </IconButton>
-                  <Menu
-                    anchorEl={anchorElUser}
-                    open={Boolean(anchorElUser)}
-                    onClose={handleCloseUserMenu}
-                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                    transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                  <MenuItem
+                    onClick={() => {
+                      handleCloseUserMenu();
+                      window.location.href = redirectApi.createRedirectUrl(PAGE_PATH.PROFILE);
+                    }}
                   >
-                    <MenuItem
-                      onClick={() => {
-                        handleCloseUserMenu();
-                        window.location.href = redirectApi.createRedirectUrl(PAGE_PATH.PROFILE);
-                      }}
-                    >
-                      Profile
-                    </MenuItem>
-                    <MenuItem
-                      onClick={() => {
-                        handleCloseUserMenu();
-                        logout({ logoutParams: { returnTo: window.location.origin } });
-                      }}
-                    >
-                      Log out
-                    </MenuItem>
-                  </Menu>
-                </>
-              ) : (
-                <Button
-                  className="nav-button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    loginWithRedirect();
-                  }}
-                >
-                  Login
-                </Button>
-              )}
-            </Box>
+                    Profile
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      handleCloseUserMenu();
+                      logout({ logoutParams: { returnTo: window.location.origin } });
+                    }}
+                  >
+                    Log out
+                  </MenuItem>
+                </Menu>
+              </>
+            ) : (
+              <Button
+                className="nav-button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  loginWithRedirect();
+                }}
+              >
+                Login
+              </Button>
+            )}
+          </Box>
         </Toolbar>
       </AppBar>
 
@@ -243,9 +257,7 @@ export const Header: React.FC = () => {
           </RadioGroup>
         </DialogContent>
         <DialogActions>
-          <Button onClick={closeSettingsModal}>
-            Close
-          </Button>
+          <Button onClick={closeSettingsModal}>Close</Button>
         </DialogActions>
       </Dialog>
     </>

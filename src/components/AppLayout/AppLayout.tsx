@@ -3,15 +3,6 @@ import React from 'react';
 import {
   AppLayout,
   BreadcrumbGroup,
-  BreadcrumbGroupProps,
-  Container,
-  ContentLayout,
-  Flashbar,
-  Header,
-  HelpPanel,
-  Link,
-  SideNavigation,
-  SplitPanel,
 } from '@cloudscape-design/components';
 import { I18nProvider } from '@cloudscape-design/components/i18n';
 import messages from '@cloudscape-design/components/i18n/messages/all.en';
