@@ -26,9 +26,19 @@ export const AppLayoutPreview = (props: IAppLayoutPreview) => {
     const regex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     return regex.test(segment);
   }
+
+  const shouldDisplayHomeBreadcrumb = (segment: string): boolean => {
+    return segment === 'product';
+  };
+  
+  const shouldDisplayNothing = (segment: string): boolean => {
+    return segment.includes('#')
+      || segment.includes('profile')
+      || segment.includes('subscribe');
+  };
   
   breadcrumbPath.forEach((segment) => {
-    if (segment.includes('#') || segment.includes('profile')) {
+    if (shouldDisplayNothing(segment)) {
       return;
     }
   
@@ -43,7 +53,7 @@ export const AppLayoutPreview = (props: IAppLayoutPreview) => {
       redirectUrl = `#${previousPath}/${segment}`;
     }
     //We want the initial breadcrumb to be the homepage
-    else if (segment === 'product') {
+    else if (shouldDisplayHomeBreadcrumb(segment)) {
       displayText = 'Home';
       //Update url
       redirectUrl = '#';

@@ -116,15 +116,19 @@ export const Header: React.FC = () => {
       <AppBar position="static" className="custom-app-bar" elevation={0}>
         <Toolbar className="custom-toolbar">
           <Box className="left-section">
-            <img
+            <TextContent>
+              <h2
+                className="logo-text"
+                onClick={() => redirectApi.redirectToPage(PAGE_PATH.HOME)}
+              >Instantly Analyze
+              </h2> 
+            </TextContent>
+            {/*<img
               src="/public/logo69.png"
               alt="Instantly Analyze"
               className="app-logo"
-            />
+            />*/}
           </Box>
-          <Typography variant="h6" className="toolbar-title">
-            Instantly Analyze
-          </Typography>
         </Toolbar>
       </AppBar>
     );
@@ -137,13 +141,19 @@ export const Header: React.FC = () => {
           {/* Left: Logo */}
           <Box
             className="left-section"
-            onClick={() => redirectApi.redirectToPage(PAGE_PATH.HOME)}
           >
-            <img
+            <TextContent>
+              <h2
+                className="logo-text"
+                onClick={() => redirectApi.redirectToPage(PAGE_PATH.HOME)}
+              >Instantly Analyze
+              </h2> 
+            </TextContent>
+            {/*<img
               src="/public/logo69.png"
               alt="Instantly Analyze"
               className="app-logo"
-            />
+            />*/}
           </Box>
 
           {/* Center: Nav buttons */}

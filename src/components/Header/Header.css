@@ -77,8 +77,18 @@ body {
 }
 
 .go-pro-button {
-    margin-right: '1rem';
-    background-color: #FFD700 !important;
-    color: #000 !important;
-    border: 1px solid #DAA520 !important;
-  }
+  margin-right: '1rem';
+  background-color: #FFD700 !important;
+  color: #000 !important;
+  border: 1px solid #DAA520 !important;
+}
+
+  /* Add this to your CSS file */
+.logo-text {
+  transition: color 0.3s ease !important;
+}
+
+.logo-text:hover {
+  color: #007BFF !important; /* Change this to your desired hover color */
+  cursor: pointer !important; /* Add this line to change the cursor */
+}
