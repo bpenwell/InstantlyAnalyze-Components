@@ -21,6 +21,11 @@
     font-size: 16px;
 }
 
+/* Style for locked input field */
+.input-field.locked {
+    background-color: #f0f0f0; /* Light gray background */
+}
+
 /* Style for the submit button */
 .submit-button {
     background-color: #4caf50;

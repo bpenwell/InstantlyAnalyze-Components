@@ -8,6 +8,14 @@ const Asterisk = styled.span`
   margin-left: 4px;
 `;
 
+const LockButton = styled.button`
+  margin-left: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #888;
+`;
+
 const MAX_CURRENCY_VALUE = 9007199254740991;
 const MIN_CURRENCY_VALUE = -9007199254740991;
 const MAX_PERCENT_VALUE = 100;
@@ -22,12 +30,17 @@ interface InputProps {
   onChange: (value: any) => void;
   required?: boolean;
   checked?: boolean;
+  /**
+   * Is unlockable
+   */
+  locked?: boolean;
 }
 
 export const Input = (props: InputProps) => {
-  const { id, label, type = 'text', options, value, onChange, required } = props;
+  const { id, label, type = 'text', options, value, onChange, required, locked } = props;
   const valueNotUndefined = value !== undefined ? value : '';
   const [displayValue, setDisplayValue] = useState<string>(valueNotUndefined.toString());
+  const [isLocked, setIsLocked] = useState(locked);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -179,9 +192,14 @@ export const Input = (props: InputProps) => {
   };
 
   const renderInput = () => {
+    const inputClassName = `input-field ${isLocked ? 'locked' : ''}`;
+    const toggleLock = () => {
+      setIsLocked(!isLocked);
+    };
+    
     if (type === 'select' && options) {
       return (
-        <select id={id} value={displayValue} onChange={handleInputChange} className='input-field'>
+        <select id={id} value={displayValue} onChange={handleInputChange} className={inputClassName} disabled={isLocked}>
           {options.map((option) => (
             <option key={option} value={option}>
               {option}
@@ -191,18 +209,26 @@ export const Input = (props: InputProps) => {
       );
     } else {
       return (
-        <input
-          id={id}
-          required={required}
-          type={type}
-          value={displayValue}
-          onChange={handleInputChange}
-          onClick={handleOnClick}
-          onKeyDown={handleKeyDown}
-          ref={inputRef}
-          className='input-field'
-          checked={props.checked}
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <input
+            id={id}
+            required={required}
+            type={type}
+            value={displayValue}
+            onChange={handleInputChange}
+            onClick={handleOnClick}
+            onKeyDown={handleKeyDown}
+            ref={inputRef}
+            className={inputClassName}
+            checked={props.checked}
+            disabled={isLocked}
           />
+          {isLocked && (
+            <LockButton onClick={toggleLock}>
+              🔓
+            </LockButton>
+          )}
+        </div>
       );
     }
   };
