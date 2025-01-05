@@ -132,7 +132,7 @@ export const AddressFormV2: React.FC = () => {
       />
 
       {/* Loading Indicator */}
-      {loading && <LoadingBar/>}
+      {loading && <LoadingBar text='Fetching property data'/>}
 
       {/* Error Message */}
       {error && <p style={{ color: 'red' }}>{error}</p>}

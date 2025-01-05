@@ -11,6 +11,7 @@ export const LoadingBar = (props: ILoadingProps) => {
   return (
     <div aria-live="polite">
       <Box
+        textAlign="center"
         margin={{ bottom: "xs", left: "l" }}
         color="text-body-secondary"
       >

@@ -73,7 +73,7 @@ export const AddressForm = ({ returnResponseData, triggerAddressSearch }: { retu
         value={zipCode}
         onChange={(value: string) => setZipCode(value)}
       />
-      { loading ? <LoadingBar/> : <></>}
+      { loading ? <LoadingBar text='Fetching property info...'/> : <></>}
       {/* triggerSubmit is currently optional to ensure V2 still works */}
       { triggerAddressSearch !== undefined ? (<></>) : (
           <Button

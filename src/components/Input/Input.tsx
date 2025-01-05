@@ -63,6 +63,9 @@ export const Input = (props: InputProps) => {
   }, [valueNotUndefined]);
 
   const formatCurrency = (value: string) => {
+    if (value === '' || value === undefined) {
+      return '';
+    }
     let [integerPart, decimalPart] = value.split('.');
 
     integerPart = integerPart.replace(/[^\d]/g, ''); // Remove any non-digit characters
