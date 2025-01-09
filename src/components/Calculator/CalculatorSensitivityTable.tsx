@@ -306,7 +306,9 @@ export const CalculatorSensitivityTable: React.FC<IRentalCalculatorPageProps> = 
                     displayConfig = getPurchasePriceDisplayConfig(Number(initialData.purchaseDetails.purchasePrice.toFixed(0)));
                     break;
                 case 'Management Fees':
-                    displayConfig = getManagementFeesDisplayConfig(initialData.expenseDetails.managementFee, true);
+                    console.log('initialData.expenseDetails.managementFeePercent');
+                    console.log(initialData.expenseDetails.managementFeePercent);
+                    displayConfig = getManagementFeesDisplayConfig(initialData.expenseDetails.managementFeePercent, false);
                     break;
                 case 'Loan To Value %':
                     displayConfig = getLoanToValuePercentDisplayConfig(calculatorUtils.calculateLoanPercentage(props.currentYearData));
@@ -366,7 +368,7 @@ export const CalculatorSensitivityTable: React.FC<IRentalCalculatorPageProps> = 
                 <button className="submit-button" onClick={handleGenerateTable}>
                     Generate Table
                 </button>
-                {isTableCleared ? <p>Table cleared due to report data updating.</p> : null}
+                { isTableCleared ? <p className='form-group'>Table cleared due to report data updating.</p> : null }
                 {loading ? (
                     <LoadingBar />
                 ) : (

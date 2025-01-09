@@ -59,7 +59,7 @@ export const CalculatorExpenses: React.FC<IRentalCalculatorPageProps> = (props: 
     );
     setTotalVariableExpenses(updatedTotalVariableExpenses);
 
-    const updatedMonthlyTotalExpenses = calculationUtils.calculateRentalTotalExpense(props.currentYearData);
+    const updatedMonthlyTotalExpenses = calculationUtils.calculateRentalTotalExpensePerMonth(props.currentYearData);
     setMonthlyTotalExpenses(updatedMonthlyTotalExpenses);
 
     const updatedPieChartProps: IPieChartProps = {

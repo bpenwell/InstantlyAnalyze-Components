@@ -44,10 +44,20 @@ export const CalculatorLoanPaydown: React.FC<IRentalCalculatorPageProps> = (prop
         backgroundColor: 'rgba(0, 74, 0, 0.75)',
     };
 
+    const getAnnualizedReturn = (year: number, includeSellExpenses: boolean): number => {
+        if (year === 0) {
+            return 0;
+        }
+
+        const allNonInitialReportData = fullLoanTermRentalReportData.slice(1);
+        return calculationUtils.calculateAnnualizedReturn(allNonInitialReportData.slice(0, year), includeSellExpenses)
+    };
+
     const cashFlowData = applicableLoanTermTimePeriods.map(year => calculationUtils.calculateCashFlow(fullLoanTermRentalReportData[year]));
     const mortgagePaymentData = applicableLoanTermTimePeriods.map(year => calculationUtils.calculateMortgagePayment(fullLoanTermRentalReportData[year]));
     const profitIfSoldData = applicableLoanTermTimePeriods.map(year => calculationUtils.calculateProfitIfSold([fullLoanTermRentalReportData[year]]));
-    const annualizedReturnData = applicableLoanTermTimePeriods.map(year => calculationUtils.calculateAnnualizedReturn([fullLoanTermRentalReportData[year]]));
+    const annualizedReturnDataBeforeSell = applicableLoanTermTimePeriods.map(year => getAnnualizedReturn(year, false));
+    const annualizedReturnDataAfterSell = applicableLoanTermTimePeriods.map(year => getAnnualizedReturn(year, true));
 
     const chartProps: ILineChartProps = {
         datasets: [loanBalanceData, equityData, propertyValueData],
@@ -120,9 +130,15 @@ export const CalculatorLoanPaydown: React.FC<IRentalCalculatorPageProps> = (prop
                                 ))}
                             </tr>
                             <tr>
-                                <td>Annualized Return</td>
-                                {annualizedReturnData.map((value, index) => (
-                                    <td key={index}>{index === 0 ? '-' : `${displayAsPercent(value)}`}</td>
+                                <td>Annualized Return (w/o sell fees)</td>
+                                {annualizedReturnDataBeforeSell.map((value, index) => (
+                                    <td key={index}>{index === 0 ? '-' : `${displayAsPercent(value, 2, true)}`}</td>
+                                ))}
+                            </tr>
+                            <tr>
+                                <td>Annualized Return (w/ sell fees)</td>
+                                {annualizedReturnDataAfterSell.map((value, index) => (
+                                    <td key={index}>{index === 0 ? '-' : `${displayAsPercent(value, 2, true)}`}</td>
                                 ))}
                             </tr>
                         </tbody>

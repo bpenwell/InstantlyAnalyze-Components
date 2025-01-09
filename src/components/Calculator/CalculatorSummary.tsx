@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { IRentalCalculatorPageProps } from '../../interfaces';
-import { CalculationUtils, displayAsMoney, IRentalCalculatorData } from '@bpenwell/instantlyanalyze-module';
+import { CalculationUtils, displayAsMoney, displayAsPercent, IRentalCalculatorData } from '@bpenwell/instantlyanalyze-module';
 import {
   Container,
   Header,
@@ -38,19 +38,19 @@ export const CalculatorSummary: React.FC<ICalculatorSummary> = (props: ICalculat
 
   const getSummaryChartInputs = (): ILineChartProps => {
     const incomeData: ILineChartDataset = {
-      label: 'Income Data',
+      label: 'Rental Income',
       data: [],
       borderColor: '#004A00', // Main green
       backgroundColor: 'rgba(0, 74, 0, 0.75)', // Transparent green background
     };
     const expenseData: ILineChartDataset = {
-      label: 'Expense Data',
+      label: 'Expenses',
       data: [],
       borderColor: '#A40000', // Complementary red
       backgroundColor: 'rgba(164, 0, 0, 0.75)', // Transparent red background
     };
     const cashFlowData: ILineChartDataset = {
-      label: 'Cash Flow Data',
+      label: 'Cash Flow',
       data: [],
       borderColor: '#000000', // Black for cash flow
       backgroundColor: 'rgba(0, 0, 0, 0.75)', // Transparent black background
@@ -61,8 +61,8 @@ export const CalculatorSummary: React.FC<ICalculatorSummary> = (props: ICalculat
     fullLoanTermRentalReportData.forEach((data: IRentalCalculatorData, index: number) => {
       const year = index + 1;
       if (shouldDisplayChartTermYear(year)) {
-        const totalIncome = calculationUtils.calculateRentalIncome(data);
-        const totalExpenses = calculationUtils.calculateRentalTotalExpense(data);
+        const totalIncome = calculationUtils.calculateRentalIncomePerMonth(data);
+        const totalExpenses = calculationUtils.calculateRentalTotalExpensePerMonth(data);
         const cashFlow = totalIncome - totalExpenses;
 
         incomeData.data.push(totalIncome);
@@ -81,16 +81,14 @@ export const CalculatorSummary: React.FC<ICalculatorSummary> = (props: ICalculat
 
   const summaryChartProps = getSummaryChartInputs();
 
-  const income = calculationUtils.calculateRentalIncome(currentYearData);
-  const expenses = calculationUtils.calculateRentalTotalExpense(currentYearData);
+  const income = calculationUtils.calculateRentalIncomePerMonth(currentYearData);
+  const expenses = calculationUtils.calculateRentalTotalExpensePerMonth(currentYearData);
   const monthlyCashFlow = income - expenses;
   const cashOnCashROI = calculationUtils.calculateCoCROI(currentYearData);
 
   const fiveYearOrLessYear =
     fullLoanTermRentalReportData.length >= 5 ? 5 : fullLoanTermRentalReportData.length;
-  const fiveYearReturn = calculationUtils
-    .calculateFiveYearAnnualizedReturn(fullLoanTermRentalReportData)
-    .toFixed(2);
+  const fiveYearReturn = calculationUtils.calculateFiveYearAnnualizedReturn(fullLoanTermRentalReportData);
   const mortgagePayment = displayAsMoney(
     calculationUtils.calculateMortgagePayment(currentYearData),
     2
@@ -112,6 +110,10 @@ export const CalculatorSummary: React.FC<ICalculatorSummary> = (props: ICalculat
             </Box>
           </TextContent>
         </Box>
+        {/* Need space under the chart for legend */}
+        <SpaceBetween size="l"/>
+        <SpaceBetween size="s"/>
+        {/* Need space under the chart for legend */}
         <ColumnLayout columns={3} variant="text-grid">
           <Box>
             <TextContent>
@@ -142,7 +144,7 @@ export const CalculatorSummary: React.FC<ICalculatorSummary> = (props: ICalculat
           <Box>
             <TextContent>
               <h4>{`${fiveYearOrLessYear}-Year Annualized Return`}</h4>
-              <Box variant="strong">{fiveYearReturn}%</Box>
+              <Box variant="strong">{displayAsPercent(fiveYearReturn, 2, true)}</Box>
             </TextContent>
           </Box>
         </ColumnLayout>

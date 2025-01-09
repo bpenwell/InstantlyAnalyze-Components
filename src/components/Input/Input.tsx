@@ -207,6 +207,7 @@ export const Input = (props: InputProps) => {
             <option key={option} value={option}>
               {option}
             </option>
+            
           ))}
         </select>
       );
