@@ -13,7 +13,7 @@ import { LoadingBar } from '../LoadingBar/LoadingBar';
 
 export type ReturnPropertyData = (addressData: any) => void;
 
-export const AddressForm = ({ returnResponseData, triggerAddressSearch }: { returnResponseData: ReturnPropertyData, triggerAddressSearch?: boolean }) => {
+export const AddressForm = ({ returnResponseData, triggerNavigate }: { returnResponseData: ReturnPropertyData, triggerNavigate?: boolean }) => {
   const [streetAddress, setStreetAddress] = useState(initialRentalCalculatorFormState.propertyInformation.streetAddress);
   const [city, setCity] = useState(initialRentalCalculatorFormState.propertyInformation.city);
   const [state, setState] = useState(initialRentalCalculatorFormState.propertyInformation.state);
@@ -42,9 +42,9 @@ export const AddressForm = ({ returnResponseData, triggerAddressSearch }: { retu
   };
 
   useEffect(() => {
-    if (!triggerAddressSearch) { return; }
+    if (!triggerNavigate) { return; }
     handleSubmit();
-  }, [triggerAddressSearch]);
+  }, [triggerNavigate]);
 
   return (
     <div className='addressFormContainer'>
@@ -75,7 +75,7 @@ export const AddressForm = ({ returnResponseData, triggerAddressSearch }: { retu
       />
       { loading ? <LoadingBar text='Fetching property info...'/> : <></>}
       {/* triggerSubmit is currently optional to ensure V2 still works */}
-      { triggerAddressSearch !== undefined ? (<></>) : (
+      { triggerNavigate !== undefined ? (<></>) : (
           <Button
             buttonType={"primary"}
             size="small"
