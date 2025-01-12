@@ -23,7 +23,7 @@ export interface ButtonProps {
    */
   onClick?: () => void;
   loading?: boolean;
-
+  disabled?: boolean; // Default is not disabled
   [key: string]: any;
 }
 
@@ -36,6 +36,7 @@ export const Button = ({
   backgroundColor,
   label,
   loading = false, // Default is not loading
+  disabled = false,
   ...props
 }: ButtonProps) => {
   let mode = 'storybook-button--secondary';
@@ -48,7 +49,7 @@ export const Button = ({
       className={['storybook-button', `storybook-button--${size}`, mode].join(' ')}
       style={{ backgroundColor }}
       {...props}
-      disabled={loading} // Disable button when loading
+      disabled={loading || disabled} // Disable button when loading
     >
       <div className="button-content">
         {loading ? (

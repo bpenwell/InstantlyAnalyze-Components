@@ -75,6 +75,18 @@
   gap: 8px; /* Add spacing if needed between spinner and label */
 }
 
+/* Add styles for disabled state */
+.storybook-button:disabled {
+  cursor: default; /* Ensure the cursor does not change to pointer */
+  opacity: 0.6; /* Reduce opacity to indicate a disabled state */
+  pointer-events: none; /* Prevent hover or click events */
+}
+
+.storybook-button:disabled:hover {
+  background-color: inherit; /* Prevent hover effect */
+  opacity: 0.6; /* Keep the opacity the same as the disabled state */
+}
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);

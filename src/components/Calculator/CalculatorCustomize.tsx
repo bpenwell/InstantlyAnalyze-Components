@@ -143,9 +143,9 @@ export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props:
         const ltvPercent: Percentage = newValue as Percentage;
         const downPaymentPercent = 100 - ltvPercent;
         const downPayment = (downPaymentPercent / 100) * initialRentalReportData.purchaseDetails.purchasePrice;
-    
+        
         let newData: IRentalCalculatorData = {
-            ...initialRentalReportData, 
+            ...initialRentalReportData,
             loanDetails: {
                 ...initialRentalReportData.loanDetails,
                 downPayment: downPayment, 
@@ -153,6 +153,7 @@ export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props:
                 loanToValuePercent: ltvPercent,
             }
         };
+        setTotalCashNeeded(calculatorUtils.calculateTotalCashNeeded(newData));
         props.updateInitialData(newData);
     };
     const handleInterestRateChange = (newValue: ValueType) => {
