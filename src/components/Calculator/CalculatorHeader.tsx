@@ -1,19 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Header, SpaceBetween, Grid, Textarea } from '@cloudscape-design/components';
+import { Box, Button, Header, SpaceBetween, Grid } from '@cloudscape-design/components';
 import { BackendAPI, getImageSrc, IRentalCalculatorData, PAGE_PATH, printObjectFields, RedirectAPI } from '@bpenwell/instantlyanalyze-module';
+import { ShareModal } from '../ShareModal/ShareModal';
 import './CalculatorHeader.css';
 
 export interface ICalculatorHeaderProps {
   reportId: string;
   initialData: IRentalCalculatorData;
+  isShareView: boolean;
 }
 
 export const CalculatorHeader: React.FC<ICalculatorHeaderProps> = ({
   reportId,
   initialData,
+  isShareView,
 }) => {
   const [formData, setFormData] = useState<IRentalCalculatorData>(initialData);
   const [isModified, setIsModified] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [shareableLink, setShareableLink] = useState('');
   const backendAPI = new BackendAPI();
   const redirectAPI = new RedirectAPI();
 
@@ -54,72 +59,81 @@ export const CalculatorHeader: React.FC<ICalculatorHeaderProps> = ({
     }
   };
 
-    // Then modify the return section:
-    return (
+  const handleShare = () => {
+    setIsShareModalOpen(true);
+  };
+
+  const handleShareableChange = (isShareable: boolean) => {
+    if (isShareable) {
+      const currentUrl = window.location.href;
+      const shareableUrl = currentUrl.replace('/view/', '/share/');
+      // Generate shareable link (this should be replaced with actual backend logic)
+      setShareableLink(shareableUrl);
+    } else {
+      setShareableLink('');
+    }
+  };
+
+  return (
     <Box padding={{ vertical: 's', horizontal: 'l' }}>
-        <Grid
+      <Grid
         gridDefinition={[
-            { colspan: { default: 4, xs: 12, s: 4 } },  // Left column - Image
-            { colspan: { default: 4, xs: 12, s: 4 } },  // Middle column - Address
-            { colspan: { default: 4, xs: 12, s: 4 } },  // Right column - Buttons
-            { colspan: { default: 12, xs: 12, s: 12 } },  // Text input spanning middle and right
+          { colspan: { default: 3 } },  // Left column - Image
+          { colspan: { default: 2 } },  // Middle column - Address
+          { colspan: { default: 7 } },  // Right column - Buttons
         ]}
-        >
+      >
         {/* Left Column - Image */}
         <div className='header-box'>
-            <Box>
+          <Box>
             <img
-                src={getImageSrc(initialData)}
-                alt="Property"
-                style={{ width: '100%', borderRadius: '10px' }}
+              src={getImageSrc(initialData)}
+              alt="Property"
+              style={{ width: '100%', borderRadius: '10px' }}
             />
-            </Box>
+          </Box>
         </div>
 
         <div className='header-address'>
-            <Box>
-                <Header variant="h2">
-                {initialData.propertyInformation.streetAddress}
-                </Header>
-                <Header variant="h3">
-                {initialData.propertyInformation.city}, {initialData.propertyInformation.state}
-                </Header>
-            </Box>
+          <Box>
+            <Header variant="h2">
+              {initialData.propertyInformation.streetAddress}
+            </Header>
+            <Header variant="h3">
+              {initialData.propertyInformation.city}, {initialData.propertyInformation.state}
+            </Header>
+          </Box>
         </div>
 
         {/* Right Column - Buttons */}
         <div className='header-buttons'>
+          { !isShareView ? 
             <SpaceBetween size="s" direction="horizontal">
-                <Button variant="primary" onClick={handleSave} disabled={!isModified}>
-                    Save
-                </Button>
-                <Button variant="normal" href={redirectAPI.createRentalCalculatorEditRedirectUrl()}>
-                    Edit
-                </Button>
-                <Button variant="normal" onClick={handleDelete}>
-                    Delete Report
-                </Button>
+              <Button variant="normal" onClick={handleShare}>
+                Share (only works locally for now)
+              </Button>
+              <Button variant="primary" onClick={handleSave} disabled={!isModified}>
+                Save
+              </Button>
+              <Button variant="normal" href={redirectAPI.createRentalCalculatorEditRedirectUrl()}>
+                Edit
+              </Button>
+              <Button variant="normal" onClick={handleDelete}>
+                Delete Report
+              </Button>
             </SpaceBetween>
+            : null
+          }
         </div>
+      </Grid>
 
-        {/* Text input spanning middle and right columns */}
-        {/*
-        <Box>
-            <Header variant="h2">
-                Advice from your eAgent
-            </Header>
-            <Textarea
-                value="This deal is quite difficult to make work"
-                //onChange={({ detail }) => setStreamedText(detail.value)}
-                rows={10}
-                readOnly
-                placeholder="AI response will appear here..."
-                spellcheck={false}
-                //style={{ fontFamily: 'monospace' }}
-                />
-        </Box>
-        */}
-        </Grid>
+      {/* Share Modal */}
+      <ShareModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        shareableLink={shareableLink}
+        onShareableChange={handleShareableChange}
+      />
     </Box>
-    );
-}
+  );
+};

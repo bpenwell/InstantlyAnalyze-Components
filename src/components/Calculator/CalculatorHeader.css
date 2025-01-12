@@ -13,7 +13,8 @@
 .header-buttons {
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Vertically centers content */
-    align-items: flex-end;   /* Aligns content to the right */
+    justify-content: center;
+    align-items: flex-end;
     height: 100%;
+    margin-left: auto; /* Pushes the buttons to the right */
 }
