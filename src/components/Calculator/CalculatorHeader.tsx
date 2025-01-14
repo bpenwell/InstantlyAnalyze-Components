@@ -3,6 +3,7 @@ import { Box, Button, Header, SpaceBetween, Grid } from '@cloudscape-design/comp
 import { BackendAPI, getImageSrc, IRentalCalculatorData, PAGE_PATH, printObjectFields, RedirectAPI } from '@bpenwell/instantlyanalyze-module';
 import { ShareModal } from '../ShareModal/ShareModal';
 import './CalculatorHeader.css';
+import { useAuth0 } from '@auth0/auth0-react';
 
 export interface ICalculatorHeaderProps {
   reportId: string;
@@ -21,6 +22,7 @@ export const CalculatorHeader: React.FC<ICalculatorHeaderProps> = ({
   const [shareableLink, setShareableLink] = useState('');
   const backendAPI = new BackendAPI();
   const redirectAPI = new RedirectAPI();
+  const { user } = useAuth0();
 
   useEffect(() => {
     setIsModified(JSON.stringify(formData) !== JSON.stringify(initialData));
@@ -37,7 +39,7 @@ export const CalculatorHeader: React.FC<ICalculatorHeaderProps> = ({
   const handleSave = async () => {
     try {
       console.debug(`[DEBUG] initialData ${printObjectFields(initialData)}`);
-      await backendAPI.saveUpdatedRentalReport(reportId, initialData);
+      await backendAPI.saveUpdatedRentalReport(reportId, initialData, user?.sub);
       alert('Report saved successfully.');
       setIsModified(false);
     } catch (error) {
@@ -49,7 +51,7 @@ export const CalculatorHeader: React.FC<ICalculatorHeaderProps> = ({
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete this report?')) {
       try {
-        await backendAPI.deleteRentalReport(reportId);
+        await backendAPI.deleteRentalReport(reportId, user?.sub);
         alert('Report deleted successfully.');
         redirectAPI.redirectToPage(PAGE_PATH.RENTAL_CALCULATOR_HOME);
       } catch (error) {
@@ -110,7 +112,7 @@ export const CalculatorHeader: React.FC<ICalculatorHeaderProps> = ({
           { !isShareView ? 
             <SpaceBetween size="s" direction="horizontal">
               <Button variant="normal" onClick={handleShare}>
-                Share (only works locally for now)
+                Share
               </Button>
               <Button variant="primary" onClick={handleSave} disabled={!isModified}>
                 Save
@@ -129,6 +131,7 @@ export const CalculatorHeader: React.FC<ICalculatorHeaderProps> = ({
 
       {/* Share Modal */}
       <ShareModal
+        reportId={reportId}
         isOpen={isShareModalOpen}
         onClose={() => setIsShareModalOpen(false)}
         shareableLink={shareableLink}

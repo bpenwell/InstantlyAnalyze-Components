@@ -6,6 +6,7 @@ import {
 } from '@bpenwell/instantlyanalyze-module';
 import './CalculatorUpdate.css'; 
 import { Button } from '@cloudscape-design/components';
+import { useAuth0 } from '@auth0/auth0-react';
 
 export interface ICalculatorUpdateProps {
     reportId: string;
@@ -17,7 +18,8 @@ export const CalculatorUpdate: React.FC<ICalculatorUpdateProps> = ({ reportId, i
     const [isModified, setIsModified] = useState(false);
     const backendAPI = new BackendAPI();
     const redirectAPI = new RedirectAPI();
-
+    const { user } = useAuth0();
+    
     useEffect(() => {
         // Compare initial data with current formData to determine if modifications have been made
         setIsModified(JSON.stringify(formData) !== JSON.stringify(initialRentalReportData));
@@ -33,7 +35,7 @@ export const CalculatorUpdate: React.FC<ICalculatorUpdateProps> = ({ reportId, i
 
     const handleSave = async () => {
         try {
-            await backendAPI.saveUpdatedRentalReport(reportId, formData);
+            await backendAPI.saveUpdatedRentalReport(reportId, formData, user?.sub);
             alert('Report saved successfully.');
             setIsModified(false); // Reset the modification flag after saving
         } catch (error) {
@@ -45,7 +47,7 @@ export const CalculatorUpdate: React.FC<ICalculatorUpdateProps> = ({ reportId, i
     const handleDelete = async () => {
         if (window.confirm('Are you sure you want to delete this report?')) {
             try {
-                await backendAPI.deleteRentalReport(reportId);
+                await backendAPI.deleteRentalReport(reportId, user?.sub);
                 alert('Report deleted successfully.');
                 // Optionally redirect or take further action after deletion
             } catch (error) {
