@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Checkbox, Input, SpaceBetween, CopyToClipboard } from '@cloudscape-design/components';
-import { BackendAPI } from '@bpenwell/instantlyanalyze-module';
+import { BackendAPI, IRentalCalculatorData } from '@bpenwell/instantlyanalyze-module';
 import { useAuth0 } from '@auth0/auth0-react';
 
 interface ShareModalProps {
+  reportData: IRentalCalculatorData;
   reportId: string;
   isOpen: boolean;
   onClose: () => void;
@@ -12,18 +13,19 @@ interface ShareModalProps {
 }
 
 export const ShareModal: React.FC<ShareModalProps> = (props: ShareModalProps) => {
-  const { reportId, isOpen, onClose, shareableLink, onShareableChange } = props;
+  const { reportData, reportId, isOpen, onClose, shareableLink, onShareableChange } = props;
   const backendApi = new BackendAPI();
-  const [isShareable, setIsShareable] = useState(false);
+  const [isShareable, setIsShareable] = useState(reportData.isShareable);
   const { user } = useAuth0();
-  
-  useEffect(() => {
-    onShareableChange(isShareable);
-  }, [isShareable, onShareableChange]);
 
   const handleCheckboxChange = async (event: { detail: { checked: boolean } }) => {
-    await backendApi.changeRentalReportSharability(reportId, event.detail.checked, user?.sub);
+    const newReportData: IRentalCalculatorData = {
+      ...reportData,
+      isShareable: event.detail.checked
+    };
+    await backendApi.changeRentalReportSharability(reportId, newReportData, user?.sub);
     setIsShareable(event.detail.checked);
+    onShareableChange(event.detail.checked)
   };
 
   return (
@@ -35,15 +37,15 @@ export const ShareModal: React.FC<ShareModalProps> = (props: ShareModalProps) =>
     >
       <SpaceBetween size="m">
         <Checkbox onChange={handleCheckboxChange} checked={isShareable}>
-          Make this report sharable
+          {isShareable ? 'Make this report shareable': 'Report is shareable'}
         </Checkbox>
         {isShareable && (
           <SpaceBetween size="s">
             <Input value={shareableLink} readOnly />
             <CopyToClipboard
                 copyButtonText="Copy"
-                copyErrorText="Sharable link failed to copy"
-                copySuccessText="Sharable link copied"
+                copyErrorText="Shareable link failed to copy"
+                copySuccessText="Shareable link copied"
                 textToCopy={shareableLink}
             />
           </SpaceBetween>

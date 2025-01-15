@@ -7,39 +7,41 @@ import { useAuth0 } from '@auth0/auth0-react';
 
 export interface ICalculatorHeaderProps {
   reportId: string;
-  initialData: IRentalCalculatorData;
-  isShareView: boolean;
+  reportData: IRentalCalculatorData;
+  updateInitialReportData: (initialReportData: IRentalCalculatorData) => void;
 }
 
 export const CalculatorHeader: React.FC<ICalculatorHeaderProps> = ({
   reportId,
-  initialData,
-  isShareView,
+  reportData,
+  updateInitialReportData,
 }) => {
-  const [formData, setFormData] = useState<IRentalCalculatorData>(initialData);
+  /**
+   * @param isShareable 
+   * @returns '' if isShareable is false. Returns currentUrl with share instead of view if true.
+   */
+  const getShareableReportLink = (isShareable: boolean): string => {
+    if (isShareable) {
+      const currentUrl = window.location.href;
+      return currentUrl.replace('/view/', '/share/');
+    }
+    else {
+      return '';
+    }
+  };
+  
   const [isModified, setIsModified] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-  const [shareableLink, setShareableLink] = useState('');
+  const [shareableLink, setShareableLink] = useState(getShareableReportLink(reportData.isShareable));
   const backendAPI = new BackendAPI();
   const redirectAPI = new RedirectAPI();
   const { user } = useAuth0();
-
-  useEffect(() => {
-    setIsModified(JSON.stringify(formData) !== JSON.stringify(initialData));
-  }, [formData, initialData]);
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+  const isSharePage = window.location.href.includes('share/');
 
   const handleSave = async () => {
     try {
-      console.debug(`[DEBUG] initialData ${printObjectFields(initialData)}`);
-      await backendAPI.saveUpdatedRentalReport(reportId, initialData, user?.sub);
+      console.debug(`[DEBUG] initialData ${printObjectFields(reportData)}`);
+      await backendAPI.saveUpdatedRentalReport(reportId, reportData, user?.sub);
       alert('Report saved successfully.');
       setIsModified(false);
     } catch (error) {
@@ -65,14 +67,16 @@ export const CalculatorHeader: React.FC<ICalculatorHeaderProps> = ({
     setIsShareModalOpen(true);
   };
 
-  const handleShareableChange = (isShareable: boolean) => {
+  const handleShareableChange = async (isShareable: boolean) => {
+    const linkText = getShareableReportLink(isShareable);
+    setShareableLink(linkText);
     if (isShareable) {
-      const currentUrl = window.location.href;
-      const shareableUrl = currentUrl.replace('/view/', '/share/');
-      // Generate shareable link (this should be replaced with actual backend logic)
-      setShareableLink(shareableUrl);
-    } else {
-      setShareableLink('');
+      const newReportData: IRentalCalculatorData = {
+        ...reportData,
+        isShareable: isShareable
+      };
+      updateInitialReportData(newReportData);
+      await backendAPI.saveUpdatedRentalReport(reportId, newReportData, user?.sub);
     }
   };
 
@@ -89,7 +93,7 @@ export const CalculatorHeader: React.FC<ICalculatorHeaderProps> = ({
         <div className='header-box'>
           <Box>
             <img
-              src={getImageSrc(initialData)}
+              src={getImageSrc(reportData)}
               alt="Property"
               style={{ width: '100%', borderRadius: '10px' }}
             />
@@ -99,17 +103,17 @@ export const CalculatorHeader: React.FC<ICalculatorHeaderProps> = ({
         <div className='header-address'>
           <Box>
             <Header variant="h2">
-              {initialData.propertyInformation.streetAddress}
+              {reportData.propertyInformation.streetAddress}
             </Header>
             <Header variant="h3">
-              {initialData.propertyInformation.city}, {initialData.propertyInformation.state}
+              {reportData.propertyInformation.city}, {reportData.propertyInformation.state}
             </Header>
           </Box>
         </div>
 
         {/* Right Column - Buttons */}
         <div className='header-buttons'>
-          { !isShareView ? 
+          { !isSharePage ? 
             <SpaceBetween size="s" direction="horizontal">
               <Button variant="normal" onClick={handleShare}>
                 Share
@@ -124,13 +128,14 @@ export const CalculatorHeader: React.FC<ICalculatorHeaderProps> = ({
                 Delete Report
               </Button>
             </SpaceBetween>
-            : null
+            : <h4>Viewing report in share mode</h4>
           }
         </div>
       </Grid>
 
       {/* Share Modal */}
       <ShareModal
+        reportData={reportData}
         reportId={reportId}
         isOpen={isShareModalOpen}
         onClose={() => setIsShareModalOpen(false)}
