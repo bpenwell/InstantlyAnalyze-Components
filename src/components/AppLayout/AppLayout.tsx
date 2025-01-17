@@ -17,7 +17,7 @@ export interface IAppLayoutPreview {
 
 export const AppLayoutPreview = (props: IAppLayoutPreview) => {
   const { children } = props;
-  const path = window.location.hash.replace('#', '');
+  const path = window.location.hash;//.replace('#', '');
   const breadcrumbPath = path.split('/').filter(segment => segment !== '');
   let breadcrumbItems: { text: string; href: string }[] = [];
   let previousPath = '';
@@ -43,14 +43,14 @@ export const AppLayoutPreview = (props: IAppLayoutPreview) => {
     }
   
     let displayText = '';
-    let redirectUrl = `#${previousPath}/${segment}`;
+    let redirectUrl = `${previousPath}/${segment}`;
     // Check if the segment is a UUID
     if (isUUID(segment)) {
       // Use the previousPath to determine the mapping
       const mappedPath = getBreadcrumbsUUIDPageName(segment);
       displayText = mappedPath;
       //Update url
-      redirectUrl = `#${previousPath}/${segment}`;
+      redirectUrl = `${previousPath}/${segment}`;
     }
     //We want the initial breadcrumb to be the homepage
     else if (shouldDisplayHomeBreadcrumb(segment)) {
@@ -61,7 +61,7 @@ export const AppLayoutPreview = (props: IAppLayoutPreview) => {
     else {
       displayText = toUpperCamelCase(segment).replace('-', ' ');
       //Update url
-      redirectUrl = `#${previousPath}/${segment}`;
+      redirectUrl = `${previousPath}/${segment}`;
     }
   
     breadcrumbItems.push({

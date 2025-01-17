@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import {
   BackendAPI,
-  IUserConfigs,
   LOCAL_STORAGE_KEYS,
   PAGE_PATH,
   RedirectAPI,
@@ -10,37 +9,38 @@ import {
 } from '@bpenwell/instantlyanalyze-module';
 import {
   Button,
+  SelectProps,
   TextContent,
 } from '@cloudscape-design/components';
 
 // Material UI components
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-/*import Button from '@mui/material/Button';*/
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 
-// Material UI icons
+// MUI for theme/density (optional)
+import { applyMode, applyDensity, Density, Mode } from '@cloudscape-design/global-styles';
+
+// MUI icons
 import SettingsIcon from '@mui/icons-material/Settings';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 
-// (Optional) If still using Cloudscape’s theme/density methods
-import { applyMode, applyDensity, Density, Mode } from '@cloudscape-design/global-styles';
+// Extra MUI components for theme selection
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 // Our custom CSS
 import './Header.css';
 import { useAppContext } from '../../utils/AppContextProvider';
+import { FeedbackModal } from '../FeedbackModal/FeedbackModal';
+import { Menu, MenuItem } from '@mui/material';
 
 export const Header: React.FC = () => {
   const { user, isAuthenticated, isLoading, loginWithRedirect, logout } = useAuth0();
@@ -52,27 +52,24 @@ export const Header: React.FC = () => {
     LOCAL_STORAGE_KEYS.APP_DENSITY,
     Density.Comfortable
   );
-  const { userConfig, setUserConfig } = useAppContext();
 
+  const { userConfig, setUserConfig } = useAppContext();
   const redirectApi: RedirectAPI = new RedirectAPI();
   const backendAPI: BackendAPI = new BackendAPI();
 
-  // Theme & density modal
+  // State for theme & density dialog
   const [isModalVisible, setIsModalVisible] = useState(false);
-
-  // Profile menu anchor
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
-  // Handlers
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+  const [feedbackType, setFeedbackType] = useState<'bug' | 'feature'>('bug');
+  const [feedbackEmail, setFeedbackEmail] = useState('');
+  const [feedbackNote, setFeedbackNote] = useState('');
+
+  /* ================== Handlers ================== */
+  // Theme & density
   const openSettingsModal = () => setIsModalVisible(true);
   const closeSettingsModal = () => setIsModalVisible(false);
-
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
-  };
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
 
   const handleModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newMode = event.target.value as Mode;
@@ -86,13 +83,43 @@ export const Header: React.FC = () => {
     setAppDensity(newDensity);
   };
 
-  useEffect(() => {
-    /*
-    FOR DEBUGGING THE HEADER INITIALIZATION ISSUE
-    console.log(`isLoading: ${isLoading}`);
-    console.log(`isAuthenticated: ${isAuthenticated}`);
-    console.log(`user: `, user);*/
+  // User menu
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
 
+  const openFeedbackModal = () => {
+    setIsFeedbackModalOpen(true);
+  };
+  const closeFeedbackModal = () => {
+    setIsFeedbackModalOpen(false);
+    // Optionally reset fields
+    setFeedbackType('bug');
+    setFeedbackEmail('');
+    setFeedbackNote('');
+  };
+
+  const handleSubmitFeedback = async () => {
+    if (!feedbackNote.trim()) {
+      alert('Please enter a note before submitting.');
+      return;
+    }
+
+    try {
+      await backendAPI.sendFeedbackEmail(feedbackType, feedbackEmail, feedbackNote);
+      alert('Feedback submitted successfully!');
+      closeFeedbackModal();
+    } catch (error) {
+      console.error('Error sending feedback:', error);
+      alert('Failed to send feedback. Please try again.');
+    }
+  };
+
+  /* ================== useEffect for user configs ================== */
+  useEffect(() => {
     const fetchUserConfigs = async () => {
       if (isAuthenticated && user) {
         const userId = user.sub;
@@ -106,11 +133,10 @@ export const Header: React.FC = () => {
         }
       }
     };
-
     fetchUserConfigs();
   }, [isAuthenticated, user]);
 
-  // If Auth0 is still loading, show a placeholder
+  // If Auth0 is still loading, show a simple placeholder
   if (isLoading) {
     return (
       <AppBar position="static" className="custom-app-bar" elevation={0}>
@@ -120,14 +146,10 @@ export const Header: React.FC = () => {
               <h2
                 className="logo-text"
                 onClick={() => redirectApi.redirectToPage(PAGE_PATH.HOME)}
-              >Instantly Analyze
-              </h2> 
+              >
+                Instantly Analyze
+              </h2>
             </TextContent>
-            {/*<img
-              src="/public/logo69.png"
-              alt="Instantly Analyze"
-              className="app-logo"
-            />*/}
           </Box>
         </Toolbar>
       </AppBar>
@@ -139,21 +161,15 @@ export const Header: React.FC = () => {
       <AppBar position="static" className="custom-app-bar" elevation={0}>
         <Toolbar className="custom-toolbar">
           {/* Left: Logo */}
-          <Box
-            className="left-section"
-          >
+          <Box className="left-section">
             <TextContent>
               <h2
                 className="logo-text"
                 onClick={() => redirectApi.redirectToPage(PAGE_PATH.HOME)}
-              >Instantly Analyze
-              </h2> 
+              >
+                Instantly Analyze
+              </h2>
             </TextContent>
-            {/*<img
-              src="/public/logo69.png"
-              alt="Instantly Analyze"
-              className="app-logo"
-            />*/}
           </Box>
 
           {/* Center: Nav buttons */}
@@ -174,12 +190,14 @@ export const Header: React.FC = () => {
             </Button>
           </Box>
 
-          {/* Right: Settings & User profile */}
+          {/* Right: Additional Buttons */}
           <Box className="right-section">
-            {/* 
-                If user is authenticated and status == 'free',
-                display a special "Go Pro" button 
-            */}
+            {/* Single feedback button that opens a modal with a feedback-type dropdown */}
+            <Button className="nav-button" onClick={openFeedbackModal}>
+              Report Feedback
+            </Button>
+
+            {/* Show "Go Pro" if user is free */}
             {isAuthenticated && userConfig?.status === 'free' && (
               <Button
                 className="go-pro-button"
@@ -189,19 +207,19 @@ export const Header: React.FC = () => {
               </Button>
             )}
 
+            {/* Settings Modal */}
             <IconButton onClick={openSettingsModal} className="settings-icon">
               <SettingsIcon
-                // Invert icon color if dark mode
-                sx={[ appMode === Mode.Dark && { filter: 'invert(1)' }]}
+                sx={[appMode === Mode.Dark && { filter: 'invert(1)' }]}
               />
             </IconButton>
 
+            {/* User Profile / Login */}
             {isAuthenticated && user && userConfig ? (
               <>
                 <IconButton onClick={handleOpenUserMenu} className="account-icon">
                   <AccountCircle
-                    // Invert icon color if dark mode
-                    sx={[ appMode === Mode.Dark && { filter: 'invert(1)' }]}
+                    sx={[appMode === Mode.Dark && { filter: 'invert(1)' }]}
                   />
                 </IconButton>
                 <Menu
@@ -228,6 +246,7 @@ export const Header: React.FC = () => {
                     Log out
                   </MenuItem>
                 </Menu>
+                {/* MUI Menu for Profile, Logout, etc. would go here */}
               </>
             ) : (
               <Button
@@ -270,6 +289,19 @@ export const Header: React.FC = () => {
           <Button onClick={closeSettingsModal}>Close</Button>
         </DialogActions>
       </Dialog>
+
+      {/* Feedback modal (integrated via the imported component) */}
+      <FeedbackModal
+        isOpen={isFeedbackModalOpen}
+        closeFeedbackModal={closeFeedbackModal}
+        feedbackType={feedbackType}
+        setFeedbackType={setFeedbackType}
+        feedbackEmail={feedbackEmail}
+        setFeedbackEmail={setFeedbackEmail}
+        feedbackNote={feedbackNote}
+        setFeedbackNote={setFeedbackNote}
+        handleSubmitFeedback={handleSubmitFeedback}
+      />
     </>
   );
 };
