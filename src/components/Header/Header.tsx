@@ -9,7 +9,6 @@ import {
 } from '@bpenwell/instantlyanalyze-module';
 import {
   Button,
-  SelectProps,
   TextContent,
 } from '@cloudscape-design/components';
 
@@ -36,11 +35,10 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-// Our custom CSS
 import './Header.css';
 import { useAppContext } from '../../utils/AppContextProvider';
-import { FeedbackModal } from '../FeedbackModal/FeedbackModal';
 import { Menu, MenuItem } from '@mui/material';
+import { FeedbackModal, FeedbackType } from '../FeedbackModal/FeedbackModal';
 
 export const Header: React.FC = () => {
   const { user, isAuthenticated, isLoading, loginWithRedirect, logout } = useAuth0();
@@ -57,17 +55,24 @@ export const Header: React.FC = () => {
   const redirectApi: RedirectAPI = new RedirectAPI();
   const backendAPI: BackendAPI = new BackendAPI();
 
-  // State for theme & density dialog
+  // Theme & density modal
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  // User menu
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
+  // Feedback modal states
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
-  const [feedbackType, setFeedbackType] = useState<'bug' | 'feature'>('bug');
+  const [feedbackType, setFeedbackType] = useState<FeedbackType>(FeedbackType.Bug);
   const [feedbackEmail, setFeedbackEmail] = useState('');
   const [feedbackNote, setFeedbackNote] = useState('');
 
+  // NEW states for controlling loading & banner messages
+  const [isSending, setIsSending] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
   /* ================== Handlers ================== */
-  // Theme & density
   const openSettingsModal = () => setIsModalVisible(true);
   const closeSettingsModal = () => setIsModalVisible(false);
 
@@ -91,35 +96,54 @@ export const Header: React.FC = () => {
     setAnchorElUser(null);
   };
 
+  // Feedback modal
   const openFeedbackModal = () => {
     setIsFeedbackModalOpen(true);
+    // Clear banners & fields each time we open
+    setSuccessMessage('');
+    setErrorMessage('');
   };
   const closeFeedbackModal = () => {
     setIsFeedbackModalOpen(false);
     // Optionally reset fields
-    setFeedbackType('bug');
+    setFeedbackType(FeedbackType.Bug);
     setFeedbackEmail('');
     setFeedbackNote('');
   };
 
+  // SUBMIT FEEDBACK
   const handleSubmitFeedback = async () => {
+    // Clear prior messages
+    setSuccessMessage('');
+    setErrorMessage('');
+
     if (!feedbackNote.trim()) {
-      alert('Please enter a note before submitting.');
+      setErrorMessage('Please enter a note before submitting.');
+      return;
+    }
+    else if (!feedbackEmail.trim()) {
+      setErrorMessage('Please enter your email if a follow-up is needed.');
       return;
     }
 
+    setIsSending(true);
     try {
-      await backendAPI.sendFeedbackEmail(feedbackType, feedbackEmail, feedbackNote);
-      alert('Feedback submitted successfully!');
-      closeFeedbackModal();
+      if (!user) {
+        throw new Error('User must be authenticated to send feedback email');
+      }
+
+      await backendAPI.sendFeedbackEmail(feedbackType, feedbackEmail, feedbackNote, user?.name);
+      setSuccessMessage('Feedback submitted successfully!');
     } catch (error) {
       console.error('Error sending feedback:', error);
-      alert('Failed to send feedback. Please try again.');
+      setErrorMessage('Failed to send feedback. Please try again.');
+    } finally {
+      setIsSending(false);
     }
   };
 
-  /* ================== useEffect for user configs ================== */
-  useEffect(() => {
+  // Pull user config on mount/auth
+  React.useEffect(() => {
     const fetchUserConfigs = async () => {
       if (isAuthenticated && user) {
         const userId = user.sub;
@@ -136,7 +160,7 @@ export const Header: React.FC = () => {
     fetchUserConfigs();
   }, [isAuthenticated, user]);
 
-  // If Auth0 is still loading, show a simple placeholder
+  // If Auth0 is still loading, show a placeholder
   if (isLoading) {
     return (
       <AppBar position="static" className="custom-app-bar" elevation={0}>
@@ -158,6 +182,7 @@ export const Header: React.FC = () => {
 
   return (
     <>
+      {/* MAIN HEADER */}
       <AppBar position="static" className="custom-app-bar" elevation={0}>
         <Toolbar className="custom-toolbar">
           {/* Left: Logo */}
@@ -172,7 +197,7 @@ export const Header: React.FC = () => {
             </TextContent>
           </Box>
 
-          {/* Center: Nav buttons */}
+          {/* Center: Nav */}
           <Box className="center-section">
             <Button
               variant="inline-link"
@@ -190,14 +215,15 @@ export const Header: React.FC = () => {
             </Button>
           </Box>
 
-          {/* Right: Additional Buttons */}
+          {/* Right: Feedback, Settings, User */}
           <Box className="right-section">
-            {/* Single feedback button that opens a modal with a feedback-type dropdown */}
-            <Button className="nav-button" onClick={openFeedbackModal}>
-              Report Feedback
-            </Button>
+            { isAuthenticated && user ? (
+              <Button className="nav-button" onClick={openFeedbackModal}>
+                Report Feedback
+              </Button>
+            ) : <></>
+            }
 
-            {/* Show "Go Pro" if user is free */}
             {isAuthenticated && userConfig?.status === 'free' && (
               <Button
                 className="go-pro-button"
@@ -207,14 +233,12 @@ export const Header: React.FC = () => {
               </Button>
             )}
 
-            {/* Settings Modal */}
             <IconButton onClick={openSettingsModal} className="settings-icon">
               <SettingsIcon
                 sx={[appMode === Mode.Dark && { filter: 'invert(1)' }]}
               />
             </IconButton>
 
-            {/* User Profile / Login */}
             {isAuthenticated && user && userConfig ? (
               <>
                 <IconButton onClick={handleOpenUserMenu} className="account-icon">
@@ -246,7 +270,6 @@ export const Header: React.FC = () => {
                     Log out
                   </MenuItem>
                 </Menu>
-                {/* MUI Menu for Profile, Logout, etc. would go here */}
               </>
             ) : (
               <Button
@@ -263,8 +286,13 @@ export const Header: React.FC = () => {
         </Toolbar>
       </AppBar>
 
-      {/* Theme & density dialog */}
-      <Dialog open={isModalVisible} onClose={closeSettingsModal} maxWidth="xs" fullWidth>
+      {/* THEME SETTINGS DIALOG */}
+      <Dialog
+        open={isModalVisible}
+        onClose={closeSettingsModal}
+        maxWidth="xs"
+        fullWidth
+      >
         <DialogTitle>Select Theme</DialogTitle>
         <DialogContent dividers>
           <RadioGroup value={appMode} onChange={handleModeChange}>
@@ -290,7 +318,7 @@ export const Header: React.FC = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Feedback modal (integrated via the imported component) */}
+      {/* FEEDBACK MODAL */}
       <FeedbackModal
         isOpen={isFeedbackModalOpen}
         closeFeedbackModal={closeFeedbackModal}
@@ -301,6 +329,10 @@ export const Header: React.FC = () => {
         feedbackNote={feedbackNote}
         setFeedbackNote={setFeedbackNote}
         handleSubmitFeedback={handleSubmitFeedback}
+        // Pass new states
+        isLoading={isSending}
+        successMessage={successMessage}
+        errorMessage={errorMessage}
       />
     </>
   );

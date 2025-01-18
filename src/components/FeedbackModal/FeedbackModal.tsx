@@ -9,18 +9,30 @@ import {
   Select,
   SelectProps,
   Textarea,
+  Alert,
+  Spinner,
 } from '@cloudscape-design/components';
+
+export enum FeedbackType {
+  Bug = 'Bug',
+  Feature = 'Feature',
+}
 
 export function FeedbackModal(props: {
   isOpen: boolean;
   closeFeedbackModal: () => void;
-  feedbackType: 'bug' | 'feature';
-  setFeedbackType: React.Dispatch<React.SetStateAction<'bug' | 'feature'>>;
+  feedbackType: FeedbackType;
+  setFeedbackType: React.Dispatch<React.SetStateAction<FeedbackType>>;
   feedbackEmail: string;
   setFeedbackEmail: React.Dispatch<React.SetStateAction<string>>;
   feedbackNote: string;
   setFeedbackNote: React.Dispatch<React.SetStateAction<string>>;
   handleSubmitFeedback: () => void;
+
+  // NEW props:
+  isLoading: boolean;
+  successMessage: string;
+  errorMessage: string;
 }) {
   const {
     isOpen,
@@ -32,17 +44,20 @@ export function FeedbackModal(props: {
     feedbackNote,
     setFeedbackNote,
     handleSubmitFeedback,
+    isLoading,
+    successMessage,
+    errorMessage,
   } = props;
 
   // Convert string to Cloudscape "selectedOption".
   const selectedFeedbackOption: SelectProps.Option =
-    feedbackType === 'bug'
+    feedbackType === FeedbackType.Bug
       ? { label: 'Report a Bug', value: 'bug' }
       : { label: 'Suggest a Feature', value: 'feature' };
 
-  // Callback for selecting feedback type in <Select>
+  // Callback for feedback type in <Select>
   const onFeedbackTypeChange = (e: any) => {
-    const newValue = e.detail.selectedOption.value as 'bug' | 'feature';
+    const newValue = e.detail.selectedOption.value as FeedbackType;
     setFeedbackType(newValue);
   };
 
@@ -54,18 +69,33 @@ export function FeedbackModal(props: {
       closeAriaLabel="Close feedback modal"
       header="Send Feedback"
       footer={
-        <Box float="right">
-          <Button variant="link" onClick={closeFeedbackModal}>
+        <Box float="right" display="block">
+          <Button variant="link" onClick={closeFeedbackModal} disabled={isLoading}>
             Cancel
           </Button>
-          <Button variant="primary" onClick={handleSubmitFeedback}>
-            Submit
+          <Button
+            variant="primary"
+            onClick={handleSubmitFeedback}
+            disabled={isLoading}
+          >
+            {isLoading ? 'Submitting…' : 'Submit'}
           </Button>
         </Box>
       }
     >
       <SpaceBetween size="l">
-        {/* Feedback Type dropdown */}
+        {/* If success or error, show an Alert */}
+        {successMessage && (
+          <Alert statusIconAriaLabel="Success" type="success">
+            {successMessage}
+          </Alert>
+        )}
+        {errorMessage && (
+          <Alert statusIconAriaLabel="Error" type="error">
+            {errorMessage}
+          </Alert>
+        )}
+
         <FormField label="Feedback Type">
           <Select
             selectedOption={selectedFeedbackOption}
@@ -77,8 +107,7 @@ export function FeedbackModal(props: {
           />
         </FormField>
 
-        {/* Email (optional) */}
-        <FormField label="Email (optional)">
+        <FormField label="Email">
           <Input
             value={feedbackEmail}
             onChange={(e) => setFeedbackEmail(e.detail.value)}
@@ -86,7 +115,6 @@ export function FeedbackModal(props: {
           />
         </FormField>
 
-        {/* Note to Developer (multiline) */}
         <FormField label="Note to Developer">
           <Textarea
             value={feedbackNote}
