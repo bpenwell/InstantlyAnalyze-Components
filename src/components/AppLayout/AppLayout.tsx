@@ -17,7 +17,7 @@ export interface IAppLayoutPreview {
 
 export const AppLayoutPreview = (props: IAppLayoutPreview) => {
   const { children } = props;
-  const path = window.location.hash;//.replace('#', '');
+  const path = window.location.pathname;//.replace('#', '');
   const breadcrumbPath = path.split('/').filter(segment => segment !== '');
   let breadcrumbItems: { text: string; href: string }[] = [];
   let previousPath = '';

@@ -162,7 +162,7 @@ export const AddressFormV2: React.FC = () => {
                 borderBottom: '1px solid #eee',
               }}
               role="option"
-              aria-selected={selectedAddress?.id === suggestion.id}
+              //aria-selected={selectedAddress?.id === suggestion.id}
             >
               {suggestion.place_name}
             </li>

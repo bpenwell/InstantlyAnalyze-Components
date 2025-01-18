@@ -145,7 +145,7 @@ export const Header: React.FC = () => {
   // Pull user config on mount/auth
   React.useEffect(() => {
     const fetchUserConfigs = async () => {
-      if (isAuthenticated && user) {
+      if (isAuthenticated && user && !userConfig) {
         const userId = user.sub;
         const configs = await backendAPI.getUserConfigs(userId);
 
@@ -202,7 +202,7 @@ export const Header: React.FC = () => {
             <Button
               variant="inline-link"
               className="nav-button"
-              onClick={() => redirectApi.redirectToPage(PAGE_PATH.RENTAL_CALCULATOR_HOME)}
+              onClick={() => redirectApi.redirectToPage(PAGE_PATH.RENTAL_CALCULATOR_VIEW)}
             >
               Rental Reports
             </Button>
