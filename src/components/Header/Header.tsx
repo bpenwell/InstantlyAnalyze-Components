@@ -171,7 +171,7 @@ export const Header: React.FC = () => {
                 className="logo-text"
                 onClick={() => redirectApi.redirectToPage(PAGE_PATH.HOME)}
               >
-                Instantly Analyze
+                InstantlyAnalyze
               </h2>
             </TextContent>
           </Box>
@@ -192,7 +192,7 @@ export const Header: React.FC = () => {
                 className="logo-text"
                 onClick={() => redirectApi.redirectToPage(PAGE_PATH.HOME)}
               >
-                Instantly Analyze
+                InstantlyAnalyze
               </h2>
             </TextContent>
           </Box>

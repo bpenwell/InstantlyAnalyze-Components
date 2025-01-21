@@ -6,7 +6,7 @@ export function Footer() {
     return (
       <footer>
         <TextContent>
-          <p>&copy; 2024 Instantly Analyze. All rights reserved.</p>
+          <p>&copy; 2024 InstantlyAnalyze. All rights reserved.</p>
         </TextContent>
       </footer>
     );

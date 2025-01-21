@@ -10,10 +10,11 @@ import {
 import { Button } from '../Button/Button';
 import './AddressForm.css';
 import { LoadingBar } from '../LoadingBar/LoadingBar';
+import { ColumnLayout } from '@cloudscape-design/components';
 
 export type ReturnPropertyData = (addressData: any) => void;
 
-export const AddressForm = ({ returnResponseData, triggerNavigate }: { returnResponseData: ReturnPropertyData, triggerNavigate?: boolean }) => {
+export const AddressForm = ({ onAddressSubmit, triggerAddressSubmit }: { onAddressSubmit: ReturnPropertyData, triggerAddressSubmit?: boolean }) => {
   const [streetAddress, setStreetAddress] = useState(initialRentalCalculatorFormState.propertyInformation.streetAddress);
   const [city, setCity] = useState(initialRentalCalculatorFormState.propertyInformation.city);
   const [state, setState] = useState(initialRentalCalculatorFormState.propertyInformation.state);
@@ -34,7 +35,7 @@ export const AddressForm = ({ returnResponseData, triggerNavigate }: { returnRes
       const rentcastPropertyData: IRentcastPropertyData = await backendAPI.getPropertyInfoByAddress(address);
       console.log('rentcastPropertyData');
       console.log(rentcastPropertyData);
-      returnResponseData(rentcastPropertyData);
+      onAddressSubmit(rentcastPropertyData);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching property data:', error);
@@ -42,50 +43,40 @@ export const AddressForm = ({ returnResponseData, triggerNavigate }: { returnRes
   };
 
   useEffect(() => {
-    if (!triggerNavigate) { return; }
+    if (!triggerAddressSubmit) { return; }
     handleSubmit();
-  }, [triggerNavigate]);
+  }, [triggerAddressSubmit]);
 
   return (
-    <div className='addressFormContainer'>
-      <Input
-        id="street"
-        label="Street"
-        value={streetAddress}
-        onChange={(value: string) => setStreetAddress(value)}
-      />
-      <Input
-        id="city"
-        label="City"
-        value={city}
-        onChange={(value: string) => setCity(value)}
-      />
-      <Input
-        id="state"
-        label="State"
-        value={state}
-        options={Object.values(USState)}
-        onChange={(value: USState) => setState(value)}
-      />
-      <Input
-        id="zipCode"
-        label="Zip Code"
-        value={zipCode}
-        onChange={(value: string) => setZipCode(value)}
-      />
+    <div>
+      <ColumnLayout columns={4}>
+        <Input
+          id="street"
+          label="Street"
+          value={streetAddress}
+          onChange={(value: string) => setStreetAddress(value)}
+        />
+        <Input
+          id="city"
+          label="City"
+          value={city}
+          onChange={(value: string) => setCity(value)}
+        />
+        <Input
+          id="state"
+          label="State"
+          value={state}
+          options={Object.values(USState)}
+          onChange={(value: USState) => setState(value)}
+        />
+        <Input
+          id="zipCode"
+          label="Zip Code"
+          value={zipCode}
+          onChange={(value: string) => setZipCode(value)}
+        />
+      </ColumnLayout>
       { loading ? <LoadingBar text='Fetching property info...'/> : <></>}
-      {/* triggerSubmit is currently optional to ensure V2 still works */}
-      { triggerNavigate !== undefined ? (<></>) : (
-          <Button
-            buttonType={"primary"}
-            size="small"
-            onClick={handleSubmit}
-            style={{padding: "10px 20px", margin: "10px 0px 5px 10px"}}
-            label="Get Property Data"
-            loading={loading}
-          />
-        )
-      }
     </div>
   );
 };
