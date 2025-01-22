@@ -72,14 +72,15 @@ export const AppLayoutPreview = (props: IAppLayoutPreview) => {
     previousPath += `/${segment}`;
   });
 
+  // Only define breadcrumbs when we have items, otherwise undefined
+  const breadcrumbsContent = breadcrumbItems.length > 0
+    ? <BreadcrumbGroup items={breadcrumbItems} />
+    : undefined;
+
   return (
     <I18nProvider locale={LOCALE} messages={[messages]}>
       <AppLayout
-        breadcrumbs={
-          <BreadcrumbGroup
-            items={breadcrumbItems}
-          />
-        }
+        breadcrumbs={breadcrumbsContent}
         toolsHide={true}
         navigationHide={true}
         /*tools={<HelpPanel header={<h2>Overview</h2>}>Help content</HelpPanel>}*/

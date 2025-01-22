@@ -3,6 +3,7 @@ export { SelectableButton } from './components/Button/SelectableButton';
 export { DropdownButton } from './components/Button/DropdownButton';
 export type { ButtonProps } from './components/Button/Button';
 export { Header } from './components/Header/Header';
+export { HeaderV2 } from './components/Header/HeaderV2';
 export { Footer } from './components/Footer/Footer';
 export { AuthenticatedPage } from './components/Authentication/AuthenticatedPage';
 export { Input } from './components/Input/Input';
@@ -36,3 +37,6 @@ export {
 export { ManualRefresh } from './components/ManualRefresh/ManualRefresh';
 export { DeleteWithConfirmation } from './components/DeleteWithConfirmation/DeleteWithConfirmation';
 export { AppContextProvider, useAppContext } from './utils/AppContextProvider';
+export { Cards } from './components/Cards/Cards';
+export { CardItem } from './components/Cards/CardItem';
+export { HeroSection } from './components/HeroSection/HeroSection';

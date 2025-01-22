@@ -52,8 +52,8 @@ export function FeedbackModal(props: {
   // Convert string to Cloudscape "selectedOption".
   const selectedFeedbackOption: SelectProps.Option =
     feedbackType === FeedbackType.Bug
-      ? { label: 'Report a Bug', value: 'bug' }
-      : { label: 'Suggest a Feature', value: 'feature' };
+      ? { label: 'Report a Bug', value: FeedbackType.Bug }
+      : { label: 'Suggest a Feature', value: FeedbackType.Feature };
 
   // Callback for feedback type in <Select>
   const onFeedbackTypeChange = (e: any) => {
@@ -101,8 +101,8 @@ export function FeedbackModal(props: {
             selectedOption={selectedFeedbackOption}
             onChange={onFeedbackTypeChange}
             options={[
-              { label: 'Report a Bug', value: 'bug' },
-              { label: 'Suggest a Feature', value: 'feature' },
+              { label: 'Report a Bug', value: FeedbackType.Bug },
+              { label: 'Suggest a Feature', value: FeedbackType.Feature },
             ]}
           />
         </FormField>

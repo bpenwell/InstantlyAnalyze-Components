@@ -1,8 +1,8 @@
 const path = require('path');
 
 module.exports = {
-    mode: 'development',
-    devtool: 'source-map',
+    mode: 'production',
+    //devtool: 'source-map',
     entry: './src/index.ts',
     output: {
       path: path.resolve(__dirname, 'dist'),
@@ -19,7 +19,7 @@ module.exports = {
                 test: /\.(ts|tsx)$/,
                 exclude: /node_modules/,
                 use: ['babel-loader']
-              },
+            },
             {
                 test: /\.css$/i,
                 use: ['style-loader', 'css-loader'],
@@ -37,6 +37,7 @@ module.exports = {
     externals: {
       react: 'react',
       'react-dom': 'react-dom',
+      '@bpenwell/instantlyanalyze-module': '@bpenwell/instantlyanalyze-module',
       '@auth0/auth0-react': '@auth0/auth0-react',
       '@mapbox/search-js-react': '@mapbox/search-js-react',
       '@cloudscape-design/global-styles': '@cloudscape-design/global-styles',
