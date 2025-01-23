@@ -51,7 +51,11 @@ export const Header: React.FC = () => {
     Density.Comfortable
   );
 
-  const { userConfig, setUserConfig } = useAppContext();
+  const {
+    userExists,
+    setUserConfig,
+    isPaidMember
+  } = useAppContext();
   const redirectApi: RedirectAPI = new RedirectAPI();
   const backendAPI: BackendAPI = new BackendAPI();
 
@@ -145,7 +149,7 @@ export const Header: React.FC = () => {
   // Pull user config on mount/auth
   React.useEffect(() => {
     const fetchUserConfigs = async () => {
-      if (isAuthenticated && user && !userConfig) {
+      if (isAuthenticated && user && !userExists()) {
         const userId = user.sub;
         const configs = await backendAPI.getUserConfigs(userId);
 
@@ -224,7 +228,7 @@ export const Header: React.FC = () => {
             ) : <></>
             }
 
-            {isAuthenticated && userConfig?.status === 'free' && (
+            {isAuthenticated && !isPaidMember() && (
               <Button
                 className="go-pro-button"
                 href={redirectApi.createRedirectUrl(PAGE_PATH.SUBSCRIBE)}
@@ -239,7 +243,7 @@ export const Header: React.FC = () => {
               />
             </IconButton>
 
-            {isAuthenticated && user && userConfig ? (
+            {isAuthenticated && user && userExists() ? (
               <>
                 <IconButton onClick={handleOpenUserMenu} className="account-icon">
                   <AccountCircle

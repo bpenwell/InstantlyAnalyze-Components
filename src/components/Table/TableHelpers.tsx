@@ -1,8 +1,9 @@
 import React, { useRef } from 'react';
 import { useMemo } from 'react';
 import { PAGE_PATH, RedirectAPI, useLocalStorage } from '@bpenwell/instantlyanalyze-module';
-import { Box, Button, Header, HeaderProps, SpaceBetween } from '@cloudscape-design/components';
+import { Box, Button, Header, HeaderProps, SpaceBetween, Alert } from '@cloudscape-design/components';
 import { DeleteWithConfirmation, Item } from '../DeleteWithConfirmation/DeleteWithConfirmation';
+import { useAppContext } from '../../utils/AppContextProvider';
 
 export const TableNoMatchState = ({ onClearFilter }: { onClearFilter: () => void }) => (
     <Box margin={{ vertical: 'xs' }} textAlign="center" color="inherit">
@@ -55,6 +56,7 @@ export function FullPageHeader({
   selectedItems,
   ...props
 }: FullPageHeaderProps) {
+  const { canCreateNewReport, getRemainingFreeRentalReports, isPaidMember } = useAppContext();
   const isOnlyOneSelected = selectedItems.length === 1;
   const redirectAPI = new RedirectAPI();
 
@@ -74,35 +76,53 @@ export function FullPageHeader({
     }
   };
 
-  return (
-    <Header
-      variant="awsui-h1-sticky"
-      actions={
-        <SpaceBetween size="xs" direction="horizontal">
-          {extraActions}
-          <Button data-testid="header-btn-edit" disabled={!isOnlyOneSelected}  onClick={redirectToEdit}>
-            Edit
-          </Button>
-          <Button data-testid="header-btn-delete" disabled={selectedItems.length === 0} onClick={handleDeleteButtonClicked}>
-            Delete
-          </Button>
-          <DeleteWithConfirmation
-            itemFieldNameForName='address'
-            itemType='report'
-            ref={deleteWithConfirmationRef}
-            itemsToDelete={selectedItems}
-            onDeleteConfirmed={handleDelete}
-          />
+  const remainingReports = getRemainingFreeRentalReports();
 
-          <Button data-testid="header-btn-create" variant="primary" onClick={redirectToCreate}>
-            {createButtonText}
-          </Button>
-        </SpaceBetween>
+  return (
+    <>
+      { isPaidMember() ? 
+        <></> :
+        remainingReports > 0 && (
+          <Box margin={{ bottom: 's' }}>
+            <Alert
+              type="warning"
+              header="Remaining Free Reports"
+              dismissible={false}
+            >
+              You have {remainingReports} free rental reports remaining.
+            </Alert>
+          </Box>
+        )
       }
-      {...props}
-    >
-      {title}
-    </Header>
+      <Header
+        variant="awsui-h1-sticky"
+        actions={
+          <SpaceBetween size="xs" direction="horizontal">
+            {extraActions}
+            <Button data-testid="header-btn-edit" disabled={!isOnlyOneSelected}  onClick={redirectToEdit}>
+              Edit
+            </Button>
+            <Button data-testid="header-btn-delete" disabled={selectedItems.length === 0} onClick={handleDeleteButtonClicked}>
+              Delete
+            </Button>
+            <DeleteWithConfirmation
+              itemFieldNameForName='address'
+              itemType='report'
+              ref={deleteWithConfirmationRef}
+              itemsToDelete={selectedItems}
+              onDeleteConfirmed={handleDelete}
+            />
+
+            <Button data-testid="header-btn-create" variant="primary" onClick={redirectToCreate} disabled={!canCreateNewReport()}>
+              {createButtonText}
+            </Button>
+          </SpaceBetween>
+        }
+        {...props}
+      >
+        {title}
+      </Header>
+    </>
   );
 }
 
