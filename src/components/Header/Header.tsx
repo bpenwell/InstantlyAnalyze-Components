@@ -283,7 +283,7 @@ export const Header: React.FC = () => {
                   loginWithRedirect();
                 }}
               >
-                Login
+                Login/Sign Up
               </Button>
             )}
           </Box>
