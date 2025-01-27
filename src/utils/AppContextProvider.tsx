@@ -6,6 +6,8 @@ import React, { createContext, useState, useContext, ReactNode } from 'react';
 
 // 1. Define the shape of your context data, including the new APIs:
 type AppContextType = {
+  isUserLoading: boolean;
+  setIsUserLoading: (value: boolean) => void;
   userExists: () => boolean;
   setUserConfig: (status: IUserConfigs) => void;
   canCreateNewReport: () => boolean;
@@ -19,6 +21,8 @@ type AppContextType = {
 
 // 2. Create the actual context:
 const AppContext = createContext<AppContextType>({
+  isUserLoading: false,
+  setIsUserLoading: () => {},
   userExists: () => false,
   setUserConfig: () => {},
   canCreateNewReport: () => false,
@@ -43,10 +47,11 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
     freeReportsAvailable: 0,
     freeZillowScrapesAvailable: 0,
   });
+  const [loading, setLoading] = useState<boolean>(true);
 
   const userExists = (): boolean => {
     console.log('[userExists] ', userConfig);
-    return userConfig.userId === '' || userConfig.status === UserStatus.UNDEFINED;
+    return userConfig.userId !== '' || userConfig.status !== UserStatus.UNDEFINED;
   };
 
   const getRemainingFreeRentalReports = (): number => {
@@ -108,8 +113,14 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
     }
   };
 
+  const setIsUserLoading = (value: boolean): void => {
+    setLoading(value);
+  }
+
   // The value provided to context consumers
   const value: AppContextType = {
+    setIsUserLoading,
+    isUserLoading: loading,
     userExists,
     setUserConfig,
     canCreateNewReport,

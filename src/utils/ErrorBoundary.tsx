@@ -11,6 +11,7 @@ import { Footer } from '../components/Footer/Footer';
 import { AppContextProvider } from './AppContextProvider';
 import { AppLayoutPreview } from '../components/AppLayout/AppLayout';
 import { PAGE_PATH, RedirectAPI } from '@bpenwell/instantlyanalyze-module';
+import { FeedbackModal } from '../components/FeedbackModal/FeedbackModal';
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -40,7 +41,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
   render() {
     const { hasError, error } = this.state;
     // Generates an integer between 1 and 4 (inclusive).
-    const randomNumber = Math.floor(Math.random() * 4) + 1;
+    const randomNumber = Math.floor(Math.random() * 2) + 1;
     const redirectAPI: RedirectAPI = new RedirectAPI();
 
     if (hasError) {
@@ -49,23 +50,25 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
           <CustomHeader />
           <AppLayoutPreview>
             <Container>
-              <Header variant="h1">Who let the dogs out?</Header>
+              <Header variant="h1">Oops, something went wrong!</Header>
               <SpaceBetween size="l">
                 <TextContent>
                   <p>
-                    Meet Franklin. He tried to fetch this page, but it seems something went wrong.
-                    Don’t worry—he’s on it!
+                    We have encountered an unexpected error. Franklin says sorry for any inconvenience.
                   </p>
                   <p>
-                    In the meantime, you can return to our homepage or contact us if the problem
-                    persists.
+                    Please help us improve by clicking the feedback button below and letting
+                    us know what happened. We appreciate your help, and we'll work on fixing
+                    the issue as soon as possible.
                   </p>
                   <img
                     src={`/public/franklin${randomNumber}.jpeg`}
                     alt="Franky!"
                     style={{ maxWidth: '400px', display: 'block', margin: '0 auto' }}
                   />
+                  {/* Feedback Modal Button/Trigger */}
                   <SpaceBetween size="s" direction="horizontal">
+                    <FeedbackModal />
                     <Button href={redirectAPI.createRedirectUrl(PAGE_PATH.HOME)}>Return to Home</Button>
                   </SpaceBetween>
                   {error && (

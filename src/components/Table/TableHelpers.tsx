@@ -76,24 +76,8 @@ export function FullPageHeader({
     }
   };
 
-  const remainingReports = getRemainingFreeRentalReports();
-
   return (
     <>
-      { isPaidMember() ? 
-        <></> :
-        remainingReports > 0 && (
-          <Box margin={{ bottom: 's' }}>
-            <Alert
-              type="warning"
-              header="Remaining Free Reports"
-              dismissible={false}
-            >
-              You have {remainingReports} free rental reports remaining.
-            </Alert>
-          </Box>
-        )
-      }
       <Header
         variant="awsui-h1-sticky"
         actions={
