@@ -51,7 +51,7 @@ export const LoginModal = (props: ILoginModalProps) => {
                 See why our eAgent will revolutionize your job as an investor, help you pick the best strategy to pursue on a deal, all while providing world-class analysis tools to inform your decision.
               </p>
               <Button iconName="external" variant="primary" onClick={handleLogin}>
-                Authenticate
+                Login/Sign Up
               </Button>
             </SpaceBetween>
           </TextContent>

@@ -51,7 +51,7 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
 
   const getRemainingFreeRentalReports = (): number => {
     if (!userConfig.freeReportsAvailable) {
-      throw new Error('[getRemainingFreeRentalReports] userConfig.freeReportsAvailable does not exist');
+      return 0;
     }
 
     return userConfig.freeReportsAvailable;
