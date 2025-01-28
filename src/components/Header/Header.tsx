@@ -9,6 +9,7 @@ import {
 } from '@bpenwell/instantlyanalyze-module';
 import {
   Button,
+  SpaceBetween,
   TextContent,
 } from '@cloudscape-design/components';
 
@@ -153,14 +154,14 @@ export const Header: React.FC = () => {
             <Button
               variant="inline-link"
               className="nav-button"
-              onClick={() => redirectApi.redirectToPage(PAGE_PATH.RENTAL_CALCULATOR_VIEW)}
+              href={redirectApi.createRedirectUrl(PAGE_PATH.RENTAL_CALCULATOR_VIEW)}
             >
               Rental Reports
             </Button>
             <Button
               variant="inline-link"
               className="nav-button"
-              onClick={() => redirectApi.redirectToPage(PAGE_PATH.MARKET_REPORTS)}
+              href={redirectApi.createRedirectUrl(PAGE_PATH.MARKET_REPORTS)}
             >
               Market Reports
             </Button>
@@ -168,18 +169,20 @@ export const Header: React.FC = () => {
 
           {/* Right: Feedback, Settings, User */}
           <Box className="right-section">
-            {isAuthenticated && user && (
-              <FeedbackModal />
-            )}
+            <SpaceBetween size='s' direction='horizontal'>
+              {isAuthenticated && user && (
+                <FeedbackModal />
+              )}
 
-            {isAuthenticated && !isPaidMember() && (
-              <Button
-                className="go-pro-button"
-                href={redirectApi.createRedirectUrl(PAGE_PATH.SUBSCRIBE)}
-              >
-                Go Pro
-              </Button>
-            )}
+              {isAuthenticated && !isPaidMember() && (
+                <Button
+                  className="go-pro-button"
+                  href={redirectApi.createRedirectUrl(PAGE_PATH.SUBSCRIBE)}
+                >
+                  Go Pro
+                </Button>
+              )}
+            </SpaceBetween>
 
             <IconButton onClick={openSettingsModal} className="settings-icon">
               <SettingsIcon
