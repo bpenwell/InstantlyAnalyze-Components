@@ -1,14 +1,16 @@
 import React from 'react';
 import './Footer.css';
 import { Button } from '../Button/Button';
-import { Link } from 'react-router-dom';
 import { PAGE_PATH, RedirectAPI } from '@bpenwell/instantlyanalyze-module';
+
 export const Footer = () => {
+  const redirectApi = new RedirectAPI();
+
   return (
     <div className='footer-container'>
       <section className='footer-subscription'>
         <p className='footer-subscription-heading'>
-          Join the Adventure newsletter to receive our best vacation deals
+          Join the InstantlyAnalyze newsletter to receive our best investment deals
         </p>
         <p className='footer-subscription-text'>
           You can unsubscribe at any time.
@@ -29,34 +31,23 @@ export const Footer = () => {
         <div className='footer-link-wrapper'>
           <div className='footer-link-items'>
             <h2>About Us</h2>
-            <a href={PAGE_PATH.HOME}>How it works</a>
-            <a href={PAGE_PATH.HOME}>Testimonials</a>
-            <a href={PAGE_PATH.HOME}>Careers</a>
-            <a href={PAGE_PATH.HOME}>Investors</a>
-            <a href={PAGE_PATH.HOME}>Terms of Service</a>
+            <a href={PAGE_PATH.HOW_IT_WORKS}>How it works</a>
+            <a href={PAGE_PATH.MISSION_VISION}>Mission & Vision</a>
+            <a href={PAGE_PATH.PRIVACY_POLICY_AND_TERMS}>Terms of Service</a>
           </div>
           <div className='footer-link-items'>
             <h2>Contact Us</h2>
-            <a href={PAGE_PATH.HOME}>Contact</a>
-            <a href={PAGE_PATH.HOME}>Support</a>
-            <a href={PAGE_PATH.HOME}>Destinations</a>
-            <a href={PAGE_PATH.HOME}>Sponsorships</a>
+            <a href={PAGE_PATH.CONTACT}>Contact Us</a>
           </div>
         </div>
         <div className='footer-link-wrapper'>
           <div className='footer-link-items'>
-            <h2>Videos</h2>
-            <a href={PAGE_PATH.HOME}>Submit Video</a>
-            <a href={PAGE_PATH.HOME}>Ambassadors</a>
-            <a href={PAGE_PATH.HOME}>Agency</a>
-            <a href={PAGE_PATH.HOME}>Influencer</a>
-          </div>
-          <div className='footer-link-items'>
             <h2>Social Media</h2>
-            <a href={PAGE_PATH.HOME}>Instagram</a>
-            <a href={PAGE_PATH.HOME}>Facebook</a>
-            <a href={PAGE_PATH.HOME}>Youtube</a>
-            <a href={PAGE_PATH.HOME}>Twitter</a>
+            <a href={PAGE_PATH.INSTAGRAM}>Instagram</a>
+            <a href={PAGE_PATH.FACEBOOK}>Facebook</a>
+            <a href={PAGE_PATH.YOUTUBE}>YouTube</a>
+            <a href={PAGE_PATH.TWITTER}>Twitter</a>
+            <a href={PAGE_PATH.LINKEDIN}>LinkedIn</a>
           </div>
         </div>
       </div>
@@ -64,44 +55,25 @@ export const Footer = () => {
         <div className='social-media-wrap'>
           <div className='footer-logo'>
             <a href={PAGE_PATH.HOME} className='social-logo'>
-              TRVL
+              InstantlyAnalyze
               <i className='fab fa-typo3' />
             </a>
           </div>
-          <small className='website-rights'>TRVL © 2020</small>
+          <small className='website-rights'>InstantlyAnalyze © 2025</small>
           <div className='social-icons'>
-            <a href={PAGE_PATH.HOME}
-              className='social-icon-link facebook'
-              aria-label='Facebook'
-            >
-              <i className='fab fa-facebook-f' />
-            </a>
-            <a href={PAGE_PATH.HOME}
-              className='social-icon-link instagram'
-              target='_blank'
-              aria-label='Instagram'
-            >
+            <a href={PAGE_PATH.INSTAGRAM} className='social-icon-link instagram' aria-label='Instagram'>
               <i className='fab fa-instagram' />
             </a>
-            <a href={PAGE_PATH.HOME}
-              className='social-icon-link youtube'
-              target='_blank'
-              aria-label='Youtube'
-            >
+            <a href={PAGE_PATH.FACEBOOK} className='social-icon-link facebook' aria-label='Facebook'>
+              <i className='fab fa-facebook-f' />
+            </a>
+            <a href={PAGE_PATH.YOUTUBE} className='social-icon-link youtube' aria-label='YouTube'>
               <i className='fab fa-youtube' />
             </a>
-            <a href={PAGE_PATH.HOME}
-              className='social-icon-link twitter'
-              target='_blank'
-              aria-label='Twitter'
-            >
+            <a href={PAGE_PATH.TWITTER} className='social-icon-link twitter' aria-label='Twitter'>
               <i className='fab fa-twitter' />
             </a>
-            <a href={PAGE_PATH.HOME}
-              className='social-icon-link twitter'
-              target='_blank'
-              aria-label='LinkedIn'
-            >
+            <a href={PAGE_PATH.LINKEDIN} className='social-icon-link linkedin' aria-label='LinkedIn'>
               <i className='fab fa-linkedin' />
             </a>
           </div>
@@ -109,4 +81,4 @@ export const Footer = () => {
       </section>
     </div>
   );
-}
+};

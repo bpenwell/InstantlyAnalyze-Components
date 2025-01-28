@@ -13,12 +13,8 @@ import {
 } from '@cloudscape-design/components';
 import { useAuth0 } from '@auth0/auth0-react';
 import { LensTwoTone } from '@mui/icons-material';
-import { BackendAPI } from '@bpenwell/instantlyanalyze-module';
+import { BackendAPI, FeedbackType } from '@bpenwell/instantlyanalyze-module';
 
-export enum FeedbackType {
-  Bug = 'Bug',
-  Feature = 'Feature',
-}
 
 export const FeedbackModal = () => {
   const backendAPI: BackendAPI = new BackendAPI();
