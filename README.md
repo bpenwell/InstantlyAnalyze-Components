@@ -1,3 +1,9 @@
+# Are you new here?
+Read through this to get a better understanding for what we are trying to build
+and how you fit into it!
+
+https://docs.google.com/document/d/1Iz9pgstPizoaNWZ1UN1a_cC3Y-7v3HojMQwKSnbD4HQ/edit?tab=t.0 
+
 # React Component Library Template
 
 This project is part of a [blog & video tutorial](https://dev.to/alexeagleson/how-to-create-and-publish-a-react-component-library-2oe) on how to create and publish your own component library.
