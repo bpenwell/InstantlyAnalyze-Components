@@ -31,13 +31,12 @@ export const Footer = () => {
         <div className='footer-link-wrapper'>
           <div className='footer-link-items'>
             <h2>About Us</h2>
-            <a href={PAGE_PATH.HOW_IT_WORKS}>How it works</a>
-            <a href={PAGE_PATH.MISSION_VISION}>Mission & Vision</a>
+            <a href={PAGE_PATH.MISSION}>Mission & Vision</a>
             <a href={PAGE_PATH.PRIVACY_POLICY_AND_TERMS}>Terms of Service</a>
           </div>
           <div className='footer-link-items'>
             <h2>Contact Us</h2>
-            <a href={PAGE_PATH.CONTACT}>Contact Us</a>
+            <a href={PAGE_PATH.CONTACT_US}>Contact Us</a>
           </div>
         </div>
         <div className='footer-link-wrapper'>
