@@ -1,4 +1,5 @@
 import {
+  BackendAPI,
   IUserConfigs,
   UserStatus,
 } from '@bpenwell/instantlyanalyze-module';
@@ -91,6 +92,9 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
     if (!userConfig.freeReportsAvailable) {
       throw new Error('[recordReportUse] userConfig.freeReportsAvailable does not exist');
     }
+    else if (userConfig.freeReportsAvailable === 0) {
+      throw new Error('[recordReportUse] userConfig.freeReportsAvailable is already 0');
+    }
 
     if (userConfig.freeReportsAvailable && userConfig.freeReportsAvailable > 0) {
       setUserConfig({
@@ -102,6 +106,9 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
 
   const recordZillowScraperUse = (): void => {
     if (!userConfig.freeZillowScrapesAvailable) {
+      throw new Error('[recordZillowScraperUse] userConfig.freeZillowScrapesAvailable does not exist');
+    }
+    else if (userConfig.freeZillowScrapesAvailable === 0) {
       throw new Error('[recordZillowScraperUse] userConfig.freeZillowScrapesAvailable does not exist');
     }
 

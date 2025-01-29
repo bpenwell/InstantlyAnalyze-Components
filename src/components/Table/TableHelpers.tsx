@@ -24,17 +24,29 @@ export const TableEmptyState = ({ resourceName }: { resourceName: string }) => {
   const redirectToCreate = () => {
     redirectAPI.redirectToPage(PAGE_PATH.RENTAL_CALCULATOR_CREATE);
   };
+  const { canCreateNewReport } = useAppContext();
 
   return (
     <Box margin={{ vertical: 'xs' }} textAlign="center" color="inherit">
       <SpaceBetween size="xxs">
-        <div>
-          <b>No {resourceName.toLowerCase()}s</b>
-          <Box variant="p" color="inherit">
-            No {resourceName.toLowerCase()}s associated with this address.
-          </Box>
-        </div>
-        <Button onClick={redirectToCreate}>Create {resourceName.toLowerCase()}</Button>
+          {
+            !canCreateNewReport() ? (
+              <Alert
+                header="You have reached your maximum number of free reports."
+                type="error"
+              >
+                To create a new report, please upgrade your plan.
+              </Alert>
+            ) : (
+              <div>
+                <b>No {resourceName.toLowerCase()}s</b>
+                <Box variant="p" color="inherit">
+                  No {resourceName.toLowerCase()}s associated with this address.
+                </Box>
+              </div>
+            )
+          }
+        <Button onClick={redirectToCreate} disabled={!canCreateNewReport()}>Create {resourceName.toLowerCase()}</Button>
       </SpaceBetween>
     </Box>
   );
@@ -83,7 +95,7 @@ export function FullPageHeader({
         actions={
           <SpaceBetween size="xs" direction="horizontal">
             {extraActions}
-            <Button data-testid="header-btn-edit" disabled={!isOnlyOneSelected}  onClick={redirectToEdit}>
+            <Button data-testid="header-btn-edit" disabled={!isOnlyOneSelected} onClick={redirectToEdit}>
               Edit
             </Button>
             <Button data-testid="header-btn-delete" disabled={selectedItems.length === 0} onClick={handleDeleteButtonClicked}>

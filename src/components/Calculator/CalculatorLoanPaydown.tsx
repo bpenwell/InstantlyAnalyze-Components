@@ -130,13 +130,13 @@ export const CalculatorLoanPaydown: React.FC<IRentalCalculatorPageProps> = (prop
                                 ))}
                             </tr>
                             <tr>
-                                <td>Annualized Return (w/o sell fees)</td>
+                                <td>Annualized Return (if NOT sold)</td>
                                 {annualizedReturnDataBeforeSell.map((value, index) => (
                                     <td key={index}>{index === 0 ? '-' : `${displayAsPercent(value, 2, true)}`}</td>
                                 ))}
                             </tr>
                             <tr>
-                                <td>Annualized Return (w/ sell fees)</td>
+                                <td>Annualized Return (if sold)</td>
                                 {annualizedReturnDataAfterSell.map((value, index) => (
                                     <td key={index}>{index === 0 ? '-' : `${displayAsPercent(value, 2, true)}`}</td>
                                 ))}
