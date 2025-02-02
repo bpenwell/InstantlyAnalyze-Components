@@ -56,7 +56,7 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
   };
 
   const getRemainingFreeRentalReports = (): number => {
-    if (!userConfig.freeReportsAvailable) {
+    if (userConfig.freeReportsAvailable === undefined) {
       return 0;
     }
 
@@ -89,7 +89,9 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
   };
 
   const recordReportUse = (): void => {
-    if (!userConfig.freeReportsAvailable) {
+    if (isPaidMember()) return;
+
+    if (userConfig.freeReportsAvailable === undefined) {
       throw new Error('[recordReportUse] userConfig.freeReportsAvailable does not exist');
     }
     else if (userConfig.freeReportsAvailable === 0) {

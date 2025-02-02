@@ -23,7 +23,7 @@ export { TermsOfUse } from './components/Footer/TermsOfUse';
 export { Separator } from './components/Separator/Separator';
 export { ImageUploadContainer, IImageUploadContainerProps } from './components/ImageUploadContainer/ImageUploadContainer';
 export { AddressForm } from './components/AddressForm/AddressForm';
-/*export { AddressFormV2 } from './components/AddressForm/AddressFormV2';*/
+export { AddressFormV2, MAPBOX_KEY } from './components/AddressForm/AddressFormV2';
 export { Dropdown } from './components/Dropdown/Dropdown';
 export { AppLayoutPreview, IAppLayoutPreview } from './components/AppLayout/AppLayout';
 export {
