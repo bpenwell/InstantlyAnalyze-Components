@@ -18,6 +18,8 @@ type AppContextType = {
   recordZillowScraperUse: () => void;
   getRemainingFreeRentalReports: () => number;
   getRemainingFreeZillowScrapes: () => number;
+  getTablePageSizePreference: () => number;
+  setTablePageSizePreference: (number: number) => void;
 };
 
 // 2. Create the actual context:
@@ -33,6 +35,8 @@ const AppContext = createContext<AppContextType>({
   recordZillowScraperUse: () => {},
   getRemainingFreeRentalReports: () => -1,
   getRemainingFreeZillowScrapes: () => -1,
+  getTablePageSizePreference: () => 10,
+  setTablePageSizePreference: (number: number) => {},
 });
 
 // 3. Create a provider component:
@@ -47,6 +51,9 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
     status: UserStatus.UNDEFINED,
     freeReportsAvailable: 0,
     freeZillowScrapesAvailable: 0,
+    preferences: {
+      tablePageSize: 10,
+    },
   });
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -106,6 +113,20 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
     }
   };
 
+  const getTablePageSizePreference = (): number => {
+    return userConfig.preferences?.tablePageSize || 10;
+  }
+
+  const setTablePageSizePreference = (size: number): void => {
+    setUserConfig({
+      ...userConfig,
+      preferences: {
+        ...userConfig.preferences,
+        tablePageSize: size,
+      }
+    })
+  }
+
   const recordZillowScraperUse = (): void => {
     if (!userConfig.freeZillowScrapesAvailable) {
       throw new Error('[recordZillowScraperUse] userConfig.freeZillowScrapesAvailable does not exist');
@@ -129,6 +150,8 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
   // The value provided to context consumers
   const value: AppContextType = {
     setIsUserLoading,
+    getTablePageSizePreference,
+    setTablePageSizePreference,
     isUserLoading: loading,
     userExists,
     setUserConfig,
