@@ -117,14 +117,17 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
     return userConfig.preferences?.tablePageSize || 10;
   }
 
-  const setTablePageSizePreference = (size: number): void => {
-    setUserConfig({
-      ...userConfig,
-      preferences: {
-        ...userConfig.preferences,
-        tablePageSize: size,
-      }
-    })
+  const setTablePageSizePreference = async (size: number): Promise<void> => {
+      const backendApi: BackendAPI = new BackendAPI();
+      const newUserConfig = {
+        ...userConfig,
+        preferences: {
+          ...userConfig.preferences,
+          tablePageSize: size,
+        }
+      };
+      const updatedUserConfig = await backendApi.updateUserConfigs(newUserConfig, userConfig.userId);
+      setUserConfig(updatedUserConfig);
   }
 
   const recordZillowScraperUse = (): void => {
