@@ -161,7 +161,7 @@ export const Header: React.FC = () => {
             <Button
               variant="inline-link"
               className="nav-button"
-              href={redirectApi.createRedirectUrl(PAGE_PATH.MARKET_REPORTS)}
+              href={redirectApi.createRedirectUrl(PAGE_PATH.ZILLOW_SCRAPER)}
             >
               Market Reports
             </Button>

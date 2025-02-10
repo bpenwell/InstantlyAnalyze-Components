@@ -49,7 +49,7 @@ export const HeaderV2 = () => {
             </li>
             <li className='nav-item'>
               <a
-                href={redirectAPI.createRedirectUrl(PAGE_PATH.MARKET_REPORTS)}
+                href={redirectAPI.createRedirectUrl(PAGE_PATH.ZILLOW_SCRAPER)}
                 className='nav-links'
                 onClick={closeMobileMenu}
               >
