@@ -163,7 +163,7 @@ export const Header: React.FC = () => {
               className="nav-button"
               href={redirectApi.createRedirectUrl(PAGE_PATH.ZILLOW_SCRAPER)}
             >
-              Market Reports
+              Zillow Scraper
             </Button>
           </Box>
 

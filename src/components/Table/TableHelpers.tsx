@@ -55,30 +55,34 @@ export const TableEmptyState = ({ resourceName }: { resourceName: string }) => {
 interface FullPageHeaderProps extends HeaderProps {
   title?: string;
   createButtonText?: string;
+  createButtonOnClick: () => void;
+  editButtonOnClick: (selectedItemId: string) => void;
+  disableCreateWhenNoneSelected?: boolean;
+  disableEditButton?: boolean;
+  disableDeleteButton?: boolean;
   extraActions?: React.ReactNode;
   selectedItems: readonly Item[];
+  itemType: string;
   handleDelete: () => void;
 }
 
 export function FullPageHeader({
   title = 'Reports',
   createButtonText = 'Create report',
+  createButtonOnClick,
+  editButtonOnClick,
   handleDelete,
   extraActions = null,
   selectedItems,
+  disableCreateWhenNoneSelected,
+  disableDeleteButton,
+  disableEditButton,
+  itemType,
   ...props
 }: FullPageHeaderProps) {
   const { canCreateNewReport, getRemainingFreeRentalReports, isPaidMember } = useAppContext();
   const isOnlyOneSelected = selectedItems.length === 1;
-  const redirectAPI = new RedirectAPI();
-
-  const redirectToCreate = () => {
-    redirectAPI.redirectToPage(PAGE_PATH.RENTAL_CALCULATOR_CREATE);
-  };
-  
-  const redirectToEdit = () => {
-    redirectAPI.redirectToPage(PAGE_PATH.RENTAL_CALCULATOR_EDIT + `/${selectedItems[0].id}` as PAGE_PATH);
-  };
+  const disableCreateButton = disableCreateWhenNoneSelected && selectedItems.length === 0;
 
   const deleteWithConfirmationRef = useRef<{ openModal: () => void }>(null);
 
@@ -88,6 +92,7 @@ export function FullPageHeader({
     }
   };
 
+
   return (
     <>
       <Header
@@ -95,21 +100,25 @@ export function FullPageHeader({
         actions={
           <SpaceBetween size="xs" direction="horizontal">
             {extraActions}
-            <Button data-testid="header-btn-edit" disabled={!isOnlyOneSelected} onClick={redirectToEdit}>
-              Edit
-            </Button>
-            <Button data-testid="header-btn-delete" disabled={selectedItems.length === 0} onClick={handleDeleteButtonClicked}>
-              Delete
-            </Button>
+            { disableEditButton ? <></> :
+              <Button data-testid="header-btn-edit" disabled={!isOnlyOneSelected} onClick={() => editButtonOnClick(selectedItems[0].id)}>
+                Edit
+              </Button>
+            }
+            { disableDeleteButton ? <></> :
+              <Button data-testid="header-btn-delete" disabled={selectedItems.length === 0} onClick={handleDeleteButtonClicked}>
+                Delete
+              </Button>
+            }
             <DeleteWithConfirmation
               itemFieldNameForName='address'
-              itemType='report'
+              itemType={itemType}
               ref={deleteWithConfirmationRef}
               itemsToDelete={selectedItems}
               onDeleteConfirmed={handleDelete}
             />
 
-            <Button data-testid="header-btn-create" variant="primary" onClick={redirectToCreate} disabled={!canCreateNewReport()}>
+            <Button data-testid="header-btn-create" variant="primary" onClick={createButtonOnClick} disabled={!canCreateNewReport() || disableCreateButton}>
               {createButtonText}
             </Button>
           </SpaceBetween>

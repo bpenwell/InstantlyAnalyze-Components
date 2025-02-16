@@ -2,6 +2,7 @@ import {
   BackendAPI,
   IUserConfigs,
   UserStatus,
+  IBuyboxSet,
 } from '@bpenwell/instantlyanalyze-module';
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 
@@ -20,6 +21,8 @@ type AppContextType = {
   getRemainingFreeZillowScrapes: () => number;
   getTablePageSizePreference: () => number;
   setTablePageSizePreference: (number: number) => void;
+  getBuyBoxSetsPreference: () => IBuyboxSet[] | [];
+  setBuyBoxSetsPreference: (value: IBuyboxSet[]) => void;
 };
 
 // 2. Create the actual context:
@@ -37,6 +40,8 @@ const AppContext = createContext<AppContextType>({
   getRemainingFreeZillowScrapes: () => -1,
   getTablePageSizePreference: () => 10,
   setTablePageSizePreference: (number: number) => {},
+  getBuyBoxSetsPreference: () => [],
+  setBuyBoxSetsPreference: (preferences: IBuyboxSet[]) => {},
 });
 
 // 3. Create a provider component:
@@ -53,6 +58,7 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
     freeZillowScrapesAvailable: 0,
     preferences: {
       tablePageSize: 10,
+      buyBoxSets: [],
     },
   });
   const [loading, setLoading] = useState<boolean>(true);
@@ -146,6 +152,20 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
     }
   };
 
+  const getBuyBoxSetsPreference = (): IBuyboxSet[] => {
+    return userConfig?.preferences?.buyBoxSets ?? [];
+  };
+  
+  const setBuyBoxSetsPreference = (newValue: IBuyboxSet[]): void => {
+    setUserConfig({
+      ...userConfig,
+      preferences: {
+        ...userConfig.preferences,
+        buyBoxSets: newValue      
+      }
+    });
+  };
+
   const setIsUserLoading = (value: boolean): void => {
     setLoading(value);
   }
@@ -165,6 +185,8 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
     recordZillowScraperUse,
     getRemainingFreeRentalReports,
     getRemainingFreeZillowScrapes,
+    getBuyBoxSetsPreference,
+    setBuyBoxSetsPreference
   };
 
   return (
