@@ -10,7 +10,7 @@ export const Footer = () => {
     <div className='footer-container'>
       <section className='footer-subscription'>
         <p className='footer-subscription-heading'>
-          Join the InstantlyAnalyze newsletter to receive our best investment deals
+          Join the InstantlyAnalyze newsletter to receive updates, promotional deals, and more.
         </p>
         <p className='footer-subscription-text'>
           You can unsubscribe at any time.

@@ -3,6 +3,8 @@ import {
   IUserConfigs,
   UserStatus,
   IBuyboxSet,
+  IDefaultRentalInputs,
+  defaultRentalInputs,
 } from '@bpenwell/instantlyanalyze-module';
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 
@@ -23,6 +25,8 @@ type AppContextType = {
   setTablePageSizePreference: (number: number) => void;
   getBuyBoxSetsPreference: () => IBuyboxSet[] | [];
   setBuyBoxSetsPreference: (value: IBuyboxSet[]) => void;
+  getDefaultRentalInputs: () => IDefaultRentalInputs;
+  setDefaultRentalInputs: (value: IDefaultRentalInputs) => void;
 };
 
 // 2. Create the actual context:
@@ -42,6 +46,8 @@ const AppContext = createContext<AppContextType>({
   setTablePageSizePreference: (number: number) => {},
   getBuyBoxSetsPreference: () => [],
   setBuyBoxSetsPreference: (preferences: IBuyboxSet[]) => {},
+  getDefaultRentalInputs: () => defaultRentalInputs,
+  setDefaultRentalInputs: (value: IDefaultRentalInputs) => {},
 });
 
 // 3. Create a provider component:
@@ -59,6 +65,7 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
     preferences: {
       tablePageSize: 10,
       buyBoxSets: [],
+      defaultRentalInputs: defaultRentalInputs
     },
   });
   const [loading, setLoading] = useState<boolean>(true);
@@ -169,6 +176,20 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
   const setIsUserLoading = (value: boolean): void => {
     setLoading(value);
   }
+  
+  const getDefaultRentalInputs = (): IDefaultRentalInputs => {
+    return userConfig?.preferences?.defaultRentalInputs ?? defaultRentalInputs;
+  };
+  
+  const setDefaultRentalInputs = (value: IDefaultRentalInputs): void => {
+    setUserConfig({
+      ...userConfig,
+      preferences: {
+        ...userConfig.preferences,
+        defaultRentalInputs: value      
+      }
+    });
+  };
 
   // The value provided to context consumers
   const value: AppContextType = {
@@ -186,7 +207,9 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
     getRemainingFreeRentalReports,
     getRemainingFreeZillowScrapes,
     getBuyBoxSetsPreference,
-    setBuyBoxSetsPreference
+    setBuyBoxSetsPreference,
+    getDefaultRentalInputs,
+    setDefaultRentalInputs,
   };
 
   return (

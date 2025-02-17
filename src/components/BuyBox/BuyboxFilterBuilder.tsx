@@ -139,7 +139,7 @@ export const BuyboxFilterBuilder: React.FC<BuyboxFilterBuilderProps> = ({
   });
 
   return (
-    <SpaceBetween size="m">
+    <SpaceBetween size="s">
       {/* Saved sets */}
       <Container header={<Header variant="h2">Saved Buybox Sets</Header>}>
         {buyBoxSets.length === 0 ? (
@@ -225,7 +225,7 @@ export const BuyboxFilterBuilder: React.FC<BuyboxFilterBuilderProps> = ({
                   .join("")}
               </li>
             ))}
-          </ul>
+          </ul> 
           <Input
             value={setName}
             onChange={(e) => setSetName(e.detail.value)}
