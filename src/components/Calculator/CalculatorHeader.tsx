@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Header, SpaceBetween, Grid } from '@cloudscape-design/components';
-import { BackendAPI, getImageSrc, IRentalCalculatorData, PAGE_PATH, printObjectFields, RedirectAPI } from '@bpenwell/instantlyanalyze-module';
+import { Box, Button, Header, SpaceBetween, Grid, Link } from '@cloudscape-design/components';
+import { 
+  BackendAPI, 
+  getImageSrc, 
+  IRentalCalculatorData, 
+  PAGE_PATH, 
+  printObjectFields, 
+  RedirectAPI 
+} from '@bpenwell/instantlyanalyze-module';
 import { ShareModal } from '../ShareModal/ShareModal';
 import './CalculatorHeader.css';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -24,12 +31,11 @@ export const CalculatorHeader: React.FC<ICalculatorHeaderProps> = ({
     if (isShareable) {
       const currentUrl = window.location.href;
       return currentUrl.replace('/view/', '/share/');
-    }
-    else {
+    } else {
       return '';
     }
   };
-  
+
   const [isModified, setIsModified] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [shareableLink, setShareableLink] = useState(getShareableReportLink(reportData.isShareable));
@@ -73,7 +79,7 @@ export const CalculatorHeader: React.FC<ICalculatorHeaderProps> = ({
     if (isShareable) {
       const newReportData: IRentalCalculatorData = {
         ...reportData,
-        isShareable: isShareable
+        isShareable: isShareable,
       };
       updateInitialReportData(newReportData);
       await backendAPI.saveUpdatedRentalReport(reportId, newReportData, user?.sub);
@@ -100,10 +106,22 @@ export const CalculatorHeader: React.FC<ICalculatorHeaderProps> = ({
           </Box>
         </div>
 
+        {/* Middle Column - Clickable Address */}
         <div className='header-address'>
           <Box>
             <Header variant="h2">
-              {reportData.propertyInformation.streetAddress}
+              {reportData.metaData?.listingUrl ? (
+                <Link
+                  href={reportData.metaData?.listingUrl}
+                  external={true}
+                  fontSize='heading-l'
+                  rel="noopener noreferrer"
+                >
+                  {reportData.propertyInformation.streetAddress}
+                </Link>
+              ) :
+                reportData.propertyInformation.streetAddress
+              }
             </Header>
             <Header variant="h3">
               {reportData.propertyInformation.city}, {reportData.propertyInformation.state}
