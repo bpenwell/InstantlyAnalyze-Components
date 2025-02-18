@@ -40,7 +40,7 @@ export { AppContextProvider, useAppContext } from './utils/AppContextProvider';
 export { Cards } from './components/Cards/Cards';
 export { CardItem } from './components/Cards/CardItem';
 export { HeroSection } from './components/HeroSection/HeroSection';
-export { FreeReportsBanner } from './components/FreeReportsBanner/FreeReportsBanner';
+export { FreeTrialBanner, BannerType, IRemainingFreeBannerProps } from './components/FreeTrialBanner/FreeTrialBanner';
 export { BuyboxFilterBuilder } from './components/BuyBox/BuyboxFilterBuilder';
 export {
     evaluateBuyboxFilter,
