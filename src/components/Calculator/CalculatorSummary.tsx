@@ -88,7 +88,10 @@ export const CalculatorSummary: React.FC<ICalculatorSummary> = (props: ICalculat
 
   const fiveYearOrLessYear =
     fullLoanTermRentalReportData.length >= 5 ? 5 : fullLoanTermRentalReportData.length;
+  const tenYearOrLessYear =
+    fullLoanTermRentalReportData.length >= 10 ? 10 : fullLoanTermRentalReportData.length;
   const fiveYearReturn = calculationUtils.calculateFiveYearAnnualizedReturn(fullLoanTermRentalReportData);
+  const tenYearReturn = calculationUtils.calculateTenYearAnnualizedReturn(fullLoanTermRentalReportData);
   const mortgagePayment = displayAsMoney(
     calculationUtils.calculateMortgagePayment(currentYearData),
     2
@@ -134,7 +137,7 @@ export const CalculatorSummary: React.FC<ICalculatorSummary> = (props: ICalculat
             </TextContent>
           </Box>
         </ColumnLayout>
-        <ColumnLayout columns={2}>
+        <ColumnLayout columns={3}>
           <Box>
             <TextContent>
               <h4>Mortgage Payment</h4>
@@ -147,6 +150,15 @@ export const CalculatorSummary: React.FC<ICalculatorSummary> = (props: ICalculat
               <Box variant="strong">{displayAsPercent(fiveYearReturn, 2, true)}</Box>
             </TextContent>
           </Box>
+          { fullLoanTermRentalReportData.length >= 10 ?
+            <Box>
+              <TextContent>
+                <h4>{`${tenYearOrLessYear}-Year Annualized Return`}</h4>
+                <Box variant="strong">{displayAsPercent(tenYearReturn, 2, true)}</Box>
+              </TextContent>
+            </Box> :
+            <></>
+          }
         </ColumnLayout>
       </SpaceBetween>
     </Container>

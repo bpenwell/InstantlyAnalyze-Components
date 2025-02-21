@@ -49,13 +49,12 @@ export const CalculatorLoanPaydown: React.FC<IRentalCalculatorPageProps> = (prop
             return 0;
         }
 
-        const allNonInitialReportData = fullLoanTermRentalReportData.slice(1);
-        return calculationUtils.calculateAnnualizedReturn(allNonInitialReportData.slice(0, year), includeSellExpenses)
+        return calculationUtils.calculateAnnualizedReturn(fullLoanTermRentalReportData.slice(1, year+1), includeSellExpenses)
     };
 
     const cashFlowData = applicableLoanTermTimePeriods.map(year => calculationUtils.calculateCashFlow(fullLoanTermRentalReportData[year]));
     const mortgagePaymentData = applicableLoanTermTimePeriods.map(year => calculationUtils.calculateMortgagePayment(fullLoanTermRentalReportData[year]));
-    const profitIfSoldData = applicableLoanTermTimePeriods.map(year => calculationUtils.calculateProfitIfSold([fullLoanTermRentalReportData[year]]));
+    const beforeTaxEquityReversionData = applicableLoanTermTimePeriods.map(year => calculationUtils.calculateBeforeTaxEquityReversion([fullLoanTermRentalReportData[year]]));
     const annualizedReturnDataBeforeSell = applicableLoanTermTimePeriods.map(year => getAnnualizedReturn(year, false));
     const annualizedReturnDataAfterSell = applicableLoanTermTimePeriods.map(year => getAnnualizedReturn(year, true));
 
@@ -124,8 +123,8 @@ export const CalculatorLoanPaydown: React.FC<IRentalCalculatorPageProps> = (prop
                                 ))}
                             </tr>
                             <tr>
-                                <td>Profit if Sold</td>
-                                {profitIfSoldData.map((value, index) => (
+                                <td>Before Tax Equity Reversion</td>
+                                {beforeTaxEquityReversionData.map((value, index) => (
                                     <td key={index}>{displayAsMoney(value, 0, "$", true)}</td>
                                 ))}
                             </tr>
