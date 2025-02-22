@@ -11,11 +11,12 @@ export const CalculatorLoanPaydown: React.FC<IRentalCalculatorPageProps> = (prop
     const { initialRentalReportData, fullLoanTermRentalReportData } = props;
 
     const applicableLoanTermTimePeriods = TIME_PERIODS.filter((period) => {
-        return period <= initialRentalReportData.loanDetails.loanTerm ||
-            !TIME_PERIODS.includes(initialRentalReportData.loanDetails.loanTerm);
+        return period <= initialRentalReportData.loanDetails.loanTerm /*||
+            !TIME_PERIODS.includes(initialRentalReportData.loanDetails.loanTerm)*/;
     });
 
     const loanAmount = (year: number): number => {
+
         return calculationUtils.calculateRemainingLoanAmount(fullLoanTermRentalReportData[year], year);
     };
 

@@ -1,70 +1,29 @@
+// PieChart.tsx
 import React from 'react';
-import { Pie } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  ChartData,
-  ChartOptions,
-  Title,
-} from 'chart.js';
-
-// Register Chart.js components
-ChartJS.register(ArcElement, Tooltip, Legend, Title);
+import { PieChart } from '@cloudscape-design/components';
 
 export interface IPieChartProps {
   data: number[];
   labels: string[];
   backgroundColors?: string[];
-  hoverBackgroundColors?: string[];
   title?: string;
 }
 
-const PieChart = (props: IPieChartProps) => {
-  const {
-    data,
-    labels,
-    backgroundColors = ['#FF6384', '#36A2EB', '#FFCE56'],
-    hoverBackgroundColors = ['#FF6384', '#36A2EB', '#FFCE56'],
-    title = 'Pie Chart'
-  } = props;
-  
-  const chartData: ChartData<'pie'> = {
-    labels,
-    datasets: [
-      {
-        data,
-        backgroundColor: backgroundColors,
-        hoverBackgroundColor: hoverBackgroundColors,
-      },
-    ],
-  };
+export const CloudscapePieChart = ({ data, labels, title }: IPieChartProps) => {
+  const chartData = labels.map((label, index) => ({
+    title: label,
+    value: data[index],
+    color: ['#4A7A40', '#C47766', '#D9B98A', '#617A40', '#A4BBA0'][index],
+  }));
 
-  const options: ChartOptions<'pie'> = {
-    responsive: true,
-    maintainAspectRatio: true, // Maintains the aspect ratio on resize
-    plugins: {
-      legend: {
-        display: false, // Disable the legend display in the tooltip
-      },
-      title: {
-        display: !!title,
-        text: title,
-      },
-      tooltip: {
-        callbacks: {
-          label: function(context) {
-            const label = context.label || '';
-            const value = context.raw as number;
-            return `${label}: $${value.toFixed(2)}`;
-          }
-        }
-      }
-    },
-  };
-
-  return <Pie data={chartData} options={options} />;
+  return (
+    <PieChart
+      data={chartData}
+      size="medium"
+      ariaLabel="Expense breakdown"
+      hideFilter
+      segmentDescription={(datum) => `${datum.title}: $${datum.value.toFixed(2)}`}
+      legendTitle={title ?? 'Expenses Breakdown'}
+    />
+  );
 };
-
-export default PieChart;

@@ -1,0 +1,74 @@
+.calculator-container {
+  /* Container spacing, optional */
+}
+.form-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.label {
+  margin-bottom: 8px;
+}
+.bold-label {
+  font-weight: bold;
+}
+.legend-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+.legend {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+}
+.legend-color-box {
+  width: 20px;
+  height: 20px;
+  background-color: #8a8d00; /* highlight color for closest cell */
+  border: 1px solid #303030;
+  margin-right: 8px;
+}
+/* 
+  Layout for the axis labels outside the table 
+  (like "Vacancy" on top, "Rental Income" on the left).
+*/
+.grid-container {
+  display: grid;
+  grid-template-columns: auto 1fr; /* side-header + table */
+  grid-template-rows: auto 1fr;   /* top-header + table */
+  gap: 0;
+  margin-top: 1rem;
+}
+.top-header {
+  grid-column: 2 / 3; /* spans the second column only */
+  grid-row: 1 / 2;
+  text-align: center;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+}
+.side-header {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+  text-align: center;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+}
+.table-wrapper {
+  grid-column: 2 / 3; /* second column */
+  grid-row: 2 / 3;    /* second row */
+}

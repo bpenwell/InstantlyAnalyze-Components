@@ -1,14 +1,15 @@
+// CalculatorExpenses.tsx
 import React, { useEffect, useState } from 'react';
 import { IRentalCalculatorPageProps } from '../../interfaces';
 import './CalculatorExpenses.scss';
 import '../Charts/Chart.css';
 import { CalculationUtils, Frequency } from '@bpenwell/instantlyanalyze-module';
-import PieChart, { IPieChartProps } from '../Charts/PieChart';
+import { CloudscapePieChart } from '../Charts/PieChart';
 import { Container, Header } from '@cloudscape-design/components';
 
 export const CalculatorExpenses: React.FC<IRentalCalculatorPageProps> = (props: IRentalCalculatorPageProps) => {
   const calculationUtils: CalculationUtils = new CalculationUtils();
-  
+
   const [taxes, setTaxes] = useState(props.currentYearData.expenseDetails.propertyTaxes);
   const [insurance, setInsurance] = useState(props.currentYearData.expenseDetails.insurance);
   const [rehabCost, setRehabCost] = useState(0);
@@ -16,12 +17,6 @@ export const CalculatorExpenses: React.FC<IRentalCalculatorPageProps> = (props: 
   const [totalFixedExpenses, setTotalFixedExpenses] = useState(0);
   const [totalVariableExpenses, setTotalVariableExpenses] = useState(0);
   const [monthlyTotalExpenses, setMonthlyTotalExpenses] = useState(0);
-  const [pieChartProps, setPieChartProps] = useState<IPieChartProps>({
-    labels: [],
-    data: [],
-    backgroundColors: [],
-    hoverBackgroundColors: [],
-  });
 
   useEffect(() => {
     let updatedTaxes = props.currentYearData.expenseDetails.propertyTaxes;
@@ -30,7 +25,7 @@ export const CalculatorExpenses: React.FC<IRentalCalculatorPageProps> = (props: 
     if (props.currentYearData.strategyDetails.isRehabbingProperty && props.currentYearData.strategyDetails.rehabRepairCosts) {
       setRehabCost(props.currentYearData.strategyDetails.rehabRepairCosts);
     }
-    
+
     const updatedMortgage = calculationUtils.calculateMortgagePayment(props.currentYearData);
     setMortgage(updatedMortgage);
 
@@ -62,39 +57,22 @@ export const CalculatorExpenses: React.FC<IRentalCalculatorPageProps> = (props: 
     const updatedMonthlyTotalExpenses = calculationUtils.calculateRentalTotalExpensePerMonth(props.currentYearData);
     setMonthlyTotalExpenses(updatedMonthlyTotalExpenses);
 
-    const updatedPieChartProps: IPieChartProps = {
-      labels: ['Mortgage', 'Taxes', 'Insurance', 'Variable Expenses', 'Fixed Expenses'],
-      data: [updatedMortgage, updatedTaxes, updatedInsurance, updatedTotalVariableExpenses, updatedTotalFixedExpenses],
-      backgroundColors: [
-          '#4A7A40',  // Muted green
-          '#C47766',  // Muted reddish-brown
-          '#D9B98A',  // Muted beige
-          '#617A40',  // Dark olive green
-          '#A4BBA0'   // Muted light green
-      ],
-      hoverBackgroundColors: [
-          '#4A7A40',
-          '#C47766',
-          '#D9B98A',
-          '#617A40',
-          '#A4BBA0'
-      ],
-    };
-    setPieChartProps(updatedPieChartProps);
-
     setTaxes(updatedTaxes);
     setInsurance(updatedInsurance);
 
-  }, [props.currentYearData]); // Dependency array to trigger useEffect on props change
+  }, [props.currentYearData]);
 
-  console.debug(`taxes.toFixed=${taxes.toFixed}`)
   return (
     <Container className="calculator-container">
       <Header variant="h2">Expenses</Header>
       <div className="expenses-content">
         {/* Pie Chart */}
         <div className="chart-box">
-          <PieChart {...pieChartProps} />
+          <CloudscapePieChart
+            labels={['Mortgage', 'Taxes', 'Insurance', 'Variable Expenses', 'Fixed Expenses']}
+            data={[mortgage, taxes, insurance, totalVariableExpenses, totalFixedExpenses]}
+            title="Expense Breakdown"
+          />
         </div>
 
         {/* Total Expenses Section with Labels */}
