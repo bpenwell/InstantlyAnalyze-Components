@@ -244,7 +244,7 @@ export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props:
 
   return (
     <Container className="calculator-container">
-      <Header variant="h2">Test Different Scenarios</Header>
+      <Header variant="h2">Customization</Header>
       <TextContent>
         <div className="graph-box">
           <div className="report-section">

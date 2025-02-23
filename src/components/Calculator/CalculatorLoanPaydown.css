@@ -36,6 +36,11 @@
     vertical-align: middle;
 }
 
+.half-width-chart {
+    width: 75%;
+    margin: 0 auto;
+}  
+
 @media (max-width: 768px) {
     .chart-container {
         width: 100%; /* Ensure full width on mobile */

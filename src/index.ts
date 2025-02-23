@@ -17,7 +17,7 @@ export { CalculatorCustomize } from './components/Calculator/CalculatorCustomize
 export { Asterisk } from './components/Asterisk/Asterisk';
 export { CalculatorSensitivityTable } from './components/Calculator/CalculatorSensitivityTable';
 export { LoadingBar, ILoadingProps } from './components/LoadingBar/LoadingBar';
-export { CalculatorRulesOfThumb } from './components/Calculator/CalculatorRulesOfThumb';
+export { CalculatorBuyboxChecklist } from './components/Calculator/CalculatorBuyboxChecklist';
 export { CalculatorLoanPaydown } from './components/Calculator/CalculatorLoanPaydown';
 export { TermsOfUse } from './components/Footer/TermsOfUse';
 export { Separator } from './components/Separator/Separator';

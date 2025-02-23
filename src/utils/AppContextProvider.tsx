@@ -2,9 +2,10 @@ import {
   BackendAPI,
   IUserConfigs,
   UserStatus,
-  IBuyboxSet,
+  IZillowBuyboxSet,
   IDefaultRentalInputs,
   defaultRentalInputs,
+  IRentalReportBuybox,
 } from '@bpenwell/instantlyanalyze-module';
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 
@@ -23,8 +24,10 @@ type AppContextType = {
   getRemainingFreeZillowScrapes: () => number;
   getTablePageSizePreference: () => number;
   setTablePageSizePreference: (number: number) => void;
-  getBuyBoxSetsPreference: () => IBuyboxSet[] | [];
-  setBuyBoxSetsPreference: (value: IBuyboxSet[]) => void;
+  getZillowBuyBoxSetsPreference: () => IZillowBuyboxSet[] | [];
+  getRentalReportBuyBoxSetsPreference: () => IRentalReportBuybox[] | [];
+  setRentalReportBuyBoxSetsPreference: (value: IRentalReportBuybox[]) => void;
+  setBuyBoxSetsPreference: (value: IZillowBuyboxSet[]) => void;
   getDefaultRentalInputs: () => IDefaultRentalInputs;
   setDefaultRentalInputs: (value: IDefaultRentalInputs) => void;
 };
@@ -44,8 +47,10 @@ const AppContext = createContext<AppContextType>({
   getRemainingFreeZillowScrapes: () => -1,
   getTablePageSizePreference: () => 10,
   setTablePageSizePreference: (number: number) => {},
-  getBuyBoxSetsPreference: () => [],
-  setBuyBoxSetsPreference: (preferences: IBuyboxSet[]) => {},
+  getZillowBuyBoxSetsPreference: () => [],
+  getRentalReportBuyBoxSetsPreference: () => [],
+  setRentalReportBuyBoxSetsPreference: (value: IRentalReportBuybox[]) => {},
+  setBuyBoxSetsPreference: (preferences: IZillowBuyboxSet[]) => {},
   getDefaultRentalInputs: () => defaultRentalInputs,
   setDefaultRentalInputs: (value: IDefaultRentalInputs) => {},
 });
@@ -64,7 +69,8 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
     freeZillowScrapesAvailable: 0,
     preferences: {
       tablePageSize: 10,
-      buyBoxSets: [],
+      rentalReportBuyBoxSets: [],
+      zillowBuyBoxSets: [],
       defaultRentalInputs: defaultRentalInputs
     },
   });
@@ -159,19 +165,33 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
     }
   };
 
-  const getBuyBoxSetsPreference = (): IBuyboxSet[] => {
-    return userConfig?.preferences?.buyBoxSets ?? [];
+  const getZillowBuyBoxSetsPreference = (): IZillowBuyboxSet[] => {
+    return userConfig?.preferences?.zillowBuyBoxSets ?? [];
   };
   
-  const setBuyBoxSetsPreference = (newValue: IBuyboxSet[]): void => {
+  const setBuyBoxSetsPreference = (newValue: IZillowBuyboxSet[]): void => {
     setUserConfig({
       ...userConfig,
       preferences: {
         ...userConfig.preferences,
-        buyBoxSets: newValue      
+        zillowBuyBoxSets: newValue      
       }
     });
   };
+
+  const getRentalReportBuyBoxSetsPreference = (): IRentalReportBuybox[] => {
+    return userConfig?.preferences?.rentalReportBuyBoxSets ?? [];
+  }
+
+  const setRentalReportBuyBoxSetsPreference = (newValue: IRentalReportBuybox[]): void => {
+    setUserConfig({
+      ...userConfig,
+      preferences: {
+        ...userConfig.preferences,
+        rentalReportBuyBoxSets: newValue      
+      }
+    });
+  }
 
   const setIsUserLoading = (value: boolean): void => {
     setLoading(value);
@@ -206,7 +226,9 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
     recordZillowScraperUse,
     getRemainingFreeRentalReports,
     getRemainingFreeZillowScrapes,
-    getBuyBoxSetsPreference,
+    getZillowBuyBoxSetsPreference,
+    getRentalReportBuyBoxSetsPreference,
+    setRentalReportBuyBoxSetsPreference,
     setBuyBoxSetsPreference,
     getDefaultRentalInputs,
     setDefaultRentalInputs,

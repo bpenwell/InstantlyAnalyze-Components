@@ -11,7 +11,7 @@ import {
 import { CustomDropdown } from "./CustomDropdown";
 import { BuyboxFilter } from "./BuyboxFilter";
 import { BUYBOX_OPTIONS } from "./constants";
-import { BuyboxOption, FilterInstance, InputType, IBuyboxSet } from "@bpenwell/instantlyanalyze-module";
+import { BuyboxOption, FilterInstance, InputType, IZillowBuyboxSet } from "@bpenwell/instantlyanalyze-module";
 import { useAppContext } from "../../utils/AppContextProvider";
 
 interface BuyboxFilterBuilderProps {
@@ -22,13 +22,13 @@ export const BuyboxFilterBuilder: React.FC<BuyboxFilterBuilderProps> = ({
   setSelectedBuyboxFilters,
 }) => {
   const [filters, setFilters] = useState<FilterInstance[]>([]);
-  const { getBuyBoxSetsPreference, setBuyBoxSetsPreference } = useAppContext();
+  const { getZillowBuyBoxSetsPreference, setBuyBoxSetsPreference } = useAppContext();
   const [selectedSetIndex, setSelectedSetIndex] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [setName, setSetName] = useState("");
 
   // Store saved sets locally so they persist between renders
-  const [buyBoxSets, setBuyBoxSets] = useState<IBuyboxSet[]>(() => getBuyBoxSetsPreference());
+  const [buyBoxSets, setBuyBoxSets] = useState<IZillowBuyboxSet[]>(() => getZillowBuyBoxSetsPreference());
 
   useEffect(() => {
     // If your context updates the preference externally, you can sync here if needed.
@@ -116,7 +116,7 @@ export const BuyboxFilterBuilder: React.FC<BuyboxFilterBuilderProps> = ({
 
   const handleConfirmSave = () => {
     if (setName.trim() === "") return;
-    const newSet: IBuyboxSet = {
+    const newSet: IZillowBuyboxSet = {
       name: setName.trim(),
       filters: validFilters,
     };
@@ -133,7 +133,7 @@ export const BuyboxFilterBuilder: React.FC<BuyboxFilterBuilderProps> = ({
     setSetName("");
   };
 
-  const setAlreadyExists = buyBoxSets.some((set: IBuyboxSet) => {
+  const setAlreadyExists = buyBoxSets.some((set: IZillowBuyboxSet) => {
     if (set.filters.length !== validFilters.length) return false;
     return set.filters.every((filter, index) => filter === validFilters[index]);
   });
