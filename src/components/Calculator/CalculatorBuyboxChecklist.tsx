@@ -50,12 +50,12 @@ const RULES = [
   },
   {
     key: 'rentToPriceRatio',
-    label: 'Rent:Price Ratio',
+    label: '1% Rule (Rent:Price Ratio)',
     valueType: 'percent',
     calculate: (calcUtils: CalculationUtils, data: IRentalCalculatorData) =>
       (data.rentalIncome.grossMonthlyIncome / data.purchaseDetails.purchasePrice) * 100,
     displayFn: (value: number) => {
-      return displayAsPercent(value, 2, true, true);
+      return displayAsPercent(value, 2, false);
     },
     threshold: 7, // example threshold: 7%
     compare: (value: number, threshold: number) => value >= threshold,

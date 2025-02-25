@@ -3,8 +3,8 @@ import { Alert } from '@cloudscape-design/components';
 import { useAppContext } from '../../utils/AppContextProvider';
 
 export enum BannerType {
-    RENTAL_REPORTS='rental reports', 
-    ZILLOW_SCRAPER='zillow scraper usages', 
+    RENTAL_REPORTS='InstantlyReport™ uses', 
+    ZILLOW_SCRAPER='InstantlyScan™ uses', 
 };
 
 export interface IRemainingFreeBannerProps {

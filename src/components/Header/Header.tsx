@@ -156,14 +156,14 @@ export const Header: React.FC = () => {
               className="nav-button"
               href={redirectApi.createRedirectUrl(PAGE_PATH.RENTAL_CALCULATOR_DASHBOARD)}
             >
-              Rental Reports
+              InstantlyReport™
             </Button>
             <Button
               variant="inline-link"
               className="nav-button"
               href={redirectApi.createRedirectUrl(PAGE_PATH.ZILLOW_SCRAPER)}
             >
-              Zillow Scraper
+              InstantlyScan™
             </Button>
           </Box>
 
