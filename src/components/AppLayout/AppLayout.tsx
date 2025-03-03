@@ -80,6 +80,7 @@ export const AppLayoutPreview = (props: IAppLayoutPreview) => {
   return (
     <I18nProvider locale={LOCALE} messages={[messages]}>
       <AppLayout
+        disableContentPaddings={path === PAGE_PATH.HOME}
         breadcrumbs={breadcrumbsContent}
         toolsHide={true}
         navigationHide={true}
