@@ -17,10 +17,11 @@ import { useAuth0 } from '@auth0/auth0-react';
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const {loginWithRedirect } = useAuth0();
-
+  const path = window.location.pathname;
+  const bg={background:'url("/public/grid_bg.png")',backgroundSize:'cover',backgroundPositionY:'8%'};
   return (
-    <header className="flex justify-center py-4">
-      <nav aria-label="Global" className="border border-gray-400  rounded-3xl mx-auto flex max-w-5xl items-center justify-center py-4 lg:px-4">
+    <header className="flex justify-center py-4" style={path==PAGE_PATH.HOME?bg:{}}>
+      <nav aria-label="Global" style={{backdropFilter: 'blur(3px)'}} className="border border-gray-400  rounded-3xl mx-auto flex max-w-5xl items-center justify-center py-4 lg:px-4">
         <div className="flex lg:flex px-2">
           <a href="#">
             <img
