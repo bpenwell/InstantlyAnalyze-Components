@@ -153,13 +153,15 @@ export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props:
   };
 
   const handlePurchasePriceChange = (newValue: ValueType): void => {
-    props.updateInitialData({
+    const newData = {
       ...initialRentalReportData,
       purchaseDetails: {
         ...initialRentalReportData.purchaseDetails,
         purchasePrice: newValue as number,
       },
-    });
+    };
+    setTotalCashNeeded(calculatorUtils.calculateTotalCashNeeded(newData));
+    props.updateInitialData(newData);
   };
 
   const handleLoanPercentageChange = (newValue: ValueType): void => {
@@ -182,23 +184,27 @@ export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props:
   };
 
   const handleInterestRateChange = (newValue: ValueType): void => {
-    props.updateInitialData({
+    const newData: IRentalCalculatorData = {
       ...initialRentalReportData,
       loanDetails: {
         ...initialRentalReportData.loanDetails,
         interestRate: newValue as Percentage,
       },
-    });
+    };
+    setTotalCashNeeded(calculatorUtils.calculateTotalCashNeeded(newData));
+    props.updateInitialData(newData);
   };
 
   const handleLoanTermChange = (newValue: ValueType): void => {
-    props.updateInitialData({
+    const newData: IRentalCalculatorData = {
       ...initialRentalReportData,
       loanDetails: {
         ...initialRentalReportData.loanDetails,
         loanTerm: newValue,
       },
-    });
+    };
+    setTotalCashNeeded(calculatorUtils.calculateTotalCashNeeded(newData));
+    props.updateInitialData(newData);
   };
 
   /**

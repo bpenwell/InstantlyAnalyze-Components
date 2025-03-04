@@ -27,7 +27,7 @@ const { isUserLoading, isPaidMember, getRemainingFreeRentalReports, getRemaining
         case BannerType.RENTAL_REPORTS:
             remainingTrialProductUsages = getRemainingFreeRentalReports;
             break;
-        case BannerType.RENTAL_REPORTS:
+        case BannerType.ZILLOW_SCRAPER:
             remainingTrialProductUsages = getRemainingFreeZillowScrapes;
             break;
         default:

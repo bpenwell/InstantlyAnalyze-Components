@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import {
   BackendAPI,
-  LOCAL_STORAGE_KEYS,
-  PAGE_PATH,
   RedirectAPI,
+  PAGE_PATH,
+  LOCAL_STORAGE_KEYS,
   useLocalStorage,
 } from '@bpenwell/instantlyanalyze-module';
 import {
@@ -43,14 +43,12 @@ import { FeedbackModal } from '../FeedbackModal/FeedbackModal';
 
 export const Header: React.FC = () => {
   const { user, isAuthenticated, isLoading, loginWithRedirect, logout } = useAuth0();
-  const [appMode, setAppMode] = useLocalStorage<Mode>(
-    LOCAL_STORAGE_KEYS.APP_MODE,
-    Mode.Light
-  );
+  const { getAppMode, setAppMode } = useAppContext();
   const [appDensity, setAppDensity] = useLocalStorage<Density>(
     LOCAL_STORAGE_KEYS.APP_DENSITY,
     Density.Comfortable
   );
+  const appMode = getAppMode();
 
   const {
     userExists,

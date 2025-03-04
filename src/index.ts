@@ -48,3 +48,4 @@ export {
     evaluateOperation,
     meetsBuyboxCriteria,
 } from './components/BuyBox/constants';
+export { ComingSoonWrapper } from './components/ComingSoonWrapper/ComingSoonWrapper';

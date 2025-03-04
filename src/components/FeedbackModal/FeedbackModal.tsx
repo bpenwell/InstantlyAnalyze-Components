@@ -92,7 +92,7 @@ export const FeedbackModal = () => {
 
   return (
     <>
-      <Button onClick={openFeedbackModal}>Report Feedback</Button>
+      <Button onClick={openFeedbackModal}>Provide Feedback</Button>
       <Modal
         visible={isFeedbackModalOpen}
         onDismiss={closeFeedbackModal}

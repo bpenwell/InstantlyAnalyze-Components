@@ -6,11 +6,16 @@ import {
   IDefaultRentalInputs,
   defaultRentalInputs,
   IRentalReportBuybox,
+  ISubscriptionDetails,
 } from '@bpenwell/instantlyanalyze-module';
+import { Mode } from '@cloudscape-design/global-styles';
 import React, { createContext, useState, useContext, ReactNode } from 'react';
+import { LOCAL_STORAGE_KEYS, useLocalStorage } from '@bpenwell/instantlyanalyze-module';
 
 // 1. Define the shape of your context data, including the new APIs:
 type AppContextType = {
+  getAppMode: () => Mode;
+  setAppMode: (mode: Mode) => void,
   isUserLoading: boolean;
   setIsUserLoading: (value: boolean) => void;
   userExists: () => boolean;
@@ -30,10 +35,13 @@ type AppContextType = {
   setBuyBoxSetsPreference: (value: IZillowBuyboxSet[]) => void;
   getDefaultRentalInputs: () => IDefaultRentalInputs;
   setDefaultRentalInputs: (value: IDefaultRentalInputs) => void;
+  getSubscriptionDetails: () => ISubscriptionDetails;
 };
 
 // 2. Create the actual context:
 const AppContext = createContext<AppContextType>({
+  getAppMode: () => Mode.Light,
+  setAppMode: (mode: Mode) => {},
   isUserLoading: false,
   setIsUserLoading: () => {},
   userExists: () => false,
@@ -42,6 +50,7 @@ const AppContext = createContext<AppContextType>({
   canUseZillowScraper: () => false,
   isPaidMember: () => false,
   recordReportUse: () => {},
+  getSubscriptionDetails: () => ({} as any),
   recordZillowScraperUse: () => {},
   getRemainingFreeRentalReports: () => -1,
   getRemainingFreeZillowScrapes: () => -1,
@@ -64,7 +73,9 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
   // Example: store user status in state
   const [userConfig, setUserConfig] = useState<IUserConfigs>({
     userId: '',
-    status: UserStatus.UNDEFINED,
+    subscription: {
+      status: UserStatus.UNDEFINED,
+    },
     freeReportsAvailable: 0,
     freeZillowScrapesAvailable: 0,
     preferences: {
@@ -78,7 +89,7 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
 
   const userExists = (): boolean => {
     console.log('[userExists] ', userConfig);
-    return userConfig.userId !== '' || userConfig.status !== UserStatus.UNDEFINED;
+    return userConfig.userId !== '' || userConfig.subscription.status !== UserStatus.UNDEFINED;
   };
 
   const getRemainingFreeRentalReports = (): number => {
@@ -98,20 +109,29 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
   };
 
   const canCreateNewReport = (): boolean => {
-    return userConfig.status === UserStatus.ADMIN ||
-      userConfig.status === UserStatus.PRO ||
+    return userConfig.subscription.status === UserStatus.ADMIN ||
+      userConfig.subscription.status === UserStatus.PRO ||
       (!!userConfig.freeReportsAvailable && userConfig.freeReportsAvailable > 0);
   };
 
   const canUseZillowScraper = (): boolean => {
-    return userConfig.status === UserStatus.ADMIN ||
-      userConfig.status === UserStatus.PRO ||
+    return userConfig.subscription.status === UserStatus.ADMIN ||
+      userConfig.subscription.status === UserStatus.PRO ||
       (!!userConfig.freeZillowScrapesAvailable && userConfig.freeZillowScrapesAvailable > 0);
   };
 
   const isPaidMember = (): boolean => {
-    return userConfig.status === UserStatus.ADMIN ||
-      userConfig.status === UserStatus.PRO;
+    return userConfig.subscription.status === UserStatus.ADMIN ||
+      userConfig.subscription.status === UserStatus.PRO;
+  };
+  
+  const getSubscriptionDetails = (): {
+    status: UserStatus;
+    subscriptionId?: string;
+    current_period_end?: number;
+    cancel_at_period_end?: boolean;
+  } => {
+    return userConfig.subscription;
   };
 
   const recordReportUse = (): void => {
@@ -211,8 +231,21 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
     });
   };
 
+  const [appModeLocal, setAppModeLocal] = useLocalStorage<Mode>(LOCAL_STORAGE_KEYS.APP_MODE, Mode.Light);
+  const [appModeState, setAppModeState] = useState<Mode>(appModeLocal);
+  const getAppMode = () => {
+    return appModeState;
+  }
+
+  const setAppMode = (newMode: Mode) => {
+    setAppModeState(newMode);
+    setAppModeLocal(newMode);
+  }
+
   // The value provided to context consumers
   const value: AppContextType = {
+    getAppMode,
+    setAppMode,
     setIsUserLoading,
     getTablePageSizePreference,
     setTablePageSizePreference,
@@ -232,6 +265,7 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
     setBuyBoxSetsPreference,
     getDefaultRentalInputs,
     setDefaultRentalInputs,
+    getSubscriptionDetails,
   };
 
   return (

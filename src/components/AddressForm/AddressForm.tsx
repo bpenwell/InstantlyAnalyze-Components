@@ -33,8 +33,6 @@ export const AddressForm = ({ onAddressSubmit, triggerAddressSubmit }: { onAddre
 
     try {
       const rentcastPropertyData: IRentcastPropertyData = await backendAPI.getPropertyInfoByAddress(address);
-      console.log('rentcastPropertyData');
-      console.log(rentcastPropertyData);
       onAddressSubmit(rentcastPropertyData);
       setLoading(false);
     } catch (error) {
