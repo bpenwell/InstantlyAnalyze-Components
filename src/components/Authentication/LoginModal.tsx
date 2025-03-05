@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useAuth0 } from "@auth0/auth0-react";
 import {
   Button,
@@ -47,10 +47,10 @@ export const LoginModal = (props: ILoginModalProps) => {
           <TextContent className={`info-${appMode}`}>
             <SpaceBetween direction="vertical" size="xxl">
               <h1 className={`info-${appMode}`}>
-                Get a massive edge up on the competition by hiring our <strong>eAgent</strong>.
+                Automate Your On-Market Deal Finding.
               </h1>
               <p className={`info-${appMode}`}>
-                See why our eAgent will revolutionize your job as an investor, help you pick the best strategy to pursue on a deal, all while providing world-class analysis tools to inform your decision.
+                Our platform empowers you to scan entire markets, dive deep into specific deals with advanced analysis features, and stay ahead with AI enhancements coming soon.
               </p>
               <Button iconName="external" variant="primary" onClick={handleLogin}>
                 Login/Sign Up

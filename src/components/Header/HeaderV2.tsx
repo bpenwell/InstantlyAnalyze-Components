@@ -53,7 +53,7 @@ export const HeaderV2 = () => {
                 className='nav-links'
                 onClick={closeMobileMenu}
               >
-                InstantlyScan™
+                InstantlyScan
               </a>
             </li>
             <li>
