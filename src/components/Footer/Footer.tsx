@@ -1,11 +1,17 @@
 import React from 'react';
 import './Footer.css';
-import { PAGE_PATH, RedirectAPI } from '@bpenwell/instantlyanalyze-module';
+import { LOCAL_STORAGE_KEYS, PAGE_PATH, RedirectAPI, useLocalStorage } from '@bpenwell/instantlyanalyze-module';
+import { Mode } from '@cloudscape-design/global-styles';
 
 export const Footer = () => {
-
+ const [appMode, setAppMode] = useLocalStorage<Mode>(
+    LOCAL_STORAGE_KEYS.APP_MODE,
+    Mode.Light
+  );
+  const lightMode=appMode===Mode.Light;
+  const bgColor=lightMode?'bg-white':'bg-neutral-800';
   return (
-    <footer className="bg-gray-100 text-gray-800 pb-6 px-16">
+    <footer className={"bg-gray-100 pb-20 px-16 " + bgColor}>
       <div className="py-6 mx-auto flex flex-col md:flex-row justify-between items-start">
         <div className="flex items-center space-x-2">
           <img src="/public/logo.png" alt="logo" className='h-10' />
