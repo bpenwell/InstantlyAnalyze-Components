@@ -57,7 +57,7 @@ const RULES = [
     displayFn: (value: number) => {
       return displayAsPercent(value, 2, false);
     },
-    threshold: 7, // example threshold: 7%
+    threshold: 1,
     compare: (value: number, threshold: number) => value >= threshold,
   },
   {

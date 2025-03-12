@@ -12,7 +12,7 @@ export interface IPieChartProps {
 export const CloudscapePieChart = ({ data, labels, title }: IPieChartProps) => {
   const chartData = labels.map((label, index) => ({
     title: label,
-    value: data[index],
+    value: Number(data[index].toFixed(2)),
     color: ['#4A7A40', '#C47766', '#D9B98A', '#617A40', '#A4BBA0'][index],
   }));
 
@@ -22,7 +22,6 @@ export const CloudscapePieChart = ({ data, labels, title }: IPieChartProps) => {
       size="medium"
       ariaLabel="Expense breakdown"
       hideFilter
-      segmentDescription={(datum) => `${datum.title}: $${datum.value.toFixed(2)}`}
       legendTitle={title ?? 'Expenses Breakdown'}
     />
   );
