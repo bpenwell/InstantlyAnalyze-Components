@@ -31,7 +31,9 @@ export default function Navbar() {
   const path = window.location.pathname;
   const bg=path==PAGE_PATH.HOME?{background:`url("/public/${bgImg}")`,backgroundSize:'cover',backgroundPositionY:'8%'}:{};
   return (
-    <header className={`flex justify-center py-4 ${appMode}`} style={bg}>
+    <div className={appMode}>
+
+    <header className={`flex justify-center dark:bg-[#161D26] py-4`} style={bg}>
       <nav aria-label="Global" style={{backdropFilter: 'blur(3px)'}} className="bg-white bg-opacity-10 rounded-3xl mx-auto flex max-w-5xl items-center justify-center py-4 lg:px-4 border border-gray-400 dark:border-none">
         <div className="flex lg:flex px-2">
           <a href="#">
@@ -127,6 +129,7 @@ export default function Navbar() {
         </DialogPanel>
       </Dialog>
     </header>
+    </div>
   )
 }
 
