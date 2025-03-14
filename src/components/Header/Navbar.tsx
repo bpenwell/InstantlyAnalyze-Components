@@ -14,7 +14,6 @@ import { LOCAL_STORAGE_KEYS, PAGE_PATH, RedirectAPI, useLocalStorage } from '@bp
 import { useAuth0 } from '@auth0/auth0-react';
 import { Mode } from '@cloudscape-design/global-styles';
 
-
   const redirectApi: RedirectAPI = new RedirectAPI();
 
 export default function Navbar() {
@@ -23,17 +22,16 @@ export default function Navbar() {
     Mode.Light
   );
   const themeChange=()=>{setAppMode(appMode==Mode.Light?Mode.Dark:Mode.Light); window.location.reload();};
-  const bgImg=appMode===Mode.Light?'url("/public/grid_bg.png")':'url("/public/grid_bg_dark.png")';
+  const bgImg=appMode===Mode.Light?'grid_bg.png':'grid_bg_dark.png';
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const {loginWithRedirect } = useAuth0();
+
   const path = window.location.pathname;
-  const lightMode=appMode===Mode.Light;
-  const bg={background:bgImg,backgroundSize:'cover',backgroundPositionY:'8%'};
-  const textColor=lightMode?'text-gray-900':'text-white';
-  const borderColor=lightMode?'border border-gray-400':'';
+  const bg=path==PAGE_PATH.HOME?{background:`url("/public/${bgImg}")`,backgroundSize:'cover',backgroundPositionY:'8%'}:{};
   return (
-    <header className="flex justify-center py-4" style={path==PAGE_PATH.HOME?bg:{}}>
-      <nav aria-label="Global" style={{backdropFilter: 'blur(3px)'}} className={"bg-white bg-opacity-10 rounded-3xl mx-auto flex max-w-5xl items-center justify-center py-4 lg:px-4 "+ borderColor}>
+    <header className={`flex justify-center py-4 ${appMode}`} style={bg}>
+      <nav aria-label="Global" style={{backdropFilter: 'blur(3px)'}} className="bg-white bg-opacity-10 rounded-3xl mx-auto flex max-w-5xl items-center justify-center py-4 lg:px-4 border border-gray-400 dark:border-none">
         <div className="flex lg:flex px-2">
           <a href="#">
             <img
@@ -53,7 +51,7 @@ export default function Navbar() {
             <Bars3Icon aria-hidden="true" className="size-6" />
           </button>
         </div>
-        <PopoverGroup className={"hidden lg:flex lg:gap-x-12 lg:px-10 "+textColor}>
+        <PopoverGroup className="hidden lg:flex lg:gap-x-12 lg:px-10 text-gray-900 dark:text-white">
 
           <a href={redirectApi.createRedirectUrl(PAGE_PATH.HOME)} className="text-base font-semibold">
             Home
@@ -64,12 +62,10 @@ export default function Navbar() {
           <a href={redirectApi.createRedirectUrl(PAGE_PATH.CONTACT_US)} className="text-base font-semibold">
             Pricing
           </a>
-          <Button onClick={themeChange} className="text-base font-semibold hover:bg-transparent">
-            {appMode==Mode.Light?"Light Theme":"Dark Theme"}
-          </Button>
+          <ThemeSwitch checked={appMode==Mode.Dark} onClick={themeChange} />
           
         </PopoverGroup>
-        <div className="flex hidden lg:flex px-2">
+        <div className="flex lg:flex px-2">
           <Button onClick={()=>{loginWithRedirect()}} className="w-36 text-base px-8 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
             Login
           </Button>
@@ -86,6 +82,8 @@ export default function Navbar() {
                 src="/public/logo.png"
                 className="h-8 w-auto"
               />
+              <ThemeSwitch checked={appMode==Mode.Dark} onClick={themeChange} />
+
             </a>
             <button
               type="button"
@@ -130,3 +128,36 @@ export default function Navbar() {
     </header>
   )
 }
+
+const ThemeSwitch: React.FC<{checked:boolean,onClick:()=>void}> = ({checked, onClick}) => {
+
+  return (
+    <div className='flex items-center justify-center'>
+
+    <button
+      onClick={onClick}
+      className={
+        `relative w-[40px] h-[18px] rounded-full transition-colors duration-300
+        ${checked ? "bg-neutral-700 hover:bg-neutral-700" :  'bg-neutral-200 hover:bg-neutral-300'}`
+      }
+    >
+      <span
+        className={
+          `absolute top-[-3px] w-6 h-6 rounded-full transition-transform duration-300 flex items-center justify-center 
+          ${checked ? "translate-x-[16px] bg-neutral-800" : "translate-x-[0px] bg-white"}`
+        }
+      >
+        <span
+          className="w-5 h-5 bg-no-repeat bg-center"
+          style={{
+            backgroundImage: checked
+              ? `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 20 20"><path fill="white" d="M10 2a8 8 0 108 8 6 6 0 11-8-8z"/></svg>')`
+              : `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="black" d="M9.305 1.667V3.75h1.389V1.667h-1.39zm-4.707 1.95l-.982.982L5.09 6.072l.982-.982-1.473-1.473zm10.802 0L13.927 5.09l.982.982 1.473-1.473-.982-.982zM10 5.139a4.872 4.872 0 00-4.862 4.86A4.872 4.872 0 0010 14.862 4.872 4.872 0 0014.86 10 4.872 4.872 0 0010 5.139zm0 1.389A3.462 3.462 0 0113.471 10a3.462 3.462 0 01-3.473 3.472A3.462 3.462 0 016.527 10 3.462 3.462 0 0110 6.528zM1.665 9.305v1.39h2.083v-1.39H1.666zm14.583 0v1.39h2.084v-1.39h-2.084zM5.09 13.928L3.616 15.4l.982.982 1.473-1.473-.982-.982zm9.82 0l-.982.982 1.473 1.473.982-.982-1.473-1.473zM9.305 16.25v2.083h1.389V16.25h-1.39z"/></svg>')`,
+          }}
+        ></span>
+      </span>
+    </button>
+        </div>
+  );
+};
+
