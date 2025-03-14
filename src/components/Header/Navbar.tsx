@@ -23,6 +23,7 @@ export default function Navbar() {
   );
   const themeChange=()=>{setAppMode(appMode==Mode.Light?Mode.Dark:Mode.Light); window.location.reload();};
   const bgImg=appMode===Mode.Light?'grid_bg.png':'grid_bg_dark.png';
+  const logo=appMode===Mode.Light?'logo_light.png':'logo_dark.png';
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const {loginWithRedirect } = useAuth0();
@@ -36,7 +37,7 @@ export default function Navbar() {
           <a href="#">
             <img
               alt=""
-              src="/public/logo.png"
+              src={`/public/${logo}`}
               className="h-8 w-auto"
             />
           </a>

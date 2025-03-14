@@ -8,12 +8,14 @@ export const Footer = () => {
     LOCAL_STORAGE_KEYS.APP_MODE,
     Mode.Light
   );
+    const logo=appMode===Mode.Light?'logo_light.png':'logo_dark.png';
+
   return (
     <div className={appMode}>
       <footer className='bg-gray-100 text-black dark:text-white dark:bg-neutral-800 pb-20 px-16'>
         <div className="py-6 mx-auto flex flex-col md:flex-row justify-between items-start">
           <div className="flex items-center space-x-2">
-            <img src="/public/logo.png" alt="logo" className='h-10' />
+            <img src={`/public/${logo}`} alt="logo" className='h-10' />
           </div>
           <div className="flex space-x-8 text-sm md:mt-0">
             <div>
