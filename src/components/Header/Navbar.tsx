@@ -21,19 +21,14 @@ export default function Navbar() {
     LOCAL_STORAGE_KEYS.APP_MODE,
     Mode.Light
   );
+
   const themeChange=()=>{setAppMode(appMode==Mode.Light?Mode.Dark:Mode.Light); window.location.reload();};
-  const bgImg=appMode===Mode.Light?'grid_bg.png':'grid_bg_dark.png';
   const logo=appMode===Mode.Light?'logo_light.png':'logo_dark.png';
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const {loginWithRedirect } = useAuth0();
-
-  const path = window.location.pathname;
-  const bg=path==PAGE_PATH.HOME?{background:`url("/public/${bgImg}")`,backgroundSize:'cover',backgroundPositionY:'8%'}:{};
-  return (
-    <div className={appMode}>
-
-    <header className={`flex justify-center dark:bg-[#161D26] py-4`} style={bg}>
+  
+  return (<>
       <nav aria-label="Global" style={{backdropFilter: 'blur(3px)'}} className="bg-white bg-opacity-10 rounded-3xl mx-auto flex max-w-5xl items-center justify-center py-4 lg:px-4 border border-gray-400 dark:border-none">
         <div className="flex lg:flex px-2">
           <a href="#">
@@ -109,7 +104,7 @@ export default function Navbar() {
                 <a
                   href="#"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
-                >
+                  >
                   Products
                 </a>
                 <a
@@ -128,8 +123,7 @@ export default function Navbar() {
           </div>
         </DialogPanel>
       </Dialog>
-    </header>
-    </div>
+    </>
   )
 }
 
