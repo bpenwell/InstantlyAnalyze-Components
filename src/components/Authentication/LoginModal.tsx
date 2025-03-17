@@ -10,7 +10,6 @@ import { Mode } from '@cloudscape-design/global-styles';
 import { LOCAL_STORAGE_KEYS, useLocalStorage } from '../../utils/useLocalStorage';
 import { useAppContext } from '../../utils/AppContextProvider';
 import './LoginModal.css';
-import { useAppContext } from '../../utils/AppContextProvider';
 
 export interface ILoginModalProps {
   login: () => Promise<void>;

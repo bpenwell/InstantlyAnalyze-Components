@@ -15,7 +15,6 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { LensTwoTone } from '@mui/icons-material';
 import { BackendAPI, FeedbackType } from '@bpenwell/instantlyanalyze-module';
 
-
 export const FeedbackModal = () => {
   const backendAPI: BackendAPI = new BackendAPI();
   // Feedback modal states
@@ -92,7 +91,13 @@ export const FeedbackModal = () => {
 
   return (
     <>
-      <Button onClick={openFeedbackModal}>Provide Feedback</Button>
+      {/* Feedback Modal Trigger */}
+      <a
+        className="text-base font-semibold cursor-pointer"
+        onClick={openFeedbackModal}
+      >
+        Feedback
+      </a>
       <Modal
         visible={isFeedbackModalOpen}
         onDismiss={closeFeedbackModal}
@@ -158,4 +163,4 @@ export const FeedbackModal = () => {
       </Modal>
     </>
   );
-}
+};

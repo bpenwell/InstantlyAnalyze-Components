@@ -89,7 +89,7 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
       rentalReportBuyBoxSets: [],
       tablePageSize: 10,
       zillowBuyBoxSets: [],
-      defaultRentalInputs: defaultRentalInputs
+      defaultRentalInputs: defaultRentalInputs,
       appMode: localAppMode,
       appDensity: localAppDensity,
     },
@@ -240,19 +240,7 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
     });
   };
 
-  const [appModeLocal, setAppModeLocal] = useLocalStorage<Mode>(LOCAL_STORAGE_KEYS.APP_MODE, Mode.Light);
-  const [appModeState, setAppModeState] = useState<Mode>(appModeLocal);
-  const getAppMode = () => {
-    return appModeState;
-  }
-
-  const setAppMode = (newMode: Mode) => {
-    setAppModeState(newMode);
-    setAppModeLocal(newMode);
-  }
-
   const getAppMode = (): Mode => {
-    console.log('[getAppMode] ', userConfig.preferences.appMode, localAppMode);
     return userConfig?.preferences?.appMode ?? localAppMode;
   }
 

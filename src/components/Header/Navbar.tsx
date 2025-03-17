@@ -1,52 +1,61 @@
 import React, { useEffect, useState } from "react";
 import "../../index.css";
-import { Button, Dialog, DialogPanel, PopoverGroup } from "@headlessui/react";
+import { Button, Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import {
   BackendAPI,
   PAGE_PATH,
   RedirectAPI,
 } from "@bpenwell/instantlyanalyze-module";
-import { LOCAL_STORAGE_KEYS, useLocalStorage } from '../../utils/useLocalStorage';
 import { useAuth0 } from "@auth0/auth0-react";
 import { useAppContext } from "../../utils/AppContextProvider";
 import { Menu, MenuItem } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { applyMode, Mode } from '@cloudscape-design/global-styles';
+import { applyMode, Mode } from "@cloudscape-design/global-styles";
+import { FeedbackModal } from "../FeedbackModal/FeedbackModal";
 
-
+/**
+ * Main Navbar component. Shows:
+ * - A "full" navbar at the top (on certain pages)
+ * - A "thin" sticky navbar once scrolled
+ */
 export default function Navbar() {
-  const path = window.location.pathname;
-  const redirectApi: RedirectAPI = new RedirectAPI();
-  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const { getAppMode, setAppMode } = useAppContext();
-  const appMode = getAppMode();
+  const isFullHeaderApplicable =
+    window.location.pathname === PAGE_PATH.HOME ||
+    window.location.pathname === PAGE_PATH.SUBSCRIBE;
 
-  const themeChange = () => {
-    const newMode= (appMode === Mode.Light) ? Mode.Dark : Mode.Light
-    setAppMode(newMode);
-    applyMode(newMode);
-  };
-  const logo = appMode === Mode.Light ? "logo_light.png" : "logo_dark.png";
+  // Track scroll position to decide whether to show big or thin navbar
+  const [scrollY, setScrollY] = useState(0);
+  const [displayThin, setDisplayThin] = useState(
+    isFullHeaderApplicable ? false : true
+  );
 
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
-  };
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
 
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { user, loginWithRedirect, isAuthenticated, isLoading, logout } =
-    useAuth0();
-  const { userExists, setUserConfig, isPaidMember, setIsUserLoading } =
-    useAppContext();
+      // Only use full header on home and subscribe pages
+      const shouldDisplayFullHeader =
+        isFullHeaderApplicable ? window.scrollY > 102 : true;
+      const shouldDisplayThinHeader =
+        isFullHeaderApplicable ? window.scrollY < 100 : false;
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+      if (shouldDisplayFullHeader && !displayThin) {
+        setDisplayThin(true);
+      } else if (shouldDisplayThinHeader && displayThin) {
+        setDisplayThin(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [scrollY]);
 
+  // Auth & user config logic
+  const { user, loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
+  const { userExists, setUserConfig, setIsUserLoading } = useAppContext();
   const backendAPI: BackendAPI = new BackendAPI();
 
-  // Pull user config on mount/auth
   useEffect(() => {
     const fetchUserConfigs = async () => {
       if (isAuthenticated && user && !userExists()) {
@@ -57,210 +66,601 @@ export default function Navbar() {
         if (configs.message === "User not found") {
           const newUserConfig = await backendAPI.createUserConfig(userId);
           setUserConfig(newUserConfig);
-          setIsUserLoading(false);
         } else {
           setUserConfig(configs);
-          setIsUserLoading(false);
         }
+        setIsUserLoading(false);
       }
     };
     fetchUserConfigs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, user]);
-
-  
-  const bgImg = appMode === Mode.Light ? 'grid_bg.png' : 'grid_bg_dark.png';
-  const bg = path === PAGE_PATH.HOME ? {
-    backgroundImage: `url("/public/${bgImg}")`,
-    backgroundSize: 'cover',
-    backgroundPositionY: '8%'
-  } : {};
 
   // If Auth0 is still loading, show a placeholder
   if (isLoading) {
+    if (isFullHeaderApplicable) {
+      return <LoadingPlaceholder />;
+    } else {
+      return <ThinNavbar />;
+    }
+  } else if (!isFullHeaderApplicable) {
+    return <ThinNavbar />;
+  } else {
     return (
-      <div className={appMode}>
-      <header className={`flex justify-center dark:bg-[#161D26] py-4`} style={bg}>
-      <nav
-        aria-label="Global"
-        style={{ backdropFilter: "blur(3px)" }}
-        className="bg-white bg-opacity-10 rounded-3xl mx-auto flex max-w-5xl items-center justify-center py-4 lg:px-4 border border-gray-400 dark:border-none"
-      >
-        <div className="flex lg:flex px-2">
-          <a href="#">
-            <img alt="" src={`/public/${logo}`} className="h-8 w-auto" />
-          </a>
-        </div>
-      </nav>
-      </header>
-      </div>
+      <>
+        <FullNavbar />
+        {displayThin && <ThinNavbar />}
+      </>
     );
   }
+}
+
+/**
+ * The large "full" navbar at the top of certain pages.
+ */
+function FullNavbar() {
+  const path = window.location.pathname;
+  const redirectApi: RedirectAPI = new RedirectAPI();
+
+  // State for mobile menu
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // States for product menu anchor & user menu anchor
+  const [anchorElProducts, setAnchorElProducts] = useState<null | HTMLElement>(
+    null
+  );
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+
+  const { getAppMode, setAppMode, userExists } = useAppContext();
+  const { user, loginWithRedirect, isAuthenticated, logout } = useAuth0();
+  const appMode = getAppMode();
+
+  // Toggle theme
+  const themeChange = () => {
+    const newMode = appMode === Mode.Light ? Mode.Dark : Mode.Light;
+    setAppMode(newMode);
+    applyMode(newMode);
+  };
+  const logo = appMode === Mode.Light ? "logo_light.png" : "logo_dark.png";
+
+  // Handle "Products" menu
+  const handleOpenProductsMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElProducts(event.currentTarget);
+  };
+  const handleCloseProductsMenu = () => {
+    setAnchorElProducts(null);
+  };
+
+  // Handle user menu
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  // Background logic for the home page
+  const bgImg = appMode === Mode.Light ? "grid_bg.png" : "grid_bg_dark.png";
+  const bg =
+    path === PAGE_PATH.HOME
+      ? {
+          backgroundImage: `url("/public/${bgImg}")`,
+          backgroundSize: "cover",
+          backgroundPositionY: "7%",
+        }
+      : {};
+
+  // Navbar classes
+  const navbarClasses = `
+    bg-white bg-opacity-10
+    rounded-3xl
+    mx-auto
+    border border-gray-400
+    dark:border-none
+    transition-all
+    duration-300
+    h-16
+  `;
 
   return (
     <div className={appMode}>
-      <header className={`flex justify-center dark:bg-[#161D26] py-4`} style={bg}>
-      <nav
-        aria-label="Global"
-        style={{ backdropFilter: "blur(3px)" }}
-        className="bg-white bg-opacity-10 rounded-3xl mx-auto flex max-w-5xl items-center justify-center py-4 lg:px-4 border border-gray-400 dark:border-none"
-      >
-        <div className="flex lg:flex px-2">
-          <a href="#">
-            <img alt="" src={`/public/${logo}`} className="h-8 w-auto" />
-          </a>
-        </div>
-        <div className="flex lg:hidden">
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen(true)}
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
-          >
-            <span className="sr-only">Open main menu</span>
-            <Bars3Icon aria-hidden="true" className="size-6" />
-          </button>
-        </div>
-        <PopoverGroup className="hidden lg:flex lg:gap-x-12 lg:px-10 text-gray-900 dark:text-white">
-          <a
-            href={redirectApi.createRedirectUrl(PAGE_PATH.HOME)}
-            className="text-base font-semibold"
-          >
-            Home
-          </a>
-          <a
-            href={redirectApi.createRedirectUrl(PAGE_PATH.AI_REAL_ESTATE_AGENT)}
-            className="text-base font-semibold"
-          >
-            Products
-          </a>
-          <a
-            href={redirectApi.createRedirectUrl(PAGE_PATH.CONTACT_US)}
-            className="text-base font-semibold"
-          >
-            Pricing
-          </a>
-          <ThemeSwitch checked={appMode == Mode.Dark} onClick={themeChange} />
-        </PopoverGroup>
-        {isAuthenticated && user && userExists() ? (
-          <>
-            <IconButton onClick={handleOpenUserMenu} className="mx-0 my-2 text-black">
-              <AccountCircle
-                sx={[appMode === Mode.Dark && { filter: "invert(1)" }]}
-              />
-            </IconButton>
-            <Menu
-              anchorEl={anchorElUser}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-              transformOrigin={{ vertical: "top", horizontal: "right" }}
-              sx={{
-                "& .MuiPaper-root": {
-                  backgroundColor: appMode==Mode.Light?"white": "rgb(38,38,38)", // Equivalent to `neutral-800`
-                  color: appMode==Mode.Light?"black" :"white",
-                },
-              }}
-            >
-              <MenuItem
-                onClick={() => {
-                  handleCloseUserMenu();
-                  window.location.href = redirectApi.createRedirectUrl(
-                    PAGE_PATH.PROFILE
-                  );
-                }}
+      <header className="flex justify-center dark:bg-[#161D26] py-4" style={bg}>
+        <nav
+          aria-label="Global"
+          style={{ backdropFilter: "blur(3px)" }}
+          className={navbarClasses}
+        >
+          {/* Top row: logo, desktop nav items, profile, mobile menu */}
+          <div className="flex items-center justify-between px-4 h-full">
+            {/* Left side: logo + desktop nav */}
+            <div className="flex items-center space-x-8">
+              {/* Logo */}
+              <div
+                className="flex mx-2 my-2 items-center"
+                style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
               >
-                Profile
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  handleCloseUserMenu();
-                  logout({
-                    logoutParams: { returnTo: window.location.origin },
-                  });
-                }}
-              >
-                Log out
-              </MenuItem>
-            </Menu>
-          </>
-        ) : (
-          <div className="flex lg:flex px-2">
-            <Button
-              onClick={() => {
-                loginWithRedirect();
-              }}
-              className="w-36 text-base px-8 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-            >
-              Login
-            </Button>
-          </div>
-        )}
-      </nav>
-      <Dialog
-        open={mobileMenuOpen}
-        onClose={setMobileMenuOpen}
-        className="lg:hidden m-10"
-      >
-        <div className="fixed inset-0 z-10" />
-        <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
-          <div className="flex items-center justify-between">
-            <a href="#" className="-m-1.5 p-1.5">
-              <span className="sr-only">Your Company</span>
-              <img alt="" src="/public/logo.png" className="h-8 w-auto" />
-              <ThemeSwitch
-                checked={appMode == Mode.Dark}
-                onClick={themeChange}
-              />
-            </a>
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen(false)}
-              className="-m-2.5 rounded-md p-2.5 text-gray-700"
-            >
-              <span className="sr-only">Close menu</span>
-              <XMarkIcon aria-hidden="true" className="size-6" />
-            </button>
-          </div>
-          <div className="mt-6 flow-root">
-            <div className="-my-6 divide-y divide-gray-500/10">
-              <div className="space-y-2 py-6">
-                <a
-                  href="#"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
-                >
-                  Home
+                <a href={redirectApi.createRedirectUrl(PAGE_PATH.HOME)}>
+                  <img
+                    alt=""
+                    src={`/public/${logo}`}
+                    style={{ maxHeight: "30px", width: "auto" }}
+                  />
                 </a>
-                <a
-                  href="#"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+              </div>
+              {/* Desktop nav items */}
+              <div className="hidden lg:flex items-center space-x-8 text-gray-900 dark:text-white">
+                {/* Products */}
+                <span
+                  className="text-base font-semibold cursor-pointer"
+                  onClick={handleOpenProductsMenu}
                 >
                   Products
-                </a>
+                </span>
+                <Menu
+                  anchorEl={anchorElProducts}
+                  open={Boolean(anchorElProducts)}
+                  onClose={handleCloseProductsMenu}
+                  anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+                  transformOrigin={{ vertical: "top", horizontal: "left" }}
+                  sx={{
+                    "& .MuiPaper-root": {
+                      backgroundColor:
+                        appMode === Mode.Light ? "white" : "rgb(38,38,38)",
+                      color: appMode === Mode.Light ? "black" : "white",
+                    },
+                  }}
+                >
+                  <MenuItem
+                    onClick={() => {
+                      handleCloseProductsMenu();
+                      window.location.href = redirectApi.createRedirectUrl(
+                        PAGE_PATH.RENTAL_CALCULATOR_HOME
+                      );
+                    }}
+                  >
+                    InstantlyReport
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      handleCloseProductsMenu();
+                      window.location.href = redirectApi.createRedirectUrl(
+                        PAGE_PATH.ZILLOW_SCRAPER
+                      );
+                    }}
+                  >
+                    InstantlyScan
+                  </MenuItem>
+                </Menu>
+
                 <a
-                  href="#"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                  href={redirectApi.createRedirectUrl(PAGE_PATH.SUBSCRIBE)}
+                  className="text-base font-semibold"
                 >
                   Pricing
                 </a>
-              </div>
-              <div className="flex lg:flex py-2">
-                <Button
-                  onClick={() => {
-                    loginWithRedirect();
-                  }}
-                  className="w-36 text-base px-8 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-                >
-                  Login
-                </Button>
+                <FeedbackModal />
               </div>
             </div>
+
+            {/* Right side: Auth/profile + mobile menu */}
+            <div className="flex items-center space-x-2">
+              {/* Mobile menu button (hamburger) */}
+              <div className="flex lg:hidden">
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuOpen(true)}
+                  className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+                >
+                  <span className="sr-only">Open main menu</span>
+                  <Bars3Icon aria-hidden="true" className="size-6" />
+                </button>
+              </div>
+
+              {/* Theme Switch */}
+              <ThemeSwitch checked={appMode === Mode.Dark} onClick={themeChange} />
+
+              {/* Auth & Profile menu */}
+              {isAuthenticated && user && userExists() ? (
+                <>
+                  <IconButton
+                    onClick={handleOpenUserMenu}
+                    className="mx-0 my-2 text-black"
+                  >
+                    <AccountCircle
+                      sx={[appMode === Mode.Dark && { filter: "invert(1)" }]}
+                    />
+                  </IconButton>
+                  <Menu
+                    anchorEl={anchorElUser}
+                    open={Boolean(anchorElUser)}
+                    onClose={handleCloseUserMenu}
+                    anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                    transformOrigin={{ vertical: "top", horizontal: "right" }}
+                    sx={{
+                      "& .MuiPaper-root": {
+                        backgroundColor:
+                          appMode === Mode.Light ? "white" : "rgb(38,38,38)",
+                        color: appMode === Mode.Light ? "black" : "white",
+                      },
+                    }}
+                  >
+                    <MenuItem
+                      onClick={() => {
+                        handleCloseUserMenu();
+                        window.location.href = redirectApi.createRedirectUrl(
+                          PAGE_PATH.PROFILE
+                        );
+                      }}
+                    >
+                      Profile
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        handleCloseUserMenu();
+                        logout({
+                          logoutParams: { returnTo: window.location.origin },
+                        });
+                      }}
+                    >
+                      Log out
+                    </MenuItem>
+                  </Menu>
+                </>
+              ) : (
+                <div className="flex px-2">
+                  <Button
+                    onClick={() => {
+                      loginWithRedirect();
+                    }}
+                    className="w-30 h-25 text-base px-2 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                  >
+                    Login
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
-        </DialogPanel>
-      </Dialog>
-    </header>
+
+          {/* Mobile menu (Dialog) */}
+          <Dialog
+            open={mobileMenuOpen}
+            onClose={setMobileMenuOpen}
+            className="lg:hidden m-10"
+          >
+            <div className="fixed inset-0 z-10" />
+            <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+              <div className="flex items-center justify-between">
+                <a href="#" className="-m-1.5 p-1.5">
+                  <span className="sr-only">Your Company</span>
+                  <img
+                    alt=""
+                    src={`/public/${logo}`}
+                    style={{ maxHeight: "40px", width: "auto" }}
+                  />
+                  <ThemeSwitch
+                    checked={appMode === Mode.Dark}
+                    onClick={themeChange}
+                  />
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="-m-2.5 rounded-md p-2.5 text-gray-700"
+                >
+                  <span className="sr-only">Close menu</span>
+                  <XMarkIcon aria-hidden="true" className="size-6" />
+                </button>
+              </div>
+              <div className="mt-6 flow-root">
+                <div className="-my-6 divide-y divide-gray-500/10">
+                  <div className="space-y-2 py-6">
+                    <a
+                      href={redirectApi.createRedirectUrl(PAGE_PATH.HOME)}
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                    >
+                      Home
+                    </a>
+                    <a
+                      href={redirectApi.createRedirectUrl(
+                        PAGE_PATH.RENTAL_CALCULATOR_HOME
+                      )}
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                    >
+                      Products
+                    </a>
+                    <a
+                      href={redirectApi.createRedirectUrl(PAGE_PATH.SUBSCRIBE)}
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                    >
+                      Pricing
+                    </a>
+                  </div>
+                  <div className="flex py-2">
+                    <Button
+                      onClick={() => {
+                        loginWithRedirect();
+                      }}
+                      className="mw-30 mh-25 text-base px-2 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                    >
+                      Login
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </DialogPanel>
+          </Dialog>
+        </nav>
+      </header>
     </div>
   );
 }
 
+/**
+ * The thinner, sticky navbar that appears after scrolling.
+ */
+const ThinNavbar = () => {
+  const { user, loginWithRedirect, isAuthenticated, logout } = useAuth0();
+  const { getAppMode, setAppMode, userExists } = useAppContext();
+  const redirectApi = new RedirectAPI();
+  const appMode = getAppMode();
+  const logo = appMode === Mode.Light ? "logo_light.png" : "logo_dark.png";
+
+  // Track scroll for transitional offset
+  const [scrollY, setScrollY] = useState(0);
+
+  // States for product menu anchor & user menu anchor
+  const [anchorElProducts, setAnchorElProducts] = useState<null | HTMLElement>(
+    null
+  );
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Toggle theme
+  const themeChange = () => {
+    const newMode = appMode === Mode.Light ? Mode.Dark : Mode.Light;
+    setAppMode(newMode);
+    applyMode(newMode);
+  };
+
+  // Only use full header on home and subscribe pages
+  const isFullHeaderApplicable =
+    window.location.pathname === PAGE_PATH.HOME ||
+    window.location.pathname === PAGE_PATH.SUBSCRIBE;
+  const translateY = isFullHeaderApplicable ? Math.min(0, -102 + scrollY) : 0;
+
+  // Handle "Products" menu
+  const handleOpenProductsMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElProducts(event.currentTarget);
+  };
+  const handleCloseProductsMenu = () => {
+    setAnchorElProducts(null);
+  };
+
+  // Handle user menu
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  return (
+    <header
+      className={`
+        ${appMode}
+        sticky
+        top-0
+        z-50
+        bg-white
+        bg-opacity-10
+        backdrop-blur-md
+        dark:bg-[#161D26]
+        py-2
+        transition-transform
+        duration-300
+        transform
+        translate-y-[${translateY}px]
+        text-gray-900 dark:text-white
+      `}
+      style={{ backgroundColor: appMode === Mode.Dark ? "#161d26" : "#ffffff" }}
+    >
+      <nav
+        aria-label="Global"
+        className="max-w-5xl mx-auto flex items-center justify-between px-4"
+      >
+        {/* Logo */}
+        <div
+          className="flex mx-2 my-2 items-center"
+          style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+        >
+          <a href={redirectApi.createRedirectUrl(PAGE_PATH.HOME)}>
+            <img
+              alt=""
+              src={`/public/${logo}`}
+              style={{ maxHeight: "30px", width: "auto" }}
+            />
+          </a>
+        </div>
+
+        {/* Thin navbar links */}
+        <div className="flex items-center gap-x-6 text-gray-900 dark:text-white text-sm font-semibold">
+          {/* Products menu (MUI Menu) */}
+          <span
+            className="text-base dark:text-white font-semibold cursor-pointer"
+            onClick={handleOpenProductsMenu}
+          >
+            Products
+          </span>
+          <Menu
+            anchorEl={anchorElProducts}
+            open={Boolean(anchorElProducts)}
+            onClose={handleCloseProductsMenu}
+            anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+            transformOrigin={{ vertical: "top", horizontal: "left" }}
+            sx={{
+              "& .MuiPaper-root": {
+                backgroundColor:
+                  appMode === Mode.Light ? "white" : "rgb(38,38,38)",
+                color: appMode === Mode.Light ? "black" : "white",
+              },
+            }}
+          >
+            <MenuItem
+              onClick={() => {
+                handleCloseProductsMenu();
+                window.location.href = redirectApi.createRedirectUrl(
+                  PAGE_PATH.RENTAL_CALCULATOR_HOME
+                );
+              }}
+            >
+              InstantlyReport
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleCloseProductsMenu();
+                window.location.href = redirectApi.createRedirectUrl(
+                  PAGE_PATH.ZILLOW_SCRAPER
+                );
+              }}
+            >
+              InstantlyScan
+            </MenuItem>
+          </Menu>
+
+          <a
+            className="text-base dark:text-white font-semibold"
+            href={redirectApi.createRedirectUrl(PAGE_PATH.SUBSCRIBE)}
+          >
+            Pricing
+          </a>
+
+          <FeedbackModal />
+          <ThemeSwitch checked={appMode === Mode.Dark} onClick={themeChange} />
+
+          {/* Auth & Profile menu */}
+          {isAuthenticated && user && userExists() ? (
+            <>
+              <IconButton
+                onClick={handleOpenUserMenu}
+                className="mx-0 my-2 text-black"
+              >
+                <AccountCircle
+                  sx={[appMode === Mode.Dark && { filter: "invert(1)" }]}
+                />
+              </IconButton>
+              <Menu
+                anchorEl={anchorElUser}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                transformOrigin={{ vertical: "top", horizontal: "right" }}
+                sx={{
+                  "& .MuiPaper-root": {
+                    backgroundColor:
+                      appMode === Mode.Light ? "white" : "rgb(38,38,38)",
+                    color: appMode === Mode.Light ? "black" : "white",
+                  },
+                }}
+              >
+                <MenuItem
+                  onClick={() => {
+                    handleCloseUserMenu();
+                    window.location.href = redirectApi.createRedirectUrl(
+                      PAGE_PATH.PROFILE
+                    );
+                  }}
+                >
+                  Profile
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    handleCloseUserMenu();
+                    logout({
+                      logoutParams: { returnTo: window.location.origin },
+                    });
+                  }}
+                >
+                  Log out
+                </MenuItem>
+              </Menu>
+            </>
+          ) : (
+            <div className="flex lg:flex px-2">
+              <Button
+                onClick={() => {
+                  loginWithRedirect();
+                }}
+                className="w-30 h-25 text-base px-2 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+              >
+                Login
+              </Button>
+            </div>
+          )}
+        </div>
+      </nav>
+    </header>
+  );
+};
+
+/**
+ * Shown while Auth0 is still loading user info
+ */
+function LoadingPlaceholder() {
+  const { getAppMode } = useAppContext();
+  const appMode = getAppMode();
+  const redirectApi: RedirectAPI = new RedirectAPI();
+  const logo = appMode === Mode.Light ? "logo_light.png" : "logo_dark.png";
+
+  return (
+    <div className={appMode}>
+      <header className="flex justify-center dark:bg-[#161D26] py-4">
+        <nav
+          aria-label="Global"
+          style={{ backdropFilter: "blur(3px)" }}
+          className="
+            bg-white bg-opacity-10
+            rounded-3xl
+            mx-auto
+            flex
+            max-w-5xl
+            items-center
+            justify-center
+            py-4
+            lg:px-4
+            border
+            border-gray-400
+            dark:border-none
+          "
+        >
+          {/* Logo */}
+          <div
+            className="flex mx-2 my-2 items-center"
+            style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+          >
+            <a href={redirectApi.createRedirectUrl(PAGE_PATH.HOME)}>
+              <img
+                alt=""
+                src={`/public/${logo}`}
+                style={{ maxHeight: "40px", width: "auto" }}
+              />
+            </a>
+          </div>
+        </nav>
+      </header>
+    </div>
+  );
+}
+
+/**
+ * Simple theme switch button
+ */
 const ThemeSwitch: React.FC<{ checked: boolean; onClick: () => void }> = ({
   checked,
   onClick,
