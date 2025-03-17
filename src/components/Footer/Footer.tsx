@@ -1,83 +1,79 @@
 import React from 'react';
 import './Footer.css';
-import { Button } from '../Button/Button';
+import { useAppContext } from '../../utils/AppContextProvider';
 import { PAGE_PATH, RedirectAPI } from '@bpenwell/instantlyanalyze-module';
+import { LOCAL_STORAGE_KEYS, useLocalStorage } from '../../utils/useLocalStorage';
+import { Mode } from '@cloudscape-design/global-styles';
 
 export const Footer = () => {
-  const redirectApi = new RedirectAPI();
+  const { getAppMode } = useAppContext();
+  const appMode = getAppMode();
+  const logo=appMode===Mode.Light?'logo_light.png':'logo_dark.png';
 
   return (
-    <div className='footer-container'>
-      <section className='footer-subscription'>
-        <p className='footer-subscription-heading'>
-          Join the InstantlyAnalyze newsletter to receive updates, promotional deals, and more.
-        </p>
-        <p className='footer-subscription-text'>
-          You can unsubscribe at any time.
-        </p>
-        <div className='input-areas'>
-          <form>
-            <input
-              className='footer-input'
-              name='email'
-              type='email'
-              placeholder='Your Email'
-            />
-            <Button label='Subscribe'/>
-          </form>
-        </div>
-      </section>
-      <div className='footer-links'>
-        <div className='footer-link-wrapper'>
-          <div className='footer-link-items'>
-            <h2>About Us</h2>
-            <a href={PAGE_PATH.MISSION}>Mission & Vision</a>
-            <a href={PAGE_PATH.PRIVACY_POLICY_AND_TERMS}>Terms of Service</a>
+    <div className={appMode}>
+      <footer className='bg-gray-100 text-black dark:text-white dark:bg-neutral-800 pb-20 px-16'>
+        <div className="py-6 mx-auto flex flex-col md:flex-row justify-between items-start">
+          <div className="flex items-center space-x-2">
+            <img src={`/public/${logo}`} alt="logo" className='h-10' />
           </div>
-          <div className='footer-link-items'>
-            <h2>Contact Us</h2>
-            <a href={PAGE_PATH.CONTACT_US}>Contact Us</a>
-          </div>
-        </div>
-        <div className='footer-link-wrapper'>
-          <div className='footer-link-items'>
-            <h2>Social Media</h2>
-            <a href={PAGE_PATH.INSTAGRAM}>Instagram</a>
-            <a href={PAGE_PATH.FACEBOOK}>Facebook</a>
-            <a href={PAGE_PATH.YOUTUBE}>YouTube</a>
-            <a href={PAGE_PATH.TWITTER}>Twitter</a>
-            <a href={PAGE_PATH.LINKEDIN}>LinkedIn</a>
-          </div>
-        </div>
-      </div>
-      <section className='social-media'>
-        <div className='social-media-wrap'>
-          <div className='footer-logo'>
-            <a href={PAGE_PATH.HOME} className='social-logo'>
-              InstantlyAnalyze
-              <i className='fab fa-typo3' />
-            </a>
-          </div>
-          <small className='website-rights'>InstantlyAnalyze © 2025</small>
-          <div className='social-icons'>
-            <a href={PAGE_PATH.INSTAGRAM} className='social-icon-link instagram' aria-label='Instagram'>
-              <i className='fab fa-instagram' />
-            </a>
-            <a href={PAGE_PATH.FACEBOOK} className='social-icon-link facebook' aria-label='Facebook'>
-              <i className='fab fa-facebook-f' />
-            </a>
-            <a href={PAGE_PATH.YOUTUBE} className='social-icon-link youtube' aria-label='YouTube'>
-              <i className='fab fa-youtube' />
-            </a>
-            <a href={PAGE_PATH.TWITTER} className='social-icon-link twitter' aria-label='Twitter'>
-              <i className='fab fa-twitter' />
-            </a>
-            <a href={PAGE_PATH.LINKEDIN} className='social-icon-link linkedin' aria-label='LinkedIn'>
-              <i className='fab fa-linkedin' />
-            </a>
+          <div className="flex space-x-8 text-sm md:mt-0">
+            <div>
+              <h3 className="font-semibold">Site Pages</h3>
+              <ul className="mt-2 space-y-1">
+                <li>
+                  <a href="#" className="hover:underline">
+                    Home
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:underline">
+                    About
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:underline">
+                    Contact
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold">Follow Us</h3>
+              <ul className="mt-2 space-y-1">
+                <li>
+                  <a href="#" className="hover:underline">
+                    Github
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:underline">
+                    Discord
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold">Legal</h3>
+              <ul className="mt-2 space-y-1">
+                <li>
+                  <a href="#" className="hover:underline">
+                    Privacy Policy
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:underline">
+                    Terms and conditions
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-      </section>
+        <div className="border-t border-gray-300 pt-4 text-sm">
+          &copy; 2025 InstantlyAnalyze™. All Rights Reserved
+        </div>
+      </footer>
     </div>
   );
 };

@@ -1,5 +1,7 @@
+import React, { createContext, useState, useContext, ReactNode, useEffect, useCallback } from 'react';
 import {
   BackendAPI,
+  initialRentalCalculatorFormState,
   IUserConfigs,
   UserStatus,
   IZillowBuyboxSet,
@@ -8,15 +10,16 @@ import {
   IRentalReportBuybox,
   ISubscriptionDetails,
 } from '@bpenwell/instantlyanalyze-module';
-import { Mode } from '@cloudscape-design/global-styles';
-import React, { createContext, useState, useContext, ReactNode } from 'react';
-import { LOCAL_STORAGE_KEYS, useLocalStorage } from '@bpenwell/instantlyanalyze-module';
+import { LOCAL_STORAGE_KEYS, useLocalStorage } from './useLocalStorage';
+import { Mode, Density } from '@cloudscape-design/global-styles';
 
 // 1. Define the shape of your context data, including the new APIs:
 type AppContextType = {
-  getAppMode: () => Mode;
-  setAppMode: (mode: Mode) => void,
   isUserLoading: boolean;
+  getAppMode: () => Mode;
+  setAppMode: (mode: Mode) => void;
+  getAppDensity: () => Density;
+  setAppDensity: (mode: Density) => void;
   setIsUserLoading: (value: boolean) => void;
   userExists: () => boolean;
   setUserConfig: (status: IUserConfigs) => void;
@@ -40,9 +43,11 @@ type AppContextType = {
 
 // 2. Create the actual context:
 const AppContext = createContext<AppContextType>({
+  isUserLoading: false,
   getAppMode: () => Mode.Light,
   setAppMode: (mode: Mode) => {},
-  isUserLoading: false,
+  getAppDensity: () => Density.Comfortable,
+  setAppDensity: (density: Density) => {},
   setIsUserLoading: () => {},
   userExists: () => false,
   setUserConfig: () => {},
@@ -70,8 +75,10 @@ interface AppContextProviderProps {
 }
 
 export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children }) => {
+  const [localAppMode, setLocalAppMode] = useLocalStorage<Mode>(LOCAL_STORAGE_KEYS.APP_MODE, Mode.Light);
+  const [localAppDensity, setLocalAppDensity] = useLocalStorage<Density>(LOCAL_STORAGE_KEYS.APP_DENSITY, Density.Comfortable);
   // Example: store user status in state
-  const [userConfig, setUserConfig] = useState<IUserConfigs>({
+  const [userConfig, setUserConfigState] = useState<IUserConfigs>({
     userId: '',
     subscription: {
       status: UserStatus.UNDEFINED,
@@ -79,10 +86,12 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
     freeReportsAvailable: 0,
     freeZillowScrapesAvailable: 0,
     preferences: {
-      tablePageSize: 10,
       rentalReportBuyBoxSets: [],
+      tablePageSize: 10,
       zillowBuyBoxSets: [],
       defaultRentalInputs: defaultRentalInputs
+      appMode: localAppMode,
+      appDensity: localAppDensity,
     },
   });
   const [loading, setLoading] = useState<boolean>(true);
@@ -242,16 +251,57 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
     setAppModeLocal(newMode);
   }
 
+  const getAppMode = (): Mode => {
+    console.log('[getAppMode] ', userConfig.preferences.appMode, localAppMode);
+    return userConfig?.preferences?.appMode ?? localAppMode;
+  }
+
+  const setAppMode = (mode: Mode): void => {
+    const newUserConfig = {
+      ...userConfig,
+      preferences: {
+        ...userConfig.preferences,
+        appMode: mode,
+      }
+    };
+    setUserConfig(newUserConfig);
+    setLocalAppMode(mode);
+  };
+
+  const getAppDensity = (): Density => {
+    return userConfig?.preferences?.appDensity ?? localAppDensity;
+  };
+
+  const setAppDensity = (density: Density): void => {
+    const newUserConfig = {
+      ...userConfig,
+      preferences: {
+        ...userConfig.preferences,
+        appDensity: density,
+      }
+    };
+    setLocalAppDensity(density);
+    setUserConfig(newUserConfig);
+  };
+
+  const setUserConfig = async (newConfig: IUserConfigs): Promise<void> => {
+    const backendApi: BackendAPI = new BackendAPI();
+    setUserConfigState(newConfig);
+    const updatedUserConfig = await backendApi.updateUserConfigs(newConfig, newConfig.userId);
+  };
+
   // The value provided to context consumers
   const value: AppContextType = {
     getAppMode,
     setAppMode,
+    getAppDensity,
+    setAppDensity,
     setIsUserLoading,
     getTablePageSizePreference,
     setTablePageSizePreference,
     isUserLoading: loading,
     userExists,
-    setUserConfig,
+    setUserConfig: setUserConfigState,
     canCreateNewReport,
     canUseZillowScraper,
     isPaidMember,
