@@ -4,11 +4,10 @@ import { Button, Dialog, DialogPanel, PopoverGroup } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import {
   BackendAPI,
-  LOCAL_STORAGE_KEYS,
   PAGE_PATH,
   RedirectAPI,
-  useLocalStorage,
 } from "@bpenwell/instantlyanalyze-module";
+import { LOCAL_STORAGE_KEYS, useLocalStorage } from '../../utils/useLocalStorage';
 import { useAuth0 } from "@auth0/auth0-react";
 import { useAppContext } from "../../utils/AppContextProvider";
 import { Menu, MenuItem } from "@mui/material";
@@ -21,16 +20,13 @@ export default function Navbar() {
   const path = window.location.pathname;
   const redirectApi: RedirectAPI = new RedirectAPI();
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const [appMode, setAppMode] = useLocalStorage<Mode>(
-    LOCAL_STORAGE_KEYS.APP_MODE,
-    Mode.Light
-  );
+  const { getAppMode, setAppMode } = useAppContext();
+  const appMode = getAppMode();
 
   const themeChange = () => {
-    const newMode=appMode == Mode.Light ? Mode.Dark : Mode.Light
+    const newMode= (appMode === Mode.Light) ? Mode.Dark : Mode.Light
     setAppMode(newMode);
     applyMode(newMode);
-    path===PAGE_PATH.HOME? window.location.reload():()=>{};
   };
   const logo = appMode === Mode.Light ? "logo_light.png" : "logo_dark.png";
 
@@ -72,9 +68,12 @@ export default function Navbar() {
   }, [isAuthenticated, user]);
 
   
-  const bgImg=appMode===Mode.Light?'grid_bg.png':'grid_bg_dark.png';
-  const bg=path==PAGE_PATH.HOME?{background:`url("/public/${bgImg}")`,backgroundSize:'cover',backgroundPositionY:'8%'}:{};
-      
+  const bgImg = appMode === Mode.Light ? 'grid_bg.png' : 'grid_bg_dark.png';
+  const bg = path === PAGE_PATH.HOME ? {
+    backgroundImage: `url("/public/${bgImg}")`,
+    backgroundSize: 'cover',
+    backgroundPositionY: '8%'
+  } : {};
 
   // If Auth0 is still loading, show a placeholder
   if (isLoading) {

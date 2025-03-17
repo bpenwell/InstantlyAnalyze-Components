@@ -1,14 +1,14 @@
 import React from 'react';
 import './Footer.css';
-import { LOCAL_STORAGE_KEYS, PAGE_PATH, RedirectAPI, useLocalStorage } from '@bpenwell/instantlyanalyze-module';
+import { useAppContext } from '../../utils/AppContextProvider';
+import { PAGE_PATH, RedirectAPI } from '@bpenwell/instantlyanalyze-module';
+import { LOCAL_STORAGE_KEYS, useLocalStorage } from '../../utils/useLocalStorage';
 import { Mode } from '@cloudscape-design/global-styles';
 
 export const Footer = () => {
- const [appMode, setAppMode] = useLocalStorage<Mode>(
-    LOCAL_STORAGE_KEYS.APP_MODE,
-    Mode.Light
-  );
-    const logo=appMode===Mode.Light?'logo_light.png':'logo_dark.png';
+  const { getAppMode } = useAppContext();
+  const appMode = getAppMode();
+  const logo=appMode===Mode.Light?'logo_light.png':'logo_dark.png';
 
   return (
     <div className={appMode}>

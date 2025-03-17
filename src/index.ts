@@ -41,3 +41,4 @@ export { Cards } from './components/Cards/Cards';
 export { CardItem } from './components/Cards/CardItem';
 export { HeroSection } from './components/HeroSection/HeroSection';
 export { FreeReportsBanner } from './components/FreeReportsBanner/FreeReportsBanner';
+export { useLocalStorage, LOCAL_STORAGE_KEYS } from './utils/useLocalStorage';

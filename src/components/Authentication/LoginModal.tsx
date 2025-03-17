@@ -7,7 +7,8 @@ import {
   TextContent,
 } from '@cloudscape-design/components';
 import { Mode } from '@cloudscape-design/global-styles';
-import { LOCAL_STORAGE_KEYS, useLocalStorage } from '@bpenwell/instantlyanalyze-module';
+import { LOCAL_STORAGE_KEYS, useLocalStorage } from '../../utils/useLocalStorage';
+import { useAppContext } from '../../utils/AppContextProvider';
 import './LoginModal.css';
 
 export interface ILoginModalProps {
@@ -17,7 +18,8 @@ export interface ILoginModalProps {
 export const LoginModal = (props: ILoginModalProps) => {
   const { login } = props;
   const { isAuthenticated, user } = useAuth0();
-  const [appMode] = useLocalStorage<Mode>(LOCAL_STORAGE_KEYS.APP_MODE, Mode.Light);
+  const { getAppMode } = useAppContext();
+  const appMode = getAppMode();
   const [showModal, setShowModal] = useState(true); // Control modal visibility
 
   const handleLogin = async () => {

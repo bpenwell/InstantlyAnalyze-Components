@@ -55,7 +55,7 @@ export const CalculatorHeader: React.FC<ICalculatorHeaderProps> = ({
       try {
         await backendAPI.deleteRentalReport(reportId, user?.sub);
         alert('Report deleted successfully.');
-        redirectAPI.redirectToPage(PAGE_PATH.RENTAL_CALCULATOR_VIEW);
+        redirectAPI.redirectToPage(PAGE_PATH.RENTAL_CALCULATOR_DASHBOARD);
       } catch (error) {
         console.error('Error deleting report:', error);
         alert('Failed to delete the report.');
