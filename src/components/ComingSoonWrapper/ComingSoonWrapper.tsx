@@ -1,33 +1,16 @@
 import React from 'react';
 
-
 interface IComingSoonWrapper {
   text?: string;
-  children: any;
-};
+  children: React.ReactNode;
+}
+
 export const ComingSoonWrapper = (props: IComingSoonWrapper) => {
   const { text = 'Coming soon!', children } = props;
   return (
-    <div style={{ position: 'relative' }}>
+    <div className="relative rounded-lg overflow-hidden">
       {children}
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          background: 'rgba(0, 0, 0, 0.5)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          textAlign: 'center',
-          color: '#fff',
-          fontSize: '2rem',
-          fontWeight: 'bold',
-          zIndex: 10,
-        }}
-      >
+      <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center text-white text-2xl font-bold z-10 rounded-lg">
         {text}
       </div>
     </div>

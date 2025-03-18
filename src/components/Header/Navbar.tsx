@@ -141,8 +141,7 @@ function FullNavbar() {
 
   // Background logic for the home page
   const bgImg = appMode === Mode.Light ? "grid_bg.png" : "grid_bg_dark.png";
-  const bg =
-    path === PAGE_PATH.HOME
+  const bg = (path === PAGE_PATH.HOME || path === PAGE_PATH.SUBSCRIBE)
       ? {
           backgroundImage: `url("/public/${bgImg}")`,
           backgroundSize: "cover",
@@ -164,7 +163,7 @@ function FullNavbar() {
 
   return (
     <div className={appMode}>
-      <header className="flex justify-center dark:bg-[#161D26] py-4" style={bg}>
+      <header className="flex justify-center bg-[#ffffff] dark:bg-[#161D26] py-4" style={bg}>
         <nav
           aria-label="Global"
           style={{ backdropFilter: "blur(3px)" }}
@@ -620,7 +619,7 @@ function LoadingPlaceholder() {
 
   return (
     <div className={appMode}>
-      <header className="flex justify-center dark:bg-[#161D26] py-4">
+      <header className="flex justify-center bg-[#ffffff] dark:bg-[#161D26] py-4">
         <nav
           aria-label="Global"
           style={{ backdropFilter: "blur(3px)" }}

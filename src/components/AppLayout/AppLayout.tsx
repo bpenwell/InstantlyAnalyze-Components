@@ -36,6 +36,11 @@ export const AppLayoutPreview = (props: IAppLayoutPreview) => {
       || segment.includes('profile')
       || segment.includes('subscribe');
   };
+
+  const shouldDisableContentPadding = (path: string): boolean => {
+    return path === PAGE_PATH.HOME ||
+      path === PAGE_PATH.SUBSCRIBE;
+  };
   
   breadcrumbPath.forEach((segment) => {
     if (shouldDisplayNothing(segment)) {
@@ -80,7 +85,7 @@ export const AppLayoutPreview = (props: IAppLayoutPreview) => {
   return (
     <I18nProvider locale={LOCALE} messages={[messages]}>
       <AppLayout
-        disableContentPaddings={path === PAGE_PATH.HOME}
+        disableContentPaddings={shouldDisableContentPadding(path)}
         breadcrumbs={breadcrumbsContent}
         toolsHide={true}
         navigationHide={true}

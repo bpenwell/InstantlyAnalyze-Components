@@ -6,6 +6,7 @@ import { LOCAL_STORAGE_KEYS, useLocalStorage } from '../../utils/useLocalStorage
 import { Mode } from '@cloudscape-design/global-styles';
 
 export const Footer = () => {
+  const redirectApi: RedirectAPI = new RedirectAPI();
   const { getAppMode } = useAppContext();
   const appMode = getAppMode();
   const logo=appMode===Mode.Light?'logo_light.png':'logo_dark.png';
@@ -22,18 +23,13 @@ export const Footer = () => {
               <h3 className="font-semibold">Site Pages</h3>
               <ul className="mt-2 space-y-1">
                 <li>
-                  <a href="#" className="hover:underline">
+                  <a href={redirectApi.createRedirectUrl(PAGE_PATH.HOME)} className="hover:underline">
                     Home
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:underline">
-                    About
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline">
-                    Contact
+                  <a href={redirectApi.createRedirectUrl(PAGE_PATH.CONTACT_US)} className="hover:underline">
+                    Contact Us
                   </a>
                 </li>
               </ul>
@@ -42,13 +38,23 @@ export const Footer = () => {
               <h3 className="font-semibold">Follow Us</h3>
               <ul className="mt-2 space-y-1">
                 <li>
-                  <a href="#" className="hover:underline">
-                    Github
+                  <a href={redirectApi.createRedirectUrl(PAGE_PATH.FACEBOOK)} className="hover:underline">
+                    Facebook
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:underline">
-                    Discord
+                  <a href={redirectApi.createRedirectUrl(PAGE_PATH.INSTAGRAM)} className="hover:underline">
+                    Instagram
+                  </a>
+                </li>
+                <li>
+                  <a href={redirectApi.createRedirectUrl(PAGE_PATH.TWITTER)} className="hover:underline">
+                    X
+                  </a>
+                </li>
+                <li>
+                  <a href={redirectApi.createRedirectUrl(PAGE_PATH.YOUTUBE)} className="hover:underline">
+                    Youtube
                   </a>
                 </li>
               </ul>
@@ -57,13 +63,8 @@ export const Footer = () => {
               <h3 className="font-semibold">Legal</h3>
               <ul className="mt-2 space-y-1">
                 <li>
-                  <a href="#" className="hover:underline">
-                    Privacy Policy
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline">
-                    Terms and conditions
+                  <a href={redirectApi.createRedirectUrl(PAGE_PATH.PRIVACY_POLICY_AND_TERMS)} className="hover:underline">
+                    Privacy Policy and Terms
                   </a>
                 </li>
               </ul>
