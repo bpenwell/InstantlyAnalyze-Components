@@ -9,7 +9,7 @@ import {
 } from "@bpenwell/instantlyanalyze-module";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useAppContext } from "../../utils/AppContextProvider";
-import { Menu, MenuItem } from "@mui/material";
+import { Avatar, Menu, MenuItem } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { applyMode, Mode } from "@cloudscape-design/global-styles";
@@ -106,9 +106,7 @@ function FullNavbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // States for product menu anchor & user menu anchor
-  const [anchorElProducts, setAnchorElProducts] = useState<null | HTMLElement>(
-    null
-  );
+  const [anchorElProducts, setAnchorElProducts] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const { getAppMode, setAppMode, userExists } = useAppContext();
@@ -141,7 +139,8 @@ function FullNavbar() {
 
   // Background logic for the home page
   const bgImg = appMode === Mode.Light ? "grid_bg.png" : "grid_bg_dark.png";
-  const bg = (path === PAGE_PATH.HOME || path === PAGE_PATH.SUBSCRIBE)
+  const bg =
+    path === PAGE_PATH.HOME || path === PAGE_PATH.SUBSCRIBE
       ? {
           backgroundImage: `url("/public/${bgImg}")`,
           backgroundSize: "cover",
@@ -265,9 +264,20 @@ function FullNavbar() {
                     onClick={handleOpenUserMenu}
                     className="mx-0 my-2 text-black"
                   >
-                    <AccountCircle
-                      sx={[appMode === Mode.Dark && { filter: "invert(1)" }]}
-                    />
+                    {user?.picture ? (
+                      <Avatar
+                        src={user?.picture}
+                        alt="User Avatar"
+                        sx={{
+                          width: 40,
+                          height: 40,
+                        }}
+                      />
+                    ) : (
+                      <AccountCircle
+                        sx={[appMode === Mode.Dark && { filter: "invert(1)" }]}
+                      />
+                    )}
                   </IconButton>
                   <Menu
                     anchorEl={anchorElUser}
@@ -283,6 +293,9 @@ function FullNavbar() {
                       },
                     }}
                   >
+                    <MenuItem disabled>
+                      {`Welcome back${user?.name ? ` ${user.name}` : ""}!`}
+                    </MenuItem>
                     <MenuItem
                       onClick={() => {
                         handleCloseUserMenu();
@@ -408,9 +421,7 @@ const ThinNavbar = () => {
   const [scrollY, setScrollY] = useState(0);
 
   // States for product menu anchor & user menu anchor
-  const [anchorElProducts, setAnchorElProducts] = useState<null | HTMLElement>(
-    null
-  );
+  const [anchorElProducts, setAnchorElProducts] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   useEffect(() => {
@@ -490,7 +501,7 @@ const ThinNavbar = () => {
 
         {/* Thin navbar links */}
         <div className="flex items-center gap-x-6 text-gray-900 dark:text-white text-sm font-semibold">
-          {/* Products menu (MUI Menu) */}
+          {/* Products menu */}
           <span
             className="text-base dark:text-white font-semibold cursor-pointer"
             onClick={handleOpenProductsMenu}
@@ -550,9 +561,20 @@ const ThinNavbar = () => {
                 onClick={handleOpenUserMenu}
                 className="mx-0 my-2 text-black"
               >
-                <AccountCircle
-                  sx={[appMode === Mode.Dark && { filter: "invert(1)" }]}
-                />
+                {user?.picture ? (
+                  <Avatar
+                    src={user?.picture}
+                    alt="User Avatar"
+                    sx={{
+                      width: 40,
+                      height: 40,
+                    }}
+                  />
+                ) : (
+                  <AccountCircle
+                    sx={[appMode === Mode.Dark && { filter: "invert(1)" }]}
+                  />
+                )}
               </IconButton>
               <Menu
                 anchorEl={anchorElUser}
@@ -568,6 +590,9 @@ const ThinNavbar = () => {
                   },
                 }}
               >
+                <MenuItem disabled>
+                  {`Welcome back${user?.name ? ` ${user.name}` : ""}!`}
+                </MenuItem>
                 <MenuItem
                   onClick={() => {
                     handleCloseUserMenu();

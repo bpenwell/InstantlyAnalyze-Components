@@ -2,7 +2,7 @@ import React from 'react';
 import './Footer.css';
 import { useAppContext } from '../../utils/AppContextProvider';
 import { PAGE_PATH, RedirectAPI } from '@bpenwell/instantlyanalyze-module';
-import { LOCAL_STORAGE_KEYS, useLocalStorage } from '../../utils/useLocalStorage';
+import { LOCAL_STORAGE_KEYS, useLocalStorage } from '@bpenwell/instantlyanalyze-module';
 import { Mode } from '@cloudscape-design/global-styles';
 
 export const Footer = () => {

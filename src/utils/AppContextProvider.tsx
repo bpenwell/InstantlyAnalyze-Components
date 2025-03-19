@@ -10,7 +10,7 @@ import {
   IRentalReportBuybox,
   ISubscriptionDetails,
 } from '@bpenwell/instantlyanalyze-module';
-import { LOCAL_STORAGE_KEYS, useLocalStorage } from './useLocalStorage';
+import { LOCAL_STORAGE_KEYS, useLocalStorage } from '@bpenwell/instantlyanalyze-module';
 import { Mode, Density } from '@cloudscape-design/global-styles';
 
 // 1. Define the shape of your context data, including the new APIs:

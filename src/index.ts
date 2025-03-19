@@ -49,4 +49,3 @@ export {
     meetsBuyboxCriteria,
 } from './components/BuyBox/constants';
 export { ComingSoonWrapper } from './components/ComingSoonWrapper/ComingSoonWrapper';
-export { useLocalStorage, LOCAL_STORAGE_KEYS } from './utils/useLocalStorage';

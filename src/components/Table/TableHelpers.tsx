@@ -4,7 +4,7 @@ import { PAGE_PATH, RedirectAPI } from '@bpenwell/instantlyanalyze-module';
 import { Box, Button, Header, HeaderProps, SpaceBetween, Alert } from '@cloudscape-design/components';
 import { DeleteWithConfirmation, Item } from '../DeleteWithConfirmation/DeleteWithConfirmation';
 import { useAppContext } from '../../utils/AppContextProvider';
-import { useLocalStorage } from '../../utils/useLocalStorage';
+import { useLocalStorage } from '@bpenwell/instantlyanalyze-module';
 
 export const TableNoMatchState = ({ onClearFilter }: { onClearFilter: () => void }) => (
     <Box margin={{ vertical: 'xs' }} textAlign="center" color="inherit">
