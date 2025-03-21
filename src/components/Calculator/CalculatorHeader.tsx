@@ -11,17 +11,12 @@ import {
 import { ShareModal } from '../ShareModal/ShareModal';
 import './CalculatorHeader.css';
 import { useAuth0 } from '@auth0/auth0-react';
+import { ICalculatorSummary } from './CalculatorSummary';
 
-export interface ICalculatorHeaderProps {
-  reportId: string;
-  reportData: IRentalCalculatorData;
-  updateInitialReportData: (initialReportData: IRentalCalculatorData) => void;
-}
-
-export const CalculatorHeader: React.FC<ICalculatorHeaderProps> = ({
+export const CalculatorHeader: React.FC<ICalculatorSummary> = ({
+  initialRentalReportData,
+  updateInitialData,
   reportId,
-  reportData,
-  updateInitialReportData,
 }) => {
   /**
    * @param isShareable 
@@ -36,18 +31,24 @@ export const CalculatorHeader: React.FC<ICalculatorHeaderProps> = ({
     }
   };
 
+  const [reportData, setReportData] = useState<IRentalCalculatorData>(initialRentalReportData);
   const [isModified, setIsModified] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-  const [shareableLink, setShareableLink] = useState(getShareableReportLink(reportData.isShareable));
+  const [shareableLink, setShareableLink] = useState(getShareableReportLink(initialRentalReportData.isShareable));
   const backendAPI = new BackendAPI();
   const redirectAPI = new RedirectAPI();
   const { user } = useAuth0();
   const isSharePage = window.location.href.includes('share/');
 
+  useEffect(() => {
+      // Compare initial data with current formData to determine if modifications have been made
+      setIsModified(JSON.stringify(reportData) !== JSON.stringify(initialRentalReportData));
+  }, [reportData, initialRentalReportData]);
+  
   const handleSave = async () => {
     try {
       console.debug(`[DEBUG] initialData ${printObjectFields(reportData)}`);
-      await backendAPI.saveUpdatedRentalReport(reportId, reportData, user?.sub);
+      await backendAPI.saveUpdatedRentalReport(reportId, initialRentalReportData, true, user?.sub);
       alert('Report saved successfully.');
       setIsModified(false);
     } catch (error) {
@@ -81,8 +82,8 @@ export const CalculatorHeader: React.FC<ICalculatorHeaderProps> = ({
         ...reportData,
         isShareable: isShareable,
       };
-      updateInitialReportData(newReportData);
-      await backendAPI.saveUpdatedRentalReport(reportId, newReportData, user?.sub);
+      updateInitialData(newReportData);
+      await backendAPI.saveUpdatedRentalReport(reportId, newReportData, true, user?.sub);
     }
   };
 

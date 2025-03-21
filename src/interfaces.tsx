@@ -7,4 +7,5 @@ export interface IRentalCalculatorPageProps {
     //Should just be fullLoanTermRentalReportData[0]
     initialRentalReportData: IRentalCalculatorData;
     updateInitialData: (data: IRentalCalculatorData) => void;
+    reportId: string;
 }

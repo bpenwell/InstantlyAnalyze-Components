@@ -35,7 +35,7 @@ export const CalculatorUpdate: React.FC<ICalculatorUpdateProps> = ({ reportId, i
 
     const handleSave = async () => {
         try {
-            await backendAPI.saveUpdatedRentalReport(reportId, formData, user?.sub);
+            await backendAPI.saveUpdatedRentalReport(reportId, formData,  true, user?.sub);
             alert('Report saved successfully.');
             setIsModified(false); // Reset the modification flag after saving
         } catch (error) {
