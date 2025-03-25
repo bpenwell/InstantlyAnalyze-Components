@@ -66,20 +66,16 @@ export const FeedbackModal = () => {
       setErrorMessage('Please enter a note before submitting.');
       return;
     }
-    else if (!feedbackEmail.trim()) {
-      setErrorMessage('Please enter your email if a follow-up is needed.');
-      return;
-    }
 
     setIsSending(true);
     try {
-      let usersName = user?.name;
+      let userId = user?.sub;
       if (!user) {
-        usersName = 'Unavailable';
+        userId = 'Unavailable';
         console.warn('User must be authenticated to send feedback email');
       }
 
-      await backendAPI.sendFeedbackEmail(feedbackType, feedbackEmail, feedbackNote, usersName);
+      await backendAPI.sendFeedbackEmail(feedbackType, feedbackEmail, feedbackNote, userId);
       setSuccessMessage('Feedback submitted successfully!');
     } catch (error) {
       console.error('Error sending feedback:', error);
@@ -143,15 +139,16 @@ export const FeedbackModal = () => {
             />
           </FormField>
 
-          <FormField label="Email">
+          <FormField label="Email" info="Optional">
             <Input
               value={feedbackEmail}
               onChange={(e) => setFeedbackEmail(e.detail.value)}
               placeholder="you@example.com"
+              autoComplete
             />
           </FormField>
 
-          <FormField label="Note to Developer">
+          <FormField label="Note to Developer" info="Required">
             <Textarea
               value={feedbackNote}
               onChange={(e) => setFeedbackNote(e.detail.value)}
