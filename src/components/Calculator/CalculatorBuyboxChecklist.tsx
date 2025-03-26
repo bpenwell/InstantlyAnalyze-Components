@@ -129,7 +129,7 @@ export const CalculatorBuyboxChecklist: React.FC<IRentalCalculatorPageProps> = (
 
   return (
     <Container className="calculator-container">
-      <Header variant="h2">Key Deal Metrics</Header>
+      <Header variant="h2" description='Customizable "Good Deal" indicators'>Key Deal Metrics</Header>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <SpaceBetween direction="horizontal" size="l">
           {RULES.map((rule) => {
@@ -158,7 +158,7 @@ export const CalculatorBuyboxChecklist: React.FC<IRentalCalculatorPageProps> = (
                     />
                   ) : (
                     // When not editing, simply show the threshold value.
-                    <Box>{`Good Deal >= ${rule.displayFn(currentThreshold)}`}</Box>
+                    <Box>{`Must be >= ${rule.displayFn(currentThreshold)}`}</Box>
                   )}
                 </Box>
               </Box>
