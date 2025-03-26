@@ -19,6 +19,7 @@ import {
   SpaceBetween,
   StatusIndicator,
   Button,
+  Link,
 } from '@cloudscape-design/components';
 import { useAppContext } from '../../utils/AppContextProvider';
 
@@ -26,7 +27,11 @@ import { useAppContext } from '../../utils/AppContextProvider';
 const RULES = [
   {
     key: 'cocROI',
-    label: 'CoC ROI',
+    label: (
+      <Link href="https://www.investopedia.com/terms/c/cashoncashreturn.asp" external>
+        CoC ROI
+      </Link>
+    ),
     valueType: 'percent',
     calculate: (calcUtils: CalculationUtils, data: IRentalCalculatorData) =>
       calcUtils.calculateCoCROI(data),
@@ -38,7 +43,11 @@ const RULES = [
   },
   {
     key: 'capRate',
-    label: 'Going In Cap Rate',
+    label: (
+      <Link href="https://www.investopedia.com/terms/c/capitalizationrate.asp" external>
+        Going In Cap Rate
+      </Link>
+    ),
     valueType: 'percent',
     calculate: (calcUtils: CalculationUtils, data: IRentalCalculatorData) =>
       calcUtils.calculateGoingInCapRate(data),
@@ -50,7 +59,11 @@ const RULES = [
   },
   {
     key: 'rentToPriceRatio',
-    label: '1% Rule',
+    label: (
+      <Link href="https://www.investopedia.com/terms/o/one-percent-rule.asp" external>
+        1% Rule
+      </Link>
+    ),
     valueType: 'percent',
     calculate: (calcUtils: CalculationUtils, data: IRentalCalculatorData) =>
       (data.rentalIncome.grossMonthlyIncome / data.purchaseDetails.purchasePrice) * 100,
@@ -62,7 +75,11 @@ const RULES = [
   },
   {
     key: 'cashFlow',
-    label: '50% Rule',
+    label: (
+      <Link href="https://smartasset.com/investing/50-rule-real-estate" external>
+        50% Rule
+      </Link>
+    ),
     valueType: 'currency',
     calculate: (calcUtils: CalculationUtils, data: IRentalCalculatorData) =>
       calcUtils.calculate50PercentRuleCashFlow(data),
