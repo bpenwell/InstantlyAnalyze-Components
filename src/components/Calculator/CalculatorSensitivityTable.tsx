@@ -544,7 +544,7 @@ export const CalculatorSensitivityTable: React.FC<IRentalCalculatorPageProps> = 
 
   return (
     <Container className="calculator-container">
-      <Header variant="h2">Deal Sensitivity</Header>
+      <Header variant="h2" description='Select 2 input variables and 1 output to get started'>Sensitivity Analysis</Header>
       <TextContent>
 
         {/* INPUT VARIABLE SELECTION */}

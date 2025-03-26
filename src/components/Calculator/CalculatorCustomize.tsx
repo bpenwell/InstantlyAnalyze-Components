@@ -250,7 +250,7 @@ export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props:
 
   return (
     <Container className="calculator-container">
-      <Header variant="h2">Customization</Header>
+      <Header variant="h2" description='Make sure your deal is resilient to a variety of scenarios  '>Customization</Header>
       <TextContent>
         <div className="graph-box">
           <div className="report-section">

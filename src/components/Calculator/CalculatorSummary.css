@@ -69,4 +69,12 @@
 .line-container {
     width: 50%;
     margin: 0 auto;
+    padding-bottom: 2rem; /* Ensure sufficient padding under the chart */
+}
+
+.center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem; /* Add spacing between the two objects */
 }

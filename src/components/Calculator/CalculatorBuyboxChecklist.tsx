@@ -50,7 +50,7 @@ const RULES = [
   },
   {
     key: 'rentToPriceRatio',
-    label: '1% Rule (Rent:Price Ratio)',
+    label: '1% Rule',
     valueType: 'percent',
     calculate: (calcUtils: CalculationUtils, data: IRentalCalculatorData) =>
       (data.rentalIncome.grossMonthlyIncome / data.purchaseDetails.purchasePrice) * 100,
@@ -62,7 +62,7 @@ const RULES = [
   },
   {
     key: 'cashFlow',
-    label: '50% Rule Cash Flow',
+    label: '50% Rule',
     valueType: 'currency',
     calculate: (calcUtils: CalculationUtils, data: IRentalCalculatorData) =>
       calcUtils.calculate50PercentRuleCashFlow(data),

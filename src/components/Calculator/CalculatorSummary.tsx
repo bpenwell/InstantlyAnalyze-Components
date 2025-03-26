@@ -83,7 +83,7 @@ export const CalculatorSummary: React.FC<ICalculatorSummary> = (props: ICalculat
 
   const income = calculationUtils.calculateRentalIncomePerMonth(currentYearData);
   const expenses = calculationUtils.calculateRentalTotalExpensePerMonth(currentYearData);
-  const monthlyCashFlow = income - expenses;
+  const monthlyNetCashFlow = income - expenses;
   const cashOnCashROI = calculationUtils.calculateCoCROI(currentYearData);
 
   const fiveYearOrLessYear =
@@ -100,21 +100,24 @@ export const CalculatorSummary: React.FC<ICalculatorSummary> = (props: ICalculat
   return (
     <Container /*header={<Header variant="h2">Cash Flow</Header>}*/>
       <SpaceBetween size="l">
+        <Box>
+          <TextContent>
+            <SpaceBetween size='s'>
+              <Header variant='h3' info=' | Includes all budgeting for variable + fixed expenses'>
+                Net Cash Flow
+              </Header>
+              <Box variant="strong" fontSize="display-l">
+                ${monthlyNetCashFlow.toFixed(0)} /mo
+              </Box>
+            </SpaceBetween>
+          </TextContent>
+        </Box>
         <div className="line-container">
           <CloudscapeLineChart {...summaryChartProps} />
         </div>
-        <Box>
-          <TextContent>
-            <h3>
-              {`Monthly Cash Flow${currentYear !== 0 ? ` (at year ${currentYear})` : ''}`}
-            </h3>
-            <Box variant="strong" fontSize="display-l">
-              ${monthlyCashFlow.toFixed(0)} /mo
-            </Box>
-          </TextContent>
-        </Box>
+        <Box padding={{ top: 'xxxl' }} /> {/* Add padding under the chart */}
         {/* Need space under the chart for legend */}
-        <SpaceBetween size="l"/>
+        <SpaceBetween size="xl"/>
         <SpaceBetween size="s"/>
         {/* Need space under the chart for legend */}
         <ColumnLayout columns={3} variant="text-grid">

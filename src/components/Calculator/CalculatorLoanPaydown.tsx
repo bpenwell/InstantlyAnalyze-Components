@@ -195,7 +195,7 @@ export const CalculatorLoanPaydown: React.FC<IRentalCalculatorPageProps> = (prop
   return (
     <SpaceBetween direction="vertical" size="l">
       {/* Chart Section */}
-      <Container header={<Header variant="h2">Loan Paydown</Header>}>
+      <Container header={<Header variant="h2" description='Understand your exit strategy'>Loan Paydown</Header>}>
         {/* Give the chart a fixed height */}
         <Box margin="l">
             <LineChart

@@ -64,7 +64,7 @@ export const CalculatorExpenses: React.FC<IRentalCalculatorPageProps> = (props: 
 
   return (
     <Container className="calculator-container">
-      <Header variant="h2">Expenses</Header>
+      <Header variant="h2" description='Visualize where your money is being spent'>Expenses</Header>
       <TextContent>
         <div className="expenses-content">
           {/* Pie Chart */}
