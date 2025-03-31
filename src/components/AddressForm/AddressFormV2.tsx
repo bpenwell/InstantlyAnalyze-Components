@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { AddressAutofill } from '@mapbox/search-js-react';
 import { v4 as uuidv4 } from 'uuid';
-import { BackendAPI, IRentcastPropertyData, MapboxFeatureCollection, PropertyAddress } from '@bpenwell/instantlyanalyze-module';
+import { BackendAPI, IRentalCalculatorData, IRentcastPropertyData, MapboxFeatureCollection, PropertyAddress } from '@bpenwell/instantlyanalyze-module';
 import { LoadingBar } from '../LoadingBar/LoadingBar';
 import { SpaceBetween } from '@cloudscape-design/components';
 
@@ -10,6 +10,8 @@ export type ReturnPropertyData = (addressData: IRentcastPropertyData) => void;
 interface AddressFormV2Props {
   onAddressSubmit: ReturnPropertyData;
   triggerAddressSubmit?: boolean;
+  setRentalData: (data: IRentalCalculatorData) => void;
+  rentalData: IRentalCalculatorData;
 }
 
 export const MAPBOX_KEY =
@@ -18,6 +20,8 @@ export const MAPBOX_KEY =
 export const AddressFormV2: React.FC<AddressFormV2Props> = ({
   onAddressSubmit,
   triggerAddressSubmit,
+  setRentalData,
+  rentalData,
 }) => {
   const [address, setAddress] = useState('');
   const [loading, setLoading] = useState(false);
@@ -37,11 +41,30 @@ export const AddressFormV2: React.FC<AddressFormV2Props> = ({
         };
         
         try {
-          const rentcastPropertyData: IRentcastPropertyData = await backendAPI.getPropertyInfoByAddress(address);
-          //Set locally in case we come back
-          setAddress(property.place_name);
-          //Push data up so it can update state
-          onAddressSubmit(rentcastPropertyData);
+          const rentcastPropertyData: IRentcastPropertyData | any = await backendAPI.getPropertyInfoByAddress(address);
+          if (rentcastPropertyData.error) {
+            //Set locally in case we come back
+            setAddress(property.place_name);
+            onAddressSubmit({
+              address: property.place_name,
+            });
+            setRentalData({
+              ...rentalData,
+              propertyInformation: {
+                city: address.city,
+                state: address.state,
+                streetAddress: address.streetAddress,
+                zipCode: address.zipCode,
+              },
+            })
+          }
+          else {
+            //Set locally in case we come back
+            setAddress(property.place_name);
+            //Push data up so it can update state
+            onAddressSubmit(rentcastPropertyData);
+          }
+
           //Remove loading bar
           setLoading(false);
         } catch (error) {
