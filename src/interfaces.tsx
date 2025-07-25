@@ -1,4 +1,4 @@
-import { IRentalCalculatorData } from "@bpenwell/instantlyanalyze-module";
+import { IRentalCalculatorData } from "@ben1000240/instantlyanalyze-module";
 
 export interface IRentalCalculatorPageProps {
     currentYear: number;

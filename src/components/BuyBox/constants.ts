@@ -1,6 +1,6 @@
 // buyboxOptions.ts
-import { ZillowAggregatedDataItem } from "@bpenwell/instantlyanalyze-module";
-import { BuyboxOption, FilterInstance, InputType } from "@bpenwell/instantlyanalyze-module";
+import { ZillowAggregatedDataItem } from "@ben1000240/instantlyanalyze-module";
+import { BuyboxOption, FilterInstance, InputType } from "@ben1000240/instantlyanalyze-module";
 
 export const BUYBOX_OPTIONS: BuyboxOption[] = [
   {

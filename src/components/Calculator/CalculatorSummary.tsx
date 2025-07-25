@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { IRentalCalculatorPageProps } from '../../interfaces';
-import { CalculationUtils, displayAsMoney, displayAsPercent, IRentalCalculatorData } from '@bpenwell/instantlyanalyze-module';
+import { CalculationUtils, displayAsMoney, displayAsPercent, IRentalCalculatorData } from '@ben1000240/instantlyanalyze-module';
 import {
   Container,
   Header,

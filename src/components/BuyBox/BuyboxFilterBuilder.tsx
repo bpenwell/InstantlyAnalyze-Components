@@ -6,13 +6,18 @@ import {
   Button,
   Modal,
   Input,
-  ButtonGroup
+  ButtonGroup,
+  NonCancelableCustomEvent
 } from "@cloudscape-design/components";
 import { CustomDropdown } from "./CustomDropdown";
 import { BuyboxFilter } from "./BuyboxFilter";
 import { BUYBOX_OPTIONS } from "./constants";
-import { BuyboxOption, FilterInstance, InputType, IZillowBuyboxSet } from "@bpenwell/instantlyanalyze-module";
+import { BuyboxOption, FilterInstance, InputType, IZillowBuyboxSet, FilterToken } from "@ben1000240/instantlyanalyze-module";
 import { useAppContext } from "../../utils/AppContextProvider";
+
+interface ItemClickDetails {
+  id: string;
+}
 
 interface BuyboxFilterBuilderProps {
   setSelectedBuyboxFilters: (validFilters: FilterInstance[]) => void;
@@ -43,7 +48,7 @@ export const BuyboxFilterBuilder: React.FC<BuyboxFilterBuilderProps> = ({
       removedInputs: [],
     };
 
-    option.tokens.forEach((token, index) => {
+    option.tokens.forEach((token: FilterToken, index: number) => {
       if (token.type === "input" && token.defaultValue !== undefined) {
         newFilter.inputs[index] = token.defaultValue.toString();
       }
@@ -77,7 +82,7 @@ export const BuyboxFilterBuilder: React.FC<BuyboxFilterBuilderProps> = ({
   // Memoize the validFilters array to prevent unnecessary re-renders.
   const validFilters = useMemo(() => {
     return filters.filter((filter) =>
-      filter.option.tokens.every((token, index) => {
+      filter.option.tokens.every((token: FilterToken, index: number) => {
         if (token.type === "input" && !filter.removedInputs.includes(index)) {
           const value = filter.inputs[index];
           if (!value || value.trim() === "") return false;
@@ -135,7 +140,7 @@ export const BuyboxFilterBuilder: React.FC<BuyboxFilterBuilderProps> = ({
 
   const setAlreadyExists = buyBoxSets.some((set: IZillowBuyboxSet) => {
     if (set.filters.length !== validFilters.length) return false;
-    return set.filters.every((filter, index) => filter === validFilters[index]);
+    return set.filters.every((filter: FilterInstance, index: number) => filter === validFilters[index]);
   });
 
   return (
@@ -152,8 +157,8 @@ export const BuyboxFilterBuilder: React.FC<BuyboxFilterBuilderProps> = ({
                   {set.name}
                 </Button>
                 <ButtonGroup
-                  onItemClick={({ detail }) =>
-                    ["remove"].includes(detail.id) && handleDeleteSet(index)
+                  onItemClick={(event: NonCancelableCustomEvent<ItemClickDetails>) =>
+                    ["remove"].includes(event.detail.id) && handleDeleteSet(index)
                   }
                   ariaLabel="Set actions"
                   items={[
@@ -219,7 +224,7 @@ export const BuyboxFilterBuilder: React.FC<BuyboxFilterBuilderProps> = ({
             {validFilters.map((filter) => (
               <li key={filter.instanceId}>
                 {filter.option.tokens
-                  .map((token, index) =>
+                  .map((token: FilterToken, index: number) =>
                     token.type === "text" ? token.text : `[${filter.inputs[index]}]`
                   )
                   .join("")}

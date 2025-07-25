@@ -11,21 +11,24 @@ export { ErrorBoundary } from './utils/ErrorBoundary';
 export { CalculatorTitle } from './components/Calculator/CalculatorTitle';
 export { CalculatorExpenses } from './components/Calculator/CalculatorExpenses';
 export { CalculatorHeader } from './components/Calculator/CalculatorHeader';
-export { CalculatorUpdate, ICalculatorUpdateProps } from './components/Calculator/CalculatorUpdate';
-export { CalculatorSummary, ICalculatorSummary } from './components/Calculator/CalculatorSummary';
+export { CalculatorUpdate } from './components/Calculator/CalculatorUpdate';
+export type { ICalculatorUpdateProps } from './components/Calculator/CalculatorUpdate';
+export { CalculatorSummary } from './components/Calculator/CalculatorSummary';
+export type { ICalculatorSummary } from './components/Calculator/CalculatorSummary';
 export { CalculatorCustomize } from './components/Calculator/CalculatorCustomize';
 export { Asterisk } from './components/Asterisk/Asterisk';
 export { CalculatorSensitivityTable } from './components/Calculator/CalculatorSensitivityTable';
-export { LoadingBar, ILoadingProps } from './components/LoadingBar/LoadingBar';
+export { LoadingBar } from './components/LoadingBar/LoadingBar';
 export { CalculatorBuyboxChecklist } from './components/Calculator/CalculatorBuyboxChecklist';
 export { CalculatorLoanPaydown } from './components/Calculator/CalculatorLoanPaydown';
 export { TermsOfUse } from './components/Footer/TermsOfUse';
 export { Separator } from './components/Separator/Separator';
-export { ImageUploadContainer, IImageUploadContainerProps } from './components/ImageUploadContainer/ImageUploadContainer';
+export { ImageUploadContainer } from './components/ImageUploadContainer/ImageUploadContainer';
+export type { IImageUploadContainerProps } from './components/ImageUploadContainer/ImageUploadContainer';
 export { AddressForm } from './components/AddressForm/AddressForm';
 export { AddressFormV2, MAPBOX_KEY } from './components/AddressForm/AddressFormV2';
 export { Dropdown } from './components/Dropdown/Dropdown';
-export { AppLayoutPreview, IAppLayoutPreview } from './components/AppLayout/AppLayout';
+export { AppLayoutPreview } from './components/AppLayout/AppLayout';
 export {
     FullPageHeader,
     TableEmptyState,
@@ -40,7 +43,7 @@ export { AppContextProvider, useAppContext } from './utils/AppContextProvider';
 export { Cards } from './components/Cards/Cards';
 export { CardItem } from './components/Cards/CardItem';
 export { HeroSection } from './components/HeroSection/HeroSection';
-export { FreeTrialBanner, BannerType, IRemainingFreeBannerProps } from './components/FreeTrialBanner/FreeTrialBanner';
+export { FreeTrialBanner, BannerType } from './components/FreeTrialBanner/FreeTrialBanner';
 export { BuyboxFilterBuilder } from './components/BuyBox/BuyboxFilterBuilder';
 export {
     evaluateBuyboxFilter,

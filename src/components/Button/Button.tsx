@@ -53,7 +53,7 @@ export const Button = ({
     >
       <div className="button-content">
         {loading ? (
-          <div className="loading-spinner"></div> // Render loading spinner if loading
+          <div className="loading-spinner" data-testid="loading-spinner"></div> // Render loading spinner if loading
         ) : (
           label
         )}

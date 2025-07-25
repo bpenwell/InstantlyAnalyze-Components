@@ -8,8 +8,10 @@ import {
   Button,
   StatusIndicator,
   Box,
+  SelectProps,
+  NonCancelableCustomEvent
 } from "@cloudscape-design/components";
-import { FilterInstance, InputType } from "@bpenwell/instantlyanalyze-module";
+import { FilterInstance, InputType, FilterToken } from "@ben1000240/instantlyanalyze-module";
 
 const operationOptions = [
   { label: "<", value: "<" },
@@ -27,7 +29,7 @@ export const BuyboxFilter: React.FC<{
   onRemoveFilter,
 }) => {
   // Determine validity
-  const isValid = filter.option.tokens.every((token, idx) => {
+  const isValid = filter.option.tokens.every((token: FilterToken, idx: number) => {
     if (token.type === "input" && !filter.removedInputs.includes(idx)) {
       const value = filter.inputs[idx];
       if (!value || value.trim() === "") return false;
@@ -61,7 +63,7 @@ export const BuyboxFilter: React.FC<{
             ) : (
               <StatusIndicator type="error">Invalid</StatusIndicator>
             )}
-            {filter.option.tokens.map((token, index) => {
+            {filter.option.tokens.map((token: FilterToken, index: number) => {
               if (token.type === "text") {
                 return <div key={index}>{token.text}</div>;
               }
@@ -71,9 +73,8 @@ export const BuyboxFilter: React.FC<{
 
                 if (token.inputType === InputType.NUMBER_INPUT) {
                   return (
-                    <Box >
+                    <Box key={index}>
                       <Input
-                        key={index}
                         type="number"
                         value={filter.inputs[index] || ""}
                         onChange={(e) =>
@@ -93,13 +94,12 @@ export const BuyboxFilter: React.FC<{
                         value: filter.inputs[index] || "",
                       }}
                       options={operationOptions}
-                      onChange={(e: any) =>
-                        onInputChange(
-                          filter.instanceId,
-                          index,
-                          e.detail.selectedOption.value
-                        )
-                      }
+                      onChange={(e: NonCancelableCustomEvent<SelectProps.ChangeDetail>) => {
+                        const value = e.detail.selectedOption.value;
+                        if (value) {
+                          onInputChange(filter.instanceId, index, value);
+                        }
+                      }}
                     />
                   );
                 }

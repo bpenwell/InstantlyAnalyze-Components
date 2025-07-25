@@ -6,7 +6,7 @@ import {
   PropertyAddress,
   USState,
   IRentcastPropertyData,
-} from '@bpenwell/instantlyanalyze-module';
+} from '@ben1000240/instantlyanalyze-module';
 import { Button } from '../Button/Button';
 import './AddressForm.css';
 import { LoadingBar } from '../LoadingBar/LoadingBar';

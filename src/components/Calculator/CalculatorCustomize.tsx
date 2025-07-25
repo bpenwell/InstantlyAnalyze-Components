@@ -25,7 +25,7 @@ import {
   displayAsPercent,
   Percentage,
   ValueType,
-} from '@bpenwell/instantlyanalyze-module';
+} from '@ben1000240/instantlyanalyze-module';
 // Import Cloudscape components and types
 import {
   Container,

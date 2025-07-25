@@ -6,7 +6,7 @@ import {
   BackendAPI,
   PAGE_PATH,
   RedirectAPI,
-} from "@bpenwell/instantlyanalyze-module";
+} from "@ben1000240/instantlyanalyze-module";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useAppContext } from "../../utils/AppContextProvider";
 import { Avatar, Menu, MenuItem } from "@mui/material";

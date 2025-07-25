@@ -1,10 +1,10 @@
 import React, { useRef } from 'react';
 import { useMemo } from 'react';
-import { PAGE_PATH, RedirectAPI } from '@bpenwell/instantlyanalyze-module';
+import { PAGE_PATH, RedirectAPI } from '@ben1000240/instantlyanalyze-module';
 import { Box, Button, Header, HeaderProps, SpaceBetween, Alert } from '@cloudscape-design/components';
 import { DeleteWithConfirmation, Item } from '../DeleteWithConfirmation/DeleteWithConfirmation';
 import { useAppContext } from '../../utils/AppContextProvider';
-import { useLocalStorage } from '@bpenwell/instantlyanalyze-module';
+import { useLocalStorage } from '@ben1000240/instantlyanalyze-module';
 
 export const TableNoMatchState = ({ onClearFilter }: { onClearFilter: () => void }) => (
     <Box margin={{ vertical: 'xs' }} textAlign="center" color="inherit">

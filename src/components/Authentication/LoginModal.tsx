@@ -7,7 +7,7 @@ import {
   TextContent,
 } from '@cloudscape-design/components';
 import { Mode } from '@cloudscape-design/global-styles';
-import { LOCAL_STORAGE_KEYS, useLocalStorage } from '@bpenwell/instantlyanalyze-module';
+import { LOCAL_STORAGE_KEYS, useLocalStorage } from '@ben1000240/instantlyanalyze-module';
 import { useAppContext } from '../../utils/AppContextProvider';
 import './LoginModal.css';
 

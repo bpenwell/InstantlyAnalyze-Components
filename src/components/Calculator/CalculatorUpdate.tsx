@@ -3,7 +3,7 @@ import {
     IRentalCalculatorData,
     BackendAPI,
     RedirectAPI,
-} from '@bpenwell/instantlyanalyze-module';
+} from '@ben1000240/instantlyanalyze-module';
 import './CalculatorUpdate.css'; 
 import { Button } from '@cloudscape-design/components';
 import { useAuth0 } from '@auth0/auth0-react';

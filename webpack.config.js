@@ -37,7 +37,8 @@ module.exports = {
     externals: {
       react: 'react',
       'react-dom': 'react-dom',
-      '@bpenwell/instantlyanalyze-module': '@bpenwell/instantlyanalyze-module',
+      'react/jsx-runtime': 'react/jsx-runtime',
+      '@ben1000240/instantlyanalyze-module': '@ben1000240/instantlyanalyze-module',
       '@auth0/auth0-react': '@auth0/auth0-react',
       '@mapbox/search-js-react': '@mapbox/search-js-react',
       '@cloudscape-design/global-styles': '@cloudscape-design/global-styles',

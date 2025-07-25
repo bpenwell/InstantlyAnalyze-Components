@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, StatusIndicator } from '@cloudscape-design/components';
-import { UserStatus } from '@bpenwell/instantlyanalyze-module';
+import { UserStatus } from '@ben1000240/instantlyanalyze-module';
 
 interface AccountStatusProps {
   status: UserStatus;

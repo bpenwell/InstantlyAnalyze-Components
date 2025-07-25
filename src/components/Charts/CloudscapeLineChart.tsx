@@ -5,7 +5,7 @@ import {
   LineChart,
   MixedLineBarChartProps,
 } from '@cloudscape-design/components';
-import { displayAsMoney } from '@bpenwell/instantlyanalyze-module';
+import { displayAsMoney } from '@ben1000240/instantlyanalyze-module';
 
 export interface ILineChartDataset {
   label: string;

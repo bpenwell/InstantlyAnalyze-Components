@@ -8,7 +8,7 @@ import {
   IRentalReportBuybox,
   parseCurrencyStringToNumber,
   parsePercentageStringToNumber,
-} from '@bpenwell/instantlyanalyze-module';
+} from '@ben1000240/instantlyanalyze-module';
 import {
   Input,
 } from '../Input/Input';

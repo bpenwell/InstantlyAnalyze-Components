@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './HeaderV2.css';
-import { PAGE_PATH, RedirectAPI } from '@bpenwell/instantlyanalyze-module';
+import { PAGE_PATH, RedirectAPI } from '@ben1000240/instantlyanalyze-module';
 import { Button } from '@cloudscape-design/components';
 export const HeaderV2 = () => {
   const [click, setClick] = useState(false);

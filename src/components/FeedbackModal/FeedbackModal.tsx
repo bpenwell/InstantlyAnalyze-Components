@@ -13,7 +13,7 @@ import {
 } from '@cloudscape-design/components';
 import { useAuth0 } from '@auth0/auth0-react';
 import { LensTwoTone } from '@mui/icons-material';
-import { BackendAPI, FeedbackType } from '@bpenwell/instantlyanalyze-module';
+import { BackendAPI, FeedbackType } from '@ben1000240/instantlyanalyze-module';
 
 export const FeedbackModal = () => {
   const backendAPI: BackendAPI = new BackendAPI();

@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { AddressAutofill } from '@mapbox/search-js-react';
 import { v4 as uuidv4 } from 'uuid';
-import { BackendAPI, IRentalCalculatorData, IRentcastPropertyData, MapboxFeatureCollection, PropertyAddress } from '@bpenwell/instantlyanalyze-module';
+import { BackendAPI, IRentalCalculatorData, IRentcastPropertyData, MapboxFeatureCollection, PropertyAddress } from '@ben1000240/instantlyanalyze-module';
 import { LoadingBar } from '../LoadingBar/LoadingBar';
 import { SpaceBetween } from '@cloudscape-design/components';
 
