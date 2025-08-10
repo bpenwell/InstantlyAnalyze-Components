@@ -3,11 +3,11 @@ import './Cards.css';
 import { CardItem } from './CardItem';
 export const Cards = () => {
   return (
-    <div className='cards'>
+    <div className='cards' data-testid='cards'>
       <h1>Check out these EPIC Destinations!</h1>
-      <div className='cards__container'>
-        <div className='cards__wrapper'>
-          <ul className='cards__items'>
+      <div className='cards__container' data-testid='cards-container'>
+        <div className='cards__wrapper' data-testid='cards-wrapper'>
+          <ul className='cards__items' data-testid='cards-items'>
             <CardItem
               src='public/home/img-9.jpg'
               text='Explore the hidden waterfall deep inside the Amazon Jungle'
@@ -21,7 +21,7 @@ export const Cards = () => {
               path='/services'
             />
           </ul>
-          <ul className='cards__items'>
+          <ul className='cards__items' data-testid='cards-items'>
             <CardItem
               src='public/home/img-3.jpg'
               text='Set Sail in the Atlantic Ocean visiting Uncharted Waters'

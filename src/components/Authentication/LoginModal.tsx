@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth0 } from "@auth0/auth0-react";
 import {
   Button,
@@ -21,6 +21,13 @@ export const LoginModal = (props: ILoginModalProps) => {
   const { getAppMode } = useAppContext();
   const appMode = getAppMode();
   const [showModal, setShowModal] = useState(true); // Control modal visibility
+
+  // Close modal when user becomes authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      setShowModal(false);
+    }
+  }, [isAuthenticated]);
 
   const handleLogin = async () => {
     console.log('handleLogin');

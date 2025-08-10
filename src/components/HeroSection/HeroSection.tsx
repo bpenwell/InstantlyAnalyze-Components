@@ -4,8 +4,8 @@ import './HeroSection.css';
 
 export const HeroSection = () => {
   return (
-    <div className='hero-container'>
-      <video src='https://www.instantlyanalyze.com/public/home/homeVideo.mp4' autoPlay loop muted />
+    <div className='hero-container' data-testid='hero-container'>
+      <video src='https://www.instantlyanalyze.com/public/home/homeVideo.mp4' autoPlay loop muted={true} />
       <h1>ADVENTURE AWAITS</h1>
       <p>What are you waiting for?</p>
       <div className='hero-btns'>

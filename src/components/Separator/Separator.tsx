@@ -7,8 +7,8 @@ interface SeparatorProps {
 
 export const Separator: React.FC<SeparatorProps> = ({ width = 60 }) => {
     return (
-        <div className="separator-container">
-            <div className="separator" style={{ width: `${width}%` }}></div>
+        <div className="separator-container" data-testid="separator-container">
+            <div className="separator" data-testid="separator-line" style={{ width: `${width}%` }}></div>
         </div>
     );
 };

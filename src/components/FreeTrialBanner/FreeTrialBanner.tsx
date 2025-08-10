@@ -33,11 +33,12 @@ const { isUserLoading, isPaidMember, getRemainingFreeRentalReports, getRemaining
         default:
             throw Error(`Invalid BannerType: ${bannerType}`);
     }
-    if (remainingTrialProductUsages === null) {
-    return null;
+    
+    const remainingFreeTrialUses = remainingTrialProductUsages();
+    if (remainingFreeTrialUses === null) {
+        return null;
     }
 
-    const remainingFreeTrialUses = remainingTrialProductUsages();
     const bannerText = (
     <>
         You have <strong>{remainingFreeTrialUses}</strong> more free {bannerType} under the free tier. 

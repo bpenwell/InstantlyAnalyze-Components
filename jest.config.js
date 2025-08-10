@@ -10,10 +10,13 @@ module.exports = {
     '^.+\\.(ts|tsx)$': 'ts-jest',
     '^.+\\.(js|jsx)$': 'babel-jest'
   },
+  transformIgnorePatterns: [
+    "/node_modules/(?!@cloudscape-design).+\\.js$",
+  ],
   testPathIgnorePatterns: [
     '<rootDir>/dist/',
     '<rootDir>/node_modules/',
-    '<rootDir>/src/**/__tests__/'
+    '<rootDir>/src/.*/__tests__/'
   ],
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',

@@ -24,6 +24,6 @@
       "@ben1000240/instantlyanalyze-module": ["../InstantlyAnalyze-Module/src"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "tst/**/*"],
   "exclude": ["node_modules", "dist"]
 }

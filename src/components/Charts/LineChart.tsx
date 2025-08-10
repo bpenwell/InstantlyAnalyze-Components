@@ -39,7 +39,7 @@ export interface ILineChartProps {
 }
 
 const LineChart: React.FC<ILineChartProps> = (props) => {
-  const { datasets, labels, onPointClick, interactive = true, compressData = true, addCommas = false, decimalCount = 0 } = props;
+  const { datasets, labels, onPointClick, interactive = true, compressData = true, addCommas = false, decimalCount = 0, title } = props;
   const chartRef = useRef<any>(null);
   const [activeAnnotationId, setActiveAnnotationId] = useState<string | null>(null);
   let minY = Infinity;
@@ -131,16 +131,24 @@ const LineChart: React.FC<ILineChartProps> = (props) => {
 
   const options: ChartOptions<'line'> = {
     responsive: true,
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
+    interaction: {
+      mode: 'nearest',
+      intersect: false,
+    },
     plugins: {
       legend: {
         display: false,
       },
       title: {
-        display: false,
+        display: !!title,
+        text: title,
       },
       tooltip: {
         enabled: interactive,
+      },
+      annotation: {
+        annotations: {},
       },
     },
     scales: {

@@ -116,8 +116,14 @@ export const Input = (props: InputProps) => {
     rawInputValue = parts.join('.');
     const currentCaretPosition = (inputElement as any).selectionStart || 0; // Save the current caret position
 
-    let newValue = '';
-    if (type === 'percent') {
+    let newValue: any = '';
+    if (type === 'checkbox') {
+      // For checkboxes, use the checked property instead of value
+      const checkboxElement = inputElement as HTMLInputElement;
+      newValue = checkboxElement.checked;
+      onChange(newValue);
+      return;
+    } else if (type === 'percent') {
       // Check if the value is within the allowed range
       const numericValue = parseFloat(rawInputValue);
       if (numericValue > MAX_PERCENT_VALUE || numericValue < MIN_PERCENT_VALUE) {

@@ -15,15 +15,21 @@ export interface ICalculatorUpdateProps {
 
 export const CalculatorUpdate: React.FC<ICalculatorUpdateProps> = ({ reportId, initialRentalReportData }) => {
     const [formData, setFormData] = useState<IRentalCalculatorData>(initialRentalReportData);
+    const [originalData] = useState<IRentalCalculatorData>(initialRentalReportData); // Track original data
     const [isModified, setIsModified] = useState(false);
     const backendAPI = new BackendAPI();
     const redirectAPI = new RedirectAPI();
     const { user } = useAuth0();
     
+    // Sync formData with prop changes
     useEffect(() => {
-        // Compare initial data with current formData to determine if modifications have been made
-        setIsModified(JSON.stringify(formData) !== JSON.stringify(initialRentalReportData));
-    }, [formData, initialRentalReportData]);
+        setFormData(initialRentalReportData);
+    }, [initialRentalReportData]);
+    
+    useEffect(() => {
+        // Compare current formData with the original data to determine if modifications have been made
+        setIsModified(JSON.stringify(formData) !== JSON.stringify(originalData));
+    }, [formData, originalData]);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;

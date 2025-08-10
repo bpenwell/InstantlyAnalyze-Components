@@ -15,7 +15,7 @@ export const ManualRefresh = (props: IManualRefresh) => {
       <SpaceBetween data-testid="manual-refresh" direction="horizontal" size="xs" alignItems="center">
         {lastRefresh && (
           <Box variant="p" fontSize="body-s" padding="n" color="text-status-inactive" textAlign="right">
-            <span aria-live="polite" aria-atomic="true">
+            <span role="log" aria-live="polite" aria-atomic="true">
               Last updated
               <br />
               {formatDate(lastRefresh, "MMMM d, yyyy, HH:mm ('UTC'xxx)")}

@@ -32,6 +32,7 @@ export const CalculatorHeader: React.FC<ICalculatorSummary> = ({
   };
 
   const [reportData, setReportData] = useState<IRentalCalculatorData>(initialRentalReportData);
+  const [originalReportData] = useState<IRentalCalculatorData>(initialRentalReportData); // Track original data
   const [isModified, setIsModified] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [shareableLink, setShareableLink] = useState(getShareableReportLink(initialRentalReportData.isShareable));
@@ -40,15 +41,20 @@ export const CalculatorHeader: React.FC<ICalculatorSummary> = ({
   const { user } = useAuth0();
   const isSharePage = window.location.href.includes('share/');
 
+  // Sync reportData with prop changes
   useEffect(() => {
-      // Compare initial data with current formData to determine if modifications have been made
-      setIsModified(JSON.stringify(reportData) !== JSON.stringify(initialRentalReportData));
-  }, [reportData, initialRentalReportData]);
+    setReportData(initialRentalReportData);
+  }, [initialRentalReportData]);
+
+  useEffect(() => {
+      // Compare reportData with the original data to determine if modifications have been made
+      setIsModified(JSON.stringify(reportData) !== JSON.stringify(originalReportData));
+  }, [reportData, originalReportData]);
   
   const handleSave = async () => {
     try {
       console.debug(`[DEBUG] initialData ${printObjectFields(reportData)}`);
-      await backendAPI.saveUpdatedRentalReport(reportId, initialRentalReportData, true, user?.sub);
+      await backendAPI.saveUpdatedRentalReport(reportId, reportData, true, user?.sub);
       alert('Report saved successfully.');
       setIsModified(false);
     } catch (error) {

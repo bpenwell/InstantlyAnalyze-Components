@@ -26,6 +26,17 @@ export const DeleteWithConfirmation = forwardRef<{
   //Singular wording
   const itemNameToDisplay = itemType ? itemType : 'item';
 
+  // Pluralization function
+  const pluralize = (word: string): string => {
+    if (word.endsWith('y')) {
+      return word.slice(0, -1) + 'ies';
+    }
+    if (word.endsWith('s') || word.endsWith('sh') || word.endsWith('ch') || word.endsWith('x') || word.endsWith('z')) {
+      return word + 'es';
+    }
+    return word + 's';
+  };
+
   const isMultiple = itemsToDelete.length > 1;
 
   useImperativeHandle(ref, () => ({
@@ -69,7 +80,7 @@ export const DeleteWithConfirmation = forwardRef<{
           <Box variant="span">
             Are you sure you want to delete{' '}
             <Box variant="span" fontWeight="bold">
-              {itemsToDelete.length} {itemNameToDisplay}s
+              {itemsToDelete.length} {pluralize(itemNameToDisplay)}
             </Box>
             ? This action cannot be undone.
           </Box>
