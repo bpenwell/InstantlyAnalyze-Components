@@ -20,9 +20,7 @@
     "test": "jest",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist package-lock.json",
-    "prepublishOnly": "npm run build:prod",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "prepublishOnly": "npm run build:prod"
   },
   "author": "bpenwell",
   "license": "ISC",

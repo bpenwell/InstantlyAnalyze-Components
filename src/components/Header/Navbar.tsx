@@ -164,8 +164,11 @@ function FullNavbar() {
       <header className="flex justify-center bg-[#ffffff] dark:bg-[#161D26] py-4" style={bg}>
         <nav
           aria-label="Global"
-          style={{ backdropFilter: "blur(3px)", backgroundColor: "rgb(59 130 246 / 0.5)" }}
-          className={navbarClasses}
+          style={{ 
+            backdropFilter: "blur(3px)", 
+            backgroundColor: "rgb(59 130 246 / 0.5)"
+          }}
+          className={`${navbarClasses} ${appMode === Mode.Dark ? 'dark:bg-gray-800/50' : 'bg-white/80'}`}
         >
           {/* Top row: logo, desktop nav items, profile, mobile menu */}
           <div className="flex items-center justify-between px-4 h-full">
@@ -475,7 +478,10 @@ const ThinNavbar = () => {
         translate-y-[${translateY}px]
         text-gray-900 dark:text-white
       `}
-      style={{ backgroundColor: "rgb(59 130 246 / 0.5)" }}
+      style={{ 
+        backgroundColor: appMode === Mode.Dark ? "#161D26" : "#ffffff",
+        backgroundImage: "linear-gradient(rgba(59, 130, 246, 0.5), rgba(59, 130, 246, 0.5))"
+      }}
     >
       <nav
         aria-label="Global"
