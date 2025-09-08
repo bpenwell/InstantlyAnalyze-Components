@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { FeedbackModal } from '../../../src/components/FeedbackModal/FeedbackModal';
-import { BackendAPI, FeedbackType } from '@ben1000240/instantlyanalyze-module';
+import { BackendAPI, FeedbackType } from '@bpenwell/instantlyanalyze-module';
 
 // Mock dependencies
 jest.mock('@auth0/auth0-react', () => ({
@@ -17,8 +17,8 @@ jest.mock('@auth0/auth0-react', () => ({
 
 const mockSendFeedbackEmail = jest.fn();
 
-jest.mock('@ben1000240/instantlyanalyze-module', () => ({
-  ...jest.requireActual('@ben1000240/instantlyanalyze-module'),
+jest.mock('@bpenwell/instantlyanalyze-module', () => ({
+  ...jest.requireActual('@bpenwell/instantlyanalyze-module'),
   BackendAPI: jest.fn().mockImplementation(() => ({
     sendFeedbackEmail: mockSendFeedbackEmail,
   })),

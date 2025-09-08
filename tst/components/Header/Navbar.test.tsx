@@ -18,7 +18,7 @@ jest.mock('../../../src/utils/AppContextProvider', () => ({
     setAppMode: jest.fn(),
   }),
 }));
-jest.mock('@ben1000240/instantlyanalyze-module', () => ({
+jest.mock('@bpenwell/instantlyanalyze-module', () => ({
   BackendAPI: jest.fn(),
   PAGE_PATH: { HOME: '/', SUBSCRIBE: '/subscribe', PROFILE: '/profile' },
   RedirectAPI: jest.fn(() => ({ createRedirectUrl: (path: string) => path })),

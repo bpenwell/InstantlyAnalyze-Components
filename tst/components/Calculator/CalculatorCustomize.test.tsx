@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { CalculatorCustomize } from '../../../src/components/Calculator/CalculatorCustomize';
 
 // Mock dependencies
-jest.mock('@ben1000240/instantlyanalyze-module', () => ({
+jest.mock('@bpenwell/instantlyanalyze-module', () => ({
   CalculationUtils: jest.fn(() => ({
     calculateTotalCashNeeded: jest.fn(() => 10000),
     calculateCapitalExpenditureAbsoluteValue: jest.fn(),

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { IRentalCalculatorPageProps } from '../../interfaces';
 import './CalculatorExpenses.scss';
 import '../Charts/Chart.css';
-import { CalculationUtils, Frequency } from '@ben1000240/instantlyanalyze-module';
+import { CalculationUtils, Frequency } from '@bpenwell/instantlyanalyze-module';
 import { CloudscapePieChart } from '../Charts/PieChart';
 import { Container, Header, TextContent } from '@cloudscape-design/components';
 

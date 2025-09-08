@@ -8,7 +8,7 @@ const mockCalculateGoingInCapRate = jest.fn().mockReturnValue(8.2);
 const mockCalculate50PercentRuleCashFlow = jest.fn().mockReturnValue(500);
 
 // Mock the module BEFORE importing the component
-jest.mock('@ben1000240/instantlyanalyze-module', () => ({
+jest.mock('@bpenwell/instantlyanalyze-module', () => ({
   CalculationUtils: jest.fn().mockImplementation(() => ({
     calculateCoCROI: mockCalculateCoCROI,
     calculateGoingInCapRate: mockCalculateGoingInCapRate,
@@ -68,7 +68,7 @@ import { CalculatorBuyboxChecklist } from '../../../src/components/Calculator/Ca
 
 describe('CalculatorBuyboxChecklist', () => {
   const mockUseAppContext = require('../../../src/utils/AppContextProvider').useAppContext;
-  const mockCalculationUtils = require('@ben1000240/instantlyanalyze-module').CalculationUtils;
+  const mockCalculationUtils = require('@bpenwell/instantlyanalyze-module').CalculationUtils;
 
   const mockProps = {
     currentYear: 2024,

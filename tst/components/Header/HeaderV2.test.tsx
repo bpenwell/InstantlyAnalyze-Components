@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { HeaderV2 } from '../../../src/components/Header/HeaderV2';
 
 // Mock dependencies
-jest.mock('@ben1000240/instantlyanalyze-module', () => ({
+jest.mock('@bpenwell/instantlyanalyze-module', () => ({
   PAGE_PATH: {
     HOME: '/',
     RENTAL_CALCULATOR_HOME: '/rental-calculator',

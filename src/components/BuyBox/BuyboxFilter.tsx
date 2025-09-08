@@ -11,7 +11,7 @@ import {
   SelectProps,
   NonCancelableCustomEvent
 } from "@cloudscape-design/components";
-import { FilterInstance, InputType, FilterToken } from "@ben1000240/instantlyanalyze-module";
+import { FilterInstance, InputType, FilterToken } from "@bpenwell/instantlyanalyze-module";
 
 const operationOptions = [
   { label: "<", value: "<" },

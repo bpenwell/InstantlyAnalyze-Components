@@ -1,6 +1,6 @@
 import React from "react";
 import { Select, SelectProps } from "@cloudscape-design/components";
-import { BuyboxOption, InputType } from "@ben1000240/instantlyanalyze-module";
+import { BuyboxOption, InputType } from "@bpenwell/instantlyanalyze-module";
 
 export const CustomDropdown: React.FC<{
   options: BuyboxOption[];

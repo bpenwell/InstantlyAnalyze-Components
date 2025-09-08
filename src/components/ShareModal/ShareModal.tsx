@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Checkbox, Input, SpaceBetween, CopyToClipboard, Alert } from '@cloudscape-design/components';
-import { BackendAPI, IRentalCalculatorData } from '@ben1000240/instantlyanalyze-module';
+import { BackendAPI, IRentalCalculatorData } from '@bpenwell/instantlyanalyze-module';
 import { useAuth0 } from '@auth0/auth0-react';
 
 interface ShareModalProps {

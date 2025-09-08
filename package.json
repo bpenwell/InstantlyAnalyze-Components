@@ -1,5 +1,5 @@
 {
-  "name": "@ben1000240/instantlyanalyze-components",
+  "name": "@bpenwell/instantlyanalyze-components",
   "version": "0.1.2",
   "description": "React components library",
   "main": "dist/index.js",
@@ -15,6 +15,7 @@
     "build": "npx tsc && webpack --mode development",
     "build:prod": "npx tsc && webpack --mode production",
     "dev": "webpack --mode development",
+    "server": "webpack --mode development --watch",
     "lint": "eslint .",
     "test": "jest",
     "type-check": "tsc --noEmit",
@@ -30,11 +31,11 @@
     "@cloudscape-design/chat-components": "^1.0.13",
     "@cloudscape-design/components": "^3.0.793",
     "@cloudscape-design/global-styles": "^1.0.32",
-    "@emotion/react": "^11.0.0",
-    "@emotion/styled": "^11.0.0",
+    "@emotion/react": "11.14.0",
+    "@emotion/styled": "11.14.0",
     "@mapbox/search-js-react": "^1.0.0-beta.22",
-    "@mui/icons-material": "^6.0.0",
-    "@mui/material": "^6.0.0",
+    "@mui/icons-material": "7.2.0",
+    "@mui/material": "7.2.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.25.1"
@@ -88,7 +89,7 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "@ben1000240/instantlyanalyze-module": "file:../InstantlyAnalyze-Module",
+    "@bpenwell/instantlyanalyze-module": "file:../InstantlyAnalyze-Module",
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
     "@types/react-slick": "^0.23.13",
@@ -105,7 +106,6 @@
     "react-loader-spinner": "^6.1.6",
     "react-slick": "^0.30.2",
     "slick-carousel": "^1.8.1",
-    "styled-components": "^6.1.12",
     "uuid": "^10.0.0"
   }
 }

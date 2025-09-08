@@ -6,7 +6,7 @@ import {
   BackendAPI,
   PAGE_PATH,
   RedirectAPI,
-} from "@ben1000240/instantlyanalyze-module";
+} from "@bpenwell/instantlyanalyze-module";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useAppContext } from "../../utils/AppContextProvider";
 import { Avatar, Menu, MenuItem } from "@mui/material";
@@ -151,6 +151,7 @@ function FullNavbar() {
   // Navbar classes
   const navbarClasses = `
     bg-white bg-opacity-10
+    dark:bg-blue-500 dark:bg-opacity-50
     rounded-3xl
     mx-auto
     border border-gray-400
@@ -471,7 +472,8 @@ const ThinNavbar = () => {
         bg-white
         bg-opacity-10
         backdrop-blur-md
-        dark:bg-[#161D26]
+        dark:bg-blue-500
+        dark:bg-opacity-50
         py-2
         transition-transform
         duration-300
@@ -479,7 +481,7 @@ const ThinNavbar = () => {
         translate-y-[${translateY}px]
         text-gray-900 dark:text-white
       `}
-      style={{ backgroundColor: appMode === Mode.Dark ? "#161d26" : "#ffffff" }}
+      style={{ backgroundColor: appMode === Mode.Dark ? "rgb(59 130 246 / 0.5)" : "#ffffff" }}
     >
       <nav
         aria-label="Global"

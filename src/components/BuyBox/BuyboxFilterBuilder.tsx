@@ -12,7 +12,7 @@ import {
 import { CustomDropdown } from "./CustomDropdown";
 import { BuyboxFilter } from "./BuyboxFilter";
 import { BUYBOX_OPTIONS } from "./constants";
-import { BuyboxOption, FilterInstance, InputType, IZillowBuyboxSet, FilterToken } from "@ben1000240/instantlyanalyze-module";
+import { BuyboxOption, FilterInstance, InputType, IZillowBuyboxSet, FilterToken } from "@bpenwell/instantlyanalyze-module";
 import { useAppContext } from "../../utils/AppContextProvider";
 
 interface ItemClickDetails {

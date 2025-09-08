@@ -23,7 +23,7 @@ import {
   IRentalCalculatorData,
   DataClassifier,
   getApplicableLoanTermTimePeriods
-} from '@ben1000240/instantlyanalyze-module';
+} from '@bpenwell/instantlyanalyze-module';
 
 import { LoadingBar } from '../LoadingBar/LoadingBar';
 

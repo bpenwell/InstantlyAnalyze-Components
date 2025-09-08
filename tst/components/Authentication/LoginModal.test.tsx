@@ -18,7 +18,7 @@ jest.mock('@cloudscape-design/global-styles', () => ({
   Mode: { Light: 'light', Dark: 'dark' },
 }));
 
-jest.mock('@ben1000240/instantlyanalyze-module', () => ({
+jest.mock('@bpenwell/instantlyanalyze-module', () => ({
   LOCAL_STORAGE_KEYS: {},
   useLocalStorage: () => [null, jest.fn()],
 }));

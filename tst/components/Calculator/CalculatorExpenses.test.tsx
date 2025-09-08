@@ -3,7 +3,7 @@ import { render, screen, within } from '@testing-library/react';
 import { CalculatorExpenses } from '../../../src/components/Calculator/CalculatorExpenses';
 
 // Mock dependencies
-jest.mock('@ben1000240/instantlyanalyze-module', () => ({
+jest.mock('@bpenwell/instantlyanalyze-module', () => ({
   CalculationUtils: jest.fn(() => ({
     calculateMortgagePayment: jest.fn(() => 1000),
     calculateRentalTotalExpensePerMonth: jest.fn(() => 2500),

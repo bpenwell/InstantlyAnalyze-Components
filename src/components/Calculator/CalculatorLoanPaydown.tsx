@@ -4,7 +4,7 @@ import {
   CalculationUtils,
   displayAsMoney,
   displayAsPercent,
-} from '@ben1000240/instantlyanalyze-module';
+} from '@bpenwell/instantlyanalyze-module';
 
 import { 
   Container,
@@ -14,7 +14,7 @@ import {
   LineChart,
   Table
 } from '@cloudscape-design/components';
-import { TIME_PERIODS } from '@ben1000240/instantlyanalyze-module';
+import { TIME_PERIODS } from '@bpenwell/instantlyanalyze-module';
 // Adjust these imports/paths to match your code base:
 import { CHART_COLORS } from '../../constants';
 import './CalculatorLoanPaydown.css';

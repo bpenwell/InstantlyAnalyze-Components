@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { CalculatorLoanPaydown } from '../../../src/components/Calculator/CalculatorLoanPaydown';
 
 // Mock dependencies
-jest.mock('@ben1000240/instantlyanalyze-module', () => ({
+jest.mock('@bpenwell/instantlyanalyze-module', () => ({
   CalculationUtils: jest.fn(() => ({
     calculateRemainingLoanAmount: jest.fn((data, year) => 100000 - year * 1000),
     calculateCashFlow: jest.fn(() => 5000),

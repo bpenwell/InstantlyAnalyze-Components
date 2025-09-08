@@ -25,7 +25,7 @@ const mockBackendAPI = {
   getPropertyInfoByAddress: jest.fn().mockResolvedValue({ id: '1', address: '123 Main St, New York, NY 10001' }),
 };
 
-jest.mock('@ben1000240/instantlyanalyze-module', () => ({
+jest.mock('@bpenwell/instantlyanalyze-module', () => ({
   BackendAPI: function () { return mockBackendAPI; },
 }));
 

@@ -7,7 +7,7 @@ import {
   PAGE_PATH, 
   printObjectFields, 
   RedirectAPI 
-} from '@ben1000240/instantlyanalyze-module';
+} from '@bpenwell/instantlyanalyze-module';
 import { ShareModal } from '../ShareModal/ShareModal';
 import './CalculatorHeader.css';
 import { useAuth0 } from '@auth0/auth0-react';

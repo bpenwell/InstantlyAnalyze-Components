@@ -36,7 +36,7 @@ jest.mock('@cloudscape-design/components/i18n', () => ({
 
 jest.mock('@cloudscape-design/components/i18n/messages/all.en', () => ({}));
 
-jest.mock('@ben1000240/instantlyanalyze-module', () => ({
+jest.mock('@bpenwell/instantlyanalyze-module', () => ({
   getBreadcrumbsUUIDPageName: jest.fn((uuid) => `Mapped ${uuid}`),
   PAGE_PATH: {
     HOME: '/',

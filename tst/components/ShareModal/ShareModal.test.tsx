@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ShareModal } from '../../../src/components/ShareModal/ShareModal';
-import { BackendAPI } from '@ben1000240/instantlyanalyze-module';
+import { BackendAPI } from '@bpenwell/instantlyanalyze-module';
 
 // Mock dependencies
 const mockChangeRentalReportSharability = jest.fn();
@@ -17,7 +17,7 @@ jest.mock('@auth0/auth0-react', () => ({
   }),
 }));
 
-jest.mock('@ben1000240/instantlyanalyze-module', () => ({
+jest.mock('@bpenwell/instantlyanalyze-module', () => ({
   BackendAPI: jest.fn().mockImplementation(() => ({
     changeRentalReportSharability: mockChangeRentalReportSharability,
   })),

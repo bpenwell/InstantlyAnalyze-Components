@@ -10,7 +10,7 @@ const mockDeleteRentalReport = jest.fn();
 jest.mock('@auth0/auth0-react', () => ({
   useAuth0: () => ({ user: { sub: 'test-user' } }),
 }));
-jest.mock('@ben1000240/instantlyanalyze-module', () => ({
+jest.mock('@bpenwell/instantlyanalyze-module', () => ({
   BackendAPI: jest.fn().mockImplementation(() => ({
     saveUpdatedRentalReport: mockSaveUpdatedRentalReport,
     deleteRentalReport: mockDeleteRentalReport,

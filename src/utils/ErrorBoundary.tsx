@@ -10,7 +10,7 @@ import { Header as CustomHeader } from '../components/Header/Header';
 import { Footer } from '../components/Footer/Footer';
 import { AppContextProvider } from './AppContextProvider';
 import { AppLayoutPreview } from '../components/AppLayout/AppLayout';
-import { PAGE_PATH, RedirectAPI } from '@ben1000240/instantlyanalyze-module';
+import { PAGE_PATH, RedirectAPI } from '@bpenwell/instantlyanalyze-module';
 import { FeedbackModal } from '../components/FeedbackModal/FeedbackModal';
 
 interface ErrorBoundaryState {

@@ -4,7 +4,7 @@ import { CalculatorTitle } from '../../../src/components/Calculator/CalculatorTi
 import { IRentalCalculatorPageProps } from '../../../src/interfaces';
 
 // Mock the module
-jest.mock('@ben1000240/instantlyanalyze-module', () => ({
+jest.mock('@bpenwell/instantlyanalyze-module', () => ({
   IRentalCalculatorData: jest.fn(),
 }));
 

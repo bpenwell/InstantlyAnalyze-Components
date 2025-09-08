@@ -4,7 +4,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { CalculatorSensitivityTable } from '../../../src/components/Calculator/CalculatorSensitivityTable';
 
 // Mock dependencies
-jest.mock('@ben1000240/instantlyanalyze-module', () => ({
+jest.mock('@bpenwell/instantlyanalyze-module', () => ({
   CalculationUtils: jest.fn(() => ({
     getDataByDataClassifier: jest.fn(),
     calculateFullLoanTermRentalReportDataWithSensitivityData: jest.fn(() => []),

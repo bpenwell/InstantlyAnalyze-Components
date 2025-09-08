@@ -21,7 +21,7 @@
     "noEmit": false,
     "baseUrl": ".",
     "paths": {
-      "@ben1000240/instantlyanalyze-module": ["../InstantlyAnalyze-Module/src"]
+      "@bpenwell/instantlyanalyze-module": ["../InstantlyAnalyze-Module/src"]
     }
   },
   "include": ["src/**/*", "tst/**/*"],

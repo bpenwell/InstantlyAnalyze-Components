@@ -6,7 +6,7 @@ import {
 } from '@cloudscape-design/components';
 import { I18nProvider } from '@cloudscape-design/components/i18n';
 import messages from '@cloudscape-design/components/i18n/messages/all.en';
-import { getBreadcrumbsUUIDPageName, PAGE_PATH, toUpperCamelCase } from '@ben1000240/instantlyanalyze-module';
+import { getBreadcrumbsUUIDPageName, PAGE_PATH, toUpperCamelCase } from '@bpenwell/instantlyanalyze-module';
 
 const LOCALE = 'en';
 

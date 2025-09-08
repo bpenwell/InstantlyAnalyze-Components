@@ -9,7 +9,7 @@ jest.mock('../../../src/utils/AppContextProvider', () => ({
   }),
 }));
 
-jest.mock('@ben1000240/instantlyanalyze-module', () => ({
+jest.mock('@bpenwell/instantlyanalyze-module', () => ({
   PAGE_PATH: {
     HOME: '/',
     CONTACT_US: '/contact',

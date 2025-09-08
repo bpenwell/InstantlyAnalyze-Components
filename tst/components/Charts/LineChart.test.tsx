@@ -52,7 +52,7 @@ jest.mock('chart.js', () => ({
 jest.mock('chartjs-plugin-annotation', () => jest.fn());
 
 // Mock the module
-jest.mock('@ben1000240/instantlyanalyze-module', () => ({
+jest.mock('@bpenwell/instantlyanalyze-module', () => ({
   displayAsMoney: jest.fn((value: number) => `$${value.toFixed(2)}`),
 }));
 

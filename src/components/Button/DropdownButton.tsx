@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import './DropdownButton.css';
-import { PAGE_PATH, RedirectAPI } from '@ben1000240/instantlyanalyze-module';
+import { PAGE_PATH, RedirectAPI } from '@bpenwell/instantlyanalyze-module';
 import { IFlyoutDropdownProps } from '../FlyoutDropdown/FlyoutDropdown';
 
 interface DropdownButtonProps {

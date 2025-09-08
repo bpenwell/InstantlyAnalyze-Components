@@ -2,10 +2,10 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { AddressForm } from '../../../src/components/AddressForm/AddressForm';
-import { BackendAPI, USState } from '@ben1000240/instantlyanalyze-module';
+import { BackendAPI, USState } from '@bpenwell/instantlyanalyze-module';
 
 // Mock dependencies
-jest.mock('@ben1000240/instantlyanalyze-module', () => ({
+jest.mock('@bpenwell/instantlyanalyze-module', () => ({
   BackendAPI: jest.fn(),
   USState: {
     ALABAMA: 'AL',

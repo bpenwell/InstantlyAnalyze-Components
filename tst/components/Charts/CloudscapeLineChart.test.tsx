@@ -10,7 +10,7 @@ jest.mock('@cloudscape-design/components', () => ({
     </div>
   ),
 }));
-jest.mock('@ben1000240/instantlyanalyze-module', () => ({
+jest.mock('@bpenwell/instantlyanalyze-module', () => ({
   displayAsMoney: (val: number) => `$${val}`,
 }));
 

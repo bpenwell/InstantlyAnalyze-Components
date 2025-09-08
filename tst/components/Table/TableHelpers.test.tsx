@@ -6,7 +6,7 @@ import { TableNoMatchState, TableEmptyState, FullPageHeader, useColumnWidths } f
 const mockRedirectToPage = jest.fn();
 const mockCanCreateNewReport = jest.fn();
 const mockSaveWidths = jest.fn();
-jest.mock('@ben1000240/instantlyanalyze-module', () => ({
+jest.mock('@bpenwell/instantlyanalyze-module', () => ({
   PAGE_PATH: { RENTAL_CALCULATOR_CREATE: '/create' },
   RedirectAPI: jest.fn(() => ({ redirectToPage: mockRedirectToPage })),
   useLocalStorage: jest.fn(() => [null, mockSaveWidths]),

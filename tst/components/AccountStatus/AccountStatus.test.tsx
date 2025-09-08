@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { AccountStatus } from '../../../src/components/AccountStatus/AccountStatus';
-import { UserStatus } from '@ben1000240/instantlyanalyze-module';
+import { UserStatus } from '@bpenwell/instantlyanalyze-module';
 
 // Mock the cloudscape components
 jest.mock('@cloudscape-design/components', () => ({

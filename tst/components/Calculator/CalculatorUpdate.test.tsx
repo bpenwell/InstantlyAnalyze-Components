@@ -8,7 +8,7 @@ const mockSaveUpdatedRentalReport = jest.fn().mockResolvedValue({});
 const mockDeleteRentalReport = jest.fn().mockResolvedValue({});
 const mockCreateRentalCalculatorEditRedirectUrl = jest.fn().mockReturnValue('/edit');
 
-jest.mock('@ben1000240/instantlyanalyze-module', () => ({
+jest.mock('@bpenwell/instantlyanalyze-module', () => ({
   BackendAPI: jest.fn().mockImplementation(() => ({
     saveUpdatedRentalReport: mockSaveUpdatedRentalReport,
     deleteRentalReport: mockDeleteRentalReport,

@@ -1,11 +1,11 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { DropdownButton } from '../../../src/components/Button/DropdownButton';
-import { RedirectAPI, PAGE_PATH } from '@ben1000240/instantlyanalyze-module';
+import { RedirectAPI, PAGE_PATH } from '@bpenwell/instantlyanalyze-module';
 
 // Mock the RedirectAPI
 const mockRedirectToPage = jest.fn();
-jest.mock('@ben1000240/instantlyanalyze-module', () => ({
+jest.mock('@bpenwell/instantlyanalyze-module', () => ({
   RedirectAPI: jest.fn().mockImplementation(() => ({
     redirectToPage: mockRedirectToPage,
   })),

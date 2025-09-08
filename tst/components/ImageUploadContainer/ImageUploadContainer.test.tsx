@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { ImageUploadContainer } from '../../../src/components/ImageUploadContainer/ImageUploadContainer';
 
 // Mock the module
-jest.mock('@ben1000240/instantlyanalyze-module', () => ({
+jest.mock('@bpenwell/instantlyanalyze-module', () => ({
   setRentalCalculatorFormState: jest.fn(),
 }));
 
@@ -22,7 +22,7 @@ Object.defineProperty(window, 'FileReader', {
 
 describe('ImageUploadContainer', () => {
   const mockSetState = jest.fn();
-  const mockSetRentalCalculatorFormState = require('@ben1000240/instantlyanalyze-module').setRentalCalculatorFormState;
+  const mockSetRentalCalculatorFormState = require('@bpenwell/instantlyanalyze-module').setRentalCalculatorFormState;
 
   const defaultProps = {
     image: undefined,
