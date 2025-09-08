@@ -150,8 +150,6 @@ function FullNavbar() {
 
   // Navbar classes
   const navbarClasses = `
-    bg-white bg-opacity-10
-    dark:bg-blue-500 dark:bg-opacity-50
     rounded-3xl
     mx-auto
     border border-gray-400
@@ -166,7 +164,7 @@ function FullNavbar() {
       <header className="flex justify-center bg-[#ffffff] dark:bg-[#161D26] py-4" style={bg}>
         <nav
           aria-label="Global"
-          style={{ backdropFilter: "blur(3px)" }}
+          style={{ backdropFilter: "blur(3px)", backgroundColor: "rgb(59 130 246 / 0.5)" }}
           className={navbarClasses}
         >
           {/* Top row: logo, desktop nav items, profile, mobile menu */}
@@ -469,11 +467,7 @@ const ThinNavbar = () => {
         sticky
         top-0
         z-50
-        bg-white
-        bg-opacity-10
         backdrop-blur-md
-        dark:bg-blue-500
-        dark:bg-opacity-50
         py-2
         transition-transform
         duration-300
@@ -481,7 +475,7 @@ const ThinNavbar = () => {
         translate-y-[${translateY}px]
         text-gray-900 dark:text-white
       `}
-      style={{ backgroundColor: appMode === Mode.Dark ? "rgb(59 130 246 / 0.5)" : "#ffffff" }}
+      style={{ backgroundColor: "rgb(59 130 246 / 0.5)" }}
     >
       <nav
         aria-label="Global"
