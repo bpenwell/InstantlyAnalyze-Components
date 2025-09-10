@@ -7,7 +7,7 @@ import Avatar from '@mui/material/Avatar';
 import { useAuth0 } from '@auth0/auth0-react';
 
 export const Header_Alt: React.FC = () => {
-  const { loginWithRedirect, logout, isAuthenticated, user } = useAuth0();
+  const { loginWithPopup, logout, isAuthenticated, user } = useAuth0();
 
   return (
     <AppBar position="static">
@@ -32,7 +32,7 @@ export const Header_Alt: React.FC = () => {
             <Typography variant="h6" sx={{ flexGrow: 1 }}>
               My App
             </Typography>
-            <Button color="inherit" onClick={() => loginWithRedirect()}>
+            <Button color="inherit" onClick={() => loginWithPopup()}>
               Login
             </Button>
           </>

@@ -52,7 +52,7 @@ export default function Navbar() {
   }, [scrollY]);
 
   // Auth & user config logic
-  const { user, loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
+  const { user, loginWithPopup, isAuthenticated, isLoading } = useAuth0();
   const { userExists, setUserConfig, setIsUserLoading } = useAppContext();
   const backendAPI: BackendAPI = new BackendAPI();
 
@@ -110,7 +110,7 @@ function FullNavbar() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const { getAppMode, setAppMode, userExists } = useAppContext();
-  const { user, loginWithRedirect, isAuthenticated, logout } = useAuth0();
+  const { user, loginWithPopup, isAuthenticated, logout } = useAuth0();
   const appMode = getAppMode();
 
   // Toggle theme
@@ -330,7 +330,7 @@ function FullNavbar() {
                 <div className="flex px-2">
                   <Button
                     onClick={() => {
-                      loginWithRedirect();
+                      loginWithPopup();
                     }}
                     className="w-30 h-25 text-base px-2 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
                   >
@@ -398,7 +398,7 @@ function FullNavbar() {
                   <div className="flex py-2">
                     <Button
                       onClick={() => {
-                        loginWithRedirect();
+                        loginWithPopup();
                       }}
                       className="mw-30 mh-25 text-base px-2 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
                     >
@@ -419,7 +419,7 @@ function FullNavbar() {
  * The thinner, sticky navbar that appears after scrolling.
  */
 const ThinNavbar = () => {
-  const { user, loginWithRedirect, isAuthenticated, logout } = useAuth0();
+  const { user, loginWithPopup, isAuthenticated, logout } = useAuth0();
   const { getAppMode, setAppMode, userExists } = useAppContext();
   const redirectApi = new RedirectAPI();
   const appMode = getAppMode();
@@ -633,7 +633,7 @@ const ThinNavbar = () => {
             <div className="flex lg:flex px-2">
               <Button
                 onClick={() => {
-                  loginWithRedirect();
+                  loginWithPopup();
                 }}
                 className="w-30 h-25 text-base px-2 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
               >
