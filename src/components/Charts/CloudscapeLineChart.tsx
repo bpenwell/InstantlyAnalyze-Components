@@ -91,8 +91,6 @@ export const CloudscapeLineChart: React.FC<ILineChartProps> = (props) => {
     const xValue = xDomain[0] + clickX * xScale;
     const yValue = yMax - clickY * yScale;
   
-    console.log('clickX', clickX, 'clickY', clickY);
-    console.log('xValue', xValue, 'yValue', yValue);
   
     let closestPoint = { index: -1, distance: Infinity, x: 0, y: 0, label: '' };
   
@@ -113,7 +111,6 @@ export const CloudscapeLineChart: React.FC<ILineChartProps> = (props) => {
       });
     });
   
-    console.log('closestPoint', closestPoint);
   
     if (closestPoint.index !== -1) {
       onPointClick(closestPoint.index, closestPoint.y, closestPoint.label);

@@ -28,7 +28,7 @@ const RULES = [
   {
     key: 'cocROI',
     label: (
-      <Link href="https://www.investopedia.com/terms/c/cashoncashreturn.asp" external>
+      <Link href="/blog/cash-on-cash-return" external>
         CoC ROI
       </Link>
     ),
@@ -44,7 +44,7 @@ const RULES = [
   {
     key: 'capRate',
     label: (
-      <Link href="https://www.investopedia.com/terms/c/capitalizationrate.asp" external>
+      <Link href="/blog/capitalization-rate" external>
         Going In Cap Rate
       </Link>
     ),
@@ -60,7 +60,7 @@ const RULES = [
   {
     key: 'rentToPriceRatio',
     label: (
-      <Link href="https://www.investopedia.com/terms/o/one-percent-rule.asp" external>
+      <Link href="/blog/1-percent-rule" external>
         1% Rule
       </Link>
     ),
@@ -76,7 +76,7 @@ const RULES = [
   {
     key: 'cashFlow',
     label: (
-      <Link href="https://smartasset.com/investing/50-rule-real-estate" external>
+      <Link href="/blog/50-percent-rule" external>
         50% Rule
       </Link>
     ),

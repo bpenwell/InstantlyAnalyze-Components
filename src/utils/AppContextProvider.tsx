@@ -97,7 +97,6 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
   const [loading, setLoading] = useState<boolean>(true);
 
   const userExists = (): boolean => {
-    console.log('[userExists] ', userConfig);
     return userConfig.userId !== '' || userConfig.subscription.status !== UserStatus.UNDEFINED;
   };
 

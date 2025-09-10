@@ -4,13 +4,9 @@ and how you fit into it!
 
 https://docs.google.com/document/d/1Iz9pgstPizoaNWZ1UN1a_cC3Y-7v3HojMQwKSnbD4HQ/edit?tab=t.0 
 
-# React Component Library Template
+# InstantlyAnalyze Components
 
-This project is part of a [blog & video tutorial](https://dev.to/alexeagleson/how-to-create-and-publish-a-react-component-library-2oe) on how to create and publish your own component library.
-
-[![React Component Library Video Tutorial](https://img.youtube.com/vi/XHQi5a0TmMc/0.jpg)](https://youtu.be/XHQi5a0TmMc)
-
-You can use this repo to fork as a template for your own React library projects.  
+React components library for the InstantlyAnalyze real estate investment analysis platform.  
 
 ## Pre-requisites
 if the storybook command doesn't work, you may need to run:

@@ -1,5 +1,4 @@
 // CalculatorSummary.tsx
-
 import React from 'react';
 import { IRentalCalculatorPageProps } from '../../interfaces';
 import { CalculationUtils, displayAsMoney, displayAsPercent, IRentalCalculatorData } from '@bpenwell/instantlyanalyze-module';

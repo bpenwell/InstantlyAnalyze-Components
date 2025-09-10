@@ -29,7 +29,12 @@ module.exports = {
               use: [
                 'style-loader', // Injects styles into DOM
                 'css-loader',   // Translates CSS into CommonJS
-                'sass-loader'   // Compiles Sass to CSS
+                {
+                  loader: 'sass-loader',   // Compiles Sass to CSS
+                  options: {
+                    api: 'modern' // Use modern Sass API
+                  }
+                }
               ],
             },
         ],
@@ -42,10 +47,6 @@ module.exports = {
       '@auth0/auth0-react': '@auth0/auth0-react',
       '@mapbox/search-js-react': '@mapbox/search-js-react',
       '@cloudscape-design/global-styles': '@cloudscape-design/global-styles',
-      /*'@mui/material': '@mui/material',
-      '@mui/icons-material': '@mui/icons-material',
-      '@emotion/react': '@emotion/react',
-      '@emotion/styled': '@emotion/styled',*/
       '@cloudscape-design/chat-components': '@cloudscape-design/chat-components',
       '@cloudscape-design/components': '@cloudscape-design/components',
     },
