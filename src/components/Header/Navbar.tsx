@@ -189,12 +189,12 @@ function FullNavbar() {
               </div>
               {/* Desktop nav items */}
               <div className="hidden lg:flex items-center space-x-8 text-gray-900 dark:text-white">
-                {/* Products */}
+                {/* Analyze */}
                 <span
                   className="text-base font-semibold cursor-pointer"
                   onClick={handleOpenProductsMenu}
                 >
-                  Products
+                  Analyze
                 </span>
                 <Menu
                   anchorEl={anchorElProducts}
@@ -218,7 +218,7 @@ function FullNavbar() {
                       );
                     }}
                   >
-                    InstantlyReport
+                    Properties
                   </MenuItem>
                   <MenuItem
                     onClick={() => {
@@ -228,10 +228,16 @@ function FullNavbar() {
                       );
                     }}
                   >
-                    InstantlyScan
+                    Markets
                   </MenuItem>
                 </Menu>
 
+                <a
+                  href={redirectApi.createRedirectUrl(PAGE_PATH.BLOG)}
+                  className="text-base font-semibold"
+                >
+                  Blog
+                </a>
                 <a
                   href={redirectApi.createRedirectUrl(PAGE_PATH.SUBSCRIBE)}
                   className="text-base font-semibold"
@@ -503,12 +509,12 @@ const ThinNavbar = () => {
 
         {/* Thin navbar links */}
         <div className="flex items-center gap-x-6 text-gray-900 dark:text-white text-sm font-semibold">
-          {/* Products menu */}
+          {/* Analyze menu */}
           <span
             className="text-base dark:text-white font-semibold cursor-pointer"
             onClick={handleOpenProductsMenu}
           >
-            Products
+            Analyze
           </span>
           <Menu
             anchorEl={anchorElProducts}
@@ -532,7 +538,7 @@ const ThinNavbar = () => {
                 );
               }}
             >
-              InstantlyReport
+              Properties
             </MenuItem>
             <MenuItem
               onClick={() => {
@@ -542,10 +548,16 @@ const ThinNavbar = () => {
                 );
               }}
             >
-              InstantlyScan
+              Markets
             </MenuItem>
           </Menu>
 
+          <a
+            className="text-base dark:text-white font-semibold"
+            href={redirectApi.createRedirectUrl(PAGE_PATH.BLOG)}
+          >
+            Blog
+          </a>
           <a
             className="text-base dark:text-white font-semibold"
             href={redirectApi.createRedirectUrl(PAGE_PATH.SUBSCRIBE)}

@@ -47,7 +47,7 @@ describe('Navbar Component', () => {
 
   it('should display navigation items correctly', () => {
     render(<Navbar />);
-    expect(screen.getByText('Products')).toBeInTheDocument();
+    expect(screen.getByText('Analyze')).toBeInTheDocument();
     expect(screen.getByText('Pricing')).toBeInTheDocument();
     expect(screen.getByTestId('feedback-modal')).toBeInTheDocument();
   });
