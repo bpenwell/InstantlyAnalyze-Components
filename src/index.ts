@@ -52,3 +52,28 @@ export {
     meetsBuyboxCriteria,
 } from './components/BuyBox/constants';
 export { ComingSoonWrapper } from './components/ComingSoonWrapper/ComingSoonWrapper';
+
+// Profile Components
+export {
+    ProfileHeader,
+    SubscriptionCard,
+    QuickActionsCard,
+    ReferralCard,
+    AnalysisPreferences,
+    NotificationSettings,
+    DataExportOptions,
+    RentalAnalysisDefaults,
+} from './components/Profile';
+export type {
+    ProfileHeaderProps,
+    SubscriptionCardProps,
+    QuickActionsCardProps,
+    ReferralCardProps,
+    AnalysisPreferencesProps,
+    AnalysisPreferencesData,
+    NotificationSettingsProps,
+    NotificationSettingsData,
+    DataExportOptionsProps,
+    ExportConfig,
+    RentalAnalysisDefaultsProps,
+} from './components/Profile';

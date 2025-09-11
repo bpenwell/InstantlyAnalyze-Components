@@ -1,0 +1,106 @@
+/* Rental Analysis Defaults Styles */
+
+.defaults-status-section {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.defaults-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Category sections styling */
+.defaults-category-section {
+  padding: 16px;
+  background-color: var(--color-background-layout-panel-content, #fafbfc);
+  border-radius: 8px;
+  border: 1px solid var(--color-border-divider-default, #e8eaed);
+}
+
+.defaults-category-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.defaults-category-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-text-heading-default, #202124);
+}
+
+.defaults-category-description {
+  font-size: 0.875rem;
+  color: var(--color-text-body-secondary, #5f6368);
+  margin-top: 4px;
+}
+
+/* Form field styling */
+.defaults-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.defaults-form-section {
+  background-color: var(--color-background-container-content, #ffffff);
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border-input-default, #d2d3d4);
+}
+
+.defaults-form-section-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-heading-default, #202124);
+  margin-bottom: 12px;
+}
+
+/* Value indicators */
+.defaults-value-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  color: var(--color-text-body-secondary, #5f6368);
+}
+
+.defaults-value-changed {
+  color: var(--color-text-status-info, #1976d2);
+}
+
+.defaults-value-default {
+  color: var(--color-text-body-secondary, #5f6368);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .defaults-actions {
+    justify-content: flex-start;
+    margin-top: 12px;
+  }
+  
+  .defaults-form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .defaults-status-section {
+    margin-bottom: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .defaults-category-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .defaults-form-section {
+    padding: 12px;
+  }
+}
