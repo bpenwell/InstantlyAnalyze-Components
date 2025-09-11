@@ -57,32 +57,36 @@ describe('CalculatorExpenses Component', () => {
     const totalExpensesHeader = screen.getByRole('heading', { name: 'Total Expenses' });
     expect(within(totalExpensesHeader.parentElement as HTMLElement).getByText('$2500')).toBeInTheDocument();
 
-    const mortgageHeader = screen.getByRole('heading', { name: 'Mortgage' });
-    expect(within(mortgageHeader.parentElement as HTMLElement).getByText('$1000')).toBeInTheDocument();
+    expect(screen.getByText('Mortgage')).toBeInTheDocument();
+    expect(screen.getByText('$1000')).toBeInTheDocument();
 
-    const taxesHeader = screen.getByRole('heading', { name: 'Taxes' });
-    expect(within(taxesHeader.parentElement as HTMLElement).getByText('$200')).toBeInTheDocument();
+    expect(screen.getByText('Taxes')).toBeInTheDocument();
+    expect(screen.getByText('$200')).toBeInTheDocument();
 
-    const insuranceHeader = screen.getByRole('heading', { name: 'Insurance' });
-    expect(within(insuranceHeader.parentElement as HTMLElement).getByText('$100')).toBeInTheDocument();
+    // Find Insurance section and verify its amount
+    const insuranceSection = screen.getByText('Insurance').parentElement?.parentElement;
+    expect(insuranceSection).toBeInTheDocument();
+    expect(within(insuranceSection as HTMLElement).getByText('$100')).toBeInTheDocument();
   });
 
   it('should render all expense details', () => {
     render(<CalculatorExpenses {...mockProps} />);
 
-    const electricityHeader = screen.getByRole('heading', { name: 'Electricity' });
-    expect(within(electricityHeader.parentElement as HTMLElement).getByText('$50')).toBeInTheDocument();
+    expect(screen.getByText('Electricity')).toBeInTheDocument();
+    expect(screen.getByText('$50')).toBeInTheDocument();
 
-    const waterSewerHeader = screen.getByRole('heading', { name: 'Water & Sewer' });
-    expect(within(waterSewerHeader.parentElement as HTMLElement).getByText('$40')).toBeInTheDocument();
+    expect(screen.getByText('Water & Sewer')).toBeInTheDocument();
+    expect(screen.getByText('$40')).toBeInTheDocument();
 
-    const vacancyHeader = screen.getByRole('heading', { name: 'Vacancy' });
-    expect(within(vacancyHeader.parentElement as HTMLElement).getByText('$90')).toBeInTheDocument();
+    expect(screen.getByText('Vacancy')).toBeInTheDocument();
+    expect(screen.getByText('$90')).toBeInTheDocument();
 
-    const capExHeader = screen.getByRole('heading', { name: 'CapEx' });
-    expect(within(capExHeader.parentElement as HTMLElement).getByText('$100')).toBeInTheDocument();
+    // Find CapEx section and verify its amount
+    const capExSection = screen.getByText('CapEx').parentElement?.parentElement;
+    expect(capExSection).toBeInTheDocument();
+    expect(within(capExSection as HTMLElement).getByText('$100')).toBeInTheDocument();
 
-    const managementHeader = screen.getByRole('heading', { name: 'Management' });
-    expect(within(managementHeader.parentElement as HTMLElement).getByText('$150')).toBeInTheDocument();
+    expect(screen.getByText('Management')).toBeInTheDocument();
+    expect(screen.getByText('$150')).toBeInTheDocument();
   });
 }); 

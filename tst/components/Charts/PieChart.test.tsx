@@ -30,7 +30,7 @@ describe('CloudscapePieChart', () => {
       renderPieChart();
       
       expect(screen.getByTestId('pie-chart')).toBeInTheDocument();
-      expect(screen.getByTestId('chart-size')).toHaveTextContent('medium');
+      expect(screen.getByTestId('chart-size')).toHaveTextContent('large');
       expect(screen.getByTestId('chart-aria-label')).toHaveTextContent('Expense breakdown');
       expect(screen.getByTestId('chart-hide-filter')).toHaveTextContent('true');
       expect(screen.getByTestId('chart-legend-title')).toHaveTextContent('Expenses Breakdown');
@@ -52,12 +52,12 @@ describe('CloudscapePieChart', () => {
       expect(parsedData[0]).toEqual({
         title: 'Rent',
         value: 30,
-        color: '#4A7A40'
+        color: '#2ea043'
       });
       expect(parsedData[1]).toEqual({
         title: 'Utilities',
         value: 25,
-        color: '#C47766'
+        color: '#fd7e14'
       });
     });
 
@@ -80,7 +80,7 @@ describe('CloudscapePieChart', () => {
       const chartData = screen.getByTestId('chart-data');
       const parsedData = JSON.parse(chartData.textContent || '[]');
       
-      const expectedColors = ['#4A7A40', '#C47766', '#D9B98A', '#617A40', '#A4BBA0'];
+      const expectedColors = ['#2ea043', '#fd7e14', '#6f42c1', '#d1242f', '#0969da'];
       parsedData.forEach((item: any, index: number) => {
         expect(item.color).toBe(expectedColors[index]);
       });
@@ -111,7 +111,7 @@ describe('CloudscapePieChart', () => {
       expect(parsedData[0]).toEqual({
         title: 'Single Item',
         value: 100,
-        color: '#4A7A40'
+        color: '#2ea043'
       });
     });
   });

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, Dispatch, SetStateAction } from 'react';
+import React, { useState, useMemo, useCallback, Dispatch, SetStateAction } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -40,6 +40,15 @@ import './CalculatorCustomize.css';
 // Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
+// Simple debounce utility function
+const debounce = <T extends (...args: any[]) => void>(func: T, delay: number): T => {
+  let timeoutId: NodeJS.Timeout;
+  return ((...args: any[]) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func(...args), delay);
+  }) as T;
+};
+
 export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props: IRentalCalculatorPageProps) => {
   const { initialRentalReportData, currentYearData } = props;
   const calculatorUtils = new CalculationUtils();
@@ -64,6 +73,14 @@ export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props:
   const [interestRate, setInterestRate] = useState<number>(currentYearData.loanDetails.interestRate);
   const [totalCashNeeded, setTotalCashNeeded] = useState<number>(
     calculatorUtils.calculateTotalCashNeeded(initialRentalReportData)
+  );
+
+  // Create debounced version of updateInitialData to prevent excessive calculations
+  const debouncedUpdateInitialData = useCallback(
+    debounce((data: IRentalCalculatorData) => {
+      props.updateInitialData(data);
+    }, 150), // 150ms delay
+    [props.updateInitialData]
   );
 
   const rentalIncomeSliderProps: IDataDisplayConfig = useMemo(
@@ -196,15 +213,42 @@ export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props:
   };
 
   const handleLoanTermChange = (newValue: ValueType): void => {
-    const newData: IRentalCalculatorData = {
-      ...initialRentalReportData,
-      loanDetails: {
-        ...initialRentalReportData.loanDetails,
-        loanTerm: newValue,
-      },
-    };
-    setTotalCashNeeded(calculatorUtils.calculateTotalCashNeeded(newData));
-    props.updateInitialData(newData);
+    try {
+      // Validate input
+      if (!newValue || newValue < 1 || newValue > 30) {
+        console.warn('Invalid loan term value:', newValue);
+        return;
+      }
+      
+      // Ensure we have valid initial data
+      if (!initialRentalReportData || !initialRentalReportData.purchaseDetails || !initialRentalReportData.loanDetails) {
+        console.error('Invalid initial rental data');
+        return;
+      }
+      
+      const newData: IRentalCalculatorData = {
+        ...initialRentalReportData,
+        loanDetails: {
+          ...initialRentalReportData.loanDetails,
+          loanTerm: newValue,
+        },
+      };
+      
+      // Recalculate dependent values (like other handlers do) to ensure reactive updates
+      newData.expenseDetails.capitalExpenditure = calculatorUtils.calculateCapitalExpenditureAbsoluteValue(newData);
+      newData.expenseDetails.maintenance = calculatorUtils.calculateMaintanenceAbsoluteValue(newData);
+      newData.expenseDetails.managementFee = calculatorUtils.calculateManagementFeeAbsoluteValue(newData);
+      newData.expenseDetails.vacancy = calculatorUtils.calculateVacancyAbsoluteValue(newData);
+      
+      // Update local state immediately for responsive UI
+      setTotalCashNeeded(calculatorUtils.calculateTotalCashNeeded(newData));
+      
+      // Use debounced update to prevent excessive calculations during rapid slider movements
+      debouncedUpdateInitialData(newData);
+    } catch (error) {
+      console.error('Error in handleLoanTermChange:', error);
+      // Optionally show user-friendly error message or maintain current state
+    }
   };
 
   /**
