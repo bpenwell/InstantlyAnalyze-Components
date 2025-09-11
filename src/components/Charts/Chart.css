@@ -16,13 +16,17 @@
 
 /* Chart container */
 .chart-box {
-    display: block;
+    display: flex;
+    flex-direction: column;
     padding: 10px;
     border-radius: 8px;
-    max-width: 20%;
+    flex: 1 1 calc(50% - 20px); /* Equal space with expense breakdown */
     width: 100% !important;
     align-items: center;
     justify-content: center;
+    background-color: #ffffff;
+    margin: 10px;
+    box-sizing: border-box;
 }
 
 .chart-box-small-centered {
@@ -36,4 +40,50 @@
     height: 350px;
     margin: 0 auto;
     box-sizing: border-box;
+}
+
+/* Make pie chart legend text smaller to prevent truncation */
+.chart-box .awsui-pie-chart__legend .awsui-pie-chart__legend-item {
+    font-size: 12px !important;
+}
+
+.chart-box .awsui-pie-chart__legend .awsui-pie-chart__legend-item-label {
+    font-size: 12px !important;
+}
+
+/* Alternative approach using more generic selectors */
+.chart-box [data-testid="pie-chart"] .awsui-pie-chart__legend {
+    font-size: 12px !important;
+}
+
+.chart-box [class*="legend"] {
+    font-size: 12px !important;
+}
+
+/* Hide pie chart segment labels while keeping legend */
+.chart-box .awsui-pie-chart__segment-label {
+    display: none !important;
+}
+
+.chart-box [class*="segment-label"] {
+    display: none !important;
+}
+
+.chart-box [class*="pie-chart"] [class*="label"]:not([class*="legend"]) {
+    display: none !important;
+}
+
+/* Responsive design for chart box */
+@media (max-width: 768px) {
+    .chart-box {
+        flex: 1 1 100%; /* Full width on mobile */
+        margin-bottom: 20px;
+        order: 1; /* Show chart first on mobile */
+    }
+}
+
+@media (max-width: 480px) {
+    .chart-box {
+        padding: 5px; /* Reduce padding on very small screens */
+    }
 }

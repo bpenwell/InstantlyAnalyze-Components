@@ -15,7 +15,7 @@ export const CalculatorExpenses: React.FC<IRentalCalculatorPageProps> = (props: 
   const [rehabCost, setRehabCost] = useState(0);
   const [mortgage, setMortgage] = useState(0);
   const [totalFixedExpenses, setTotalFixedExpenses] = useState(0);
-  const [totalVariableExpenses, setTotalVariableExpenses] = useState(0);
+  const [totalOperationalExpenses, setTotalOperationalExpenses] = useState(0);
   const [monthlyTotalExpenses, setMonthlyTotalExpenses] = useState(0);
 
   useEffect(() => {
@@ -42,17 +42,17 @@ export const CalculatorExpenses: React.FC<IRentalCalculatorPageProps> = (props: 
       props.currentYearData.expenseDetails.gas +
       props.currentYearData.expenseDetails.other +
       props.currentYearData.expenseDetails.hoaFees +
-      props.currentYearData.expenseDetails.waterAndSewer
+      props.currentYearData.expenseDetails.waterAndSewer +
+      props.currentYearData.expenseDetails.managementFee
     );
     setTotalFixedExpenses(updatedTotalFixedExpenses);
 
-    const updatedTotalVariableExpenses = (
+    const updatedTotalOperationalExpenses = (
       props.currentYearData.expenseDetails.capitalExpenditure +
-      props.currentYearData.expenseDetails.managementFee +
       props.currentYearData.expenseDetails.maintenance +
       props.currentYearData.expenseDetails.vacancy
     );
-    setTotalVariableExpenses(updatedTotalVariableExpenses);
+    setTotalOperationalExpenses(updatedTotalOperationalExpenses);
 
     const updatedMonthlyTotalExpenses = calculationUtils.calculateRentalTotalExpensePerMonth(props.currentYearData);
     setMonthlyTotalExpenses(updatedMonthlyTotalExpenses);
@@ -70,98 +70,122 @@ export const CalculatorExpenses: React.FC<IRentalCalculatorPageProps> = (props: 
           {/* Pie Chart */}
           <div className="chart-box">
             <CloudscapePieChart
-              labels={['Mortgage', 'Taxes', 'Insurance', 'Variable Expenses', 'Fixed Expenses']}
-              data={[mortgage, taxes, insurance, totalVariableExpenses, totalFixedExpenses]}
+              labels={['Mortgage', 'Taxes', 'Insurance', 'Budgeting Expenses', 'Fixed Expenses']}
+              data={[mortgage, taxes, insurance, totalOperationalExpenses, totalFixedExpenses]}
               title="Expense Breakdown"
             />
           </div>
 
-          {/* Total Expenses Section with Labels */}
+          {/* Total Expenses Section with Hierarchy */}
           <div className="expenses-box">
             <div className="expense-header">
               <h3>Total Expenses</h3>
               <p>${monthlyTotalExpenses.toFixed(0)}</p>
             </div>
-            <div className="sub-utilities">
-              <div className="expense-item">
-                <span className="label-circle mortgage-color"></span>
-                <h4>Mortgage</h4>
-                <p>${mortgage.toFixed(0)}</p>
+            <div className="expense-tree">
+              {/* Main expense categories */}
+              <div className="expense-item expense-main">
+                <div className="expense-item-content">
+                  <div className="expense-indicator mortgage"></div>
+                  <span>Mortgage</span>
+                </div>
+                <span className="expense-amount">${mortgage.toFixed(0)}</span>
               </div>
-              <div className="expense-item">
-                <span className="label-circle taxes-color"></span>
-                <h4>Taxes</h4>
-                <p>${taxes.toFixed(0)}</p>
+              
+              <div className="expense-item expense-main">
+                <div className="expense-item-content">
+                  <div className="expense-indicator taxes"></div>
+                  <span>Taxes</span>
+                </div>
+                <span className="expense-amount">${taxes.toFixed(0)}</span>
               </div>
-              <div className="expense-item">
-                <span className="label-circle insurance-color"></span>
-                <h4>Insurance</h4>
-                <p>${insurance.toFixed(0)}</p>
+              
+              <div className="expense-item expense-main">
+                <div className="expense-item-content">
+                  <div className="expense-indicator insurance"></div>
+                  <span>Insurance</span>
+                </div>
+                <span className="expense-amount">${insurance.toFixed(0)}</span>
               </div>
-              <div className="expense-item">
-                <span className="label-circle fixed-color"></span>
-                <h4>Fixed Expenses</h4>
-                <p>${totalFixedExpenses.toFixed(0)}</p>
+              
+              {/* Fixed Expenses with subtotal */}
+              <div className="expense-item expense-subtotal">
+                <div className="expense-item-content">
+                  <div className="expense-indicator fixed"></div>
+                  <span>Fixed Expenses</span>
+                </div>
+                <span className="expense-amount">${totalFixedExpenses.toFixed(0)}</span>
               </div>
-              <div className="expense-item">
-                <span className="label-circle variable-color"></span>
-                <h4>Variable Expenses</h4>
-                <p>${totalVariableExpenses.toFixed(0)}</p>
+              
+              {/* Fixed expense sub-items */}
+              <div className="expense-item expense-sub">
+                <div className="expense-item-content">
+                  <span>Electricity</span>
+                </div>
+                <span className="expense-amount">${props.currentYearData.expenseDetails.electricity.toFixed(0)}</span>
+              </div>
+              
+              <div className="expense-item expense-sub">
+                <div className="expense-item-content">
+                  <span>Water & Sewer</span>
+                </div>
+                <span className="expense-amount">${props.currentYearData.expenseDetails.waterAndSewer.toFixed(0)}</span>
+              </div>
+              
+              <div className="expense-item expense-sub">
+                <div className="expense-item-content">
+                  <span>Gas</span>
+                </div>
+                <span className="expense-amount">${props.currentYearData.expenseDetails.gas.toFixed(0)}</span>
+              </div>
+              
+              <div className="expense-item expense-sub">
+                <div className="expense-item-content">
+                  <span>Trash</span>
+                </div>
+                <span className="expense-amount">${props.currentYearData.expenseDetails.garbage.toFixed(0)}</span>
+              </div>
+              
+              <div className="expense-item expense-sub">
+                <div className="expense-item-content">
+                  <span>Management</span>
+                </div>
+                <span className="expense-amount">${props.currentYearData.expenseDetails.managementFee.toFixed(0)}</span>
+              </div>
+              
+              {/* Budgeting Expenses with subtotal */}
+              <div className="expense-item expense-subtotal">
+                <div className="expense-item-content">
+                  <div className="expense-indicator operational"></div>
+                  <span>Budgeting Expenses</span>
+                </div>
+                <span className="expense-amount">${totalOperationalExpenses.toFixed(0)}</span>
+              </div>
+              
+              {/* Budgeting expense sub-items */}
+              <div className="expense-item expense-sub">
+                <div className="expense-item-content">
+                  <span>Vacancy</span>
+                </div>
+                <span className="expense-amount">${props.currentYearData.expenseDetails.vacancy.toFixed(0)}</span>
+              </div>
+              
+              <div className="expense-item expense-sub">
+                <div className="expense-item-content">
+                  <span>Maintenance</span>
+                </div>
+                <span className="expense-amount">${props.currentYearData.expenseDetails.maintenance.toFixed(0)}</span>
+              </div>
+              
+              <div className="expense-item expense-sub">
+                <div className="expense-item-content">
+                  <span>CapEx</span>
+                </div>
+                <span className="expense-amount">${props.currentYearData.expenseDetails.capitalExpenditure.toFixed(0)}</span>
               </div>
             </div>
           </div>
 
-          {/* Fixed Expenses Section */}
-          <div className="expenses-box">
-            <div className="expense-header">
-              <h4>Fixed Expenses</h4>
-              <p>${totalFixedExpenses.toFixed(0)}</p>
-            </div>
-            <div className="sub-utilities">
-              <div className="expense-item">
-                <h5>Electricity</h5>
-                <p>${props.currentYearData.expenseDetails.electricity.toFixed(0)}</p>
-              </div>
-              <div className="expense-item">
-                <h5>Water & Sewer</h5>
-                <p>${props.currentYearData.expenseDetails.waterAndSewer.toFixed(0)}</p>
-              </div>
-              <div className="expense-item">
-                <h5>Gas</h5>
-                <p>${props.currentYearData.expenseDetails.gas.toFixed(0)}</p>
-              </div>
-              <div className="expense-item">
-                <h5>Trash</h5>
-                <p>${props.currentYearData.expenseDetails.garbage.toFixed(0)}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Variable Expenses Section */}
-          <div className="expenses-box">
-            <div className="expense-header">
-              <h4>Variable Expenses</h4>
-              <p>${totalVariableExpenses.toFixed(0)}</p>
-            </div>
-            <div className="sub-utilities">
-              <div className="expense-item">
-                <h5>Vacancy</h5>
-                <p>${props.currentYearData.expenseDetails.vacancy.toFixed(0)}</p>
-              </div>
-              <div className="expense-item">
-                <h5>Maintenance</h5>
-                <p>${props.currentYearData.expenseDetails.maintenance.toFixed(0)}</p>
-              </div>
-              <div className="expense-item">
-                <h5>CapEx</h5>
-                <p>${props.currentYearData.expenseDetails.capitalExpenditure.toFixed(0)}</p>
-              </div>
-              <div className="expense-item">
-                <h5>Management</h5>
-                <p>${props.currentYearData.expenseDetails.managementFee.toFixed(0)}</p>
-              </div>
-            </div>
-          </div>
         </div>
       </TextContent>
     </Container>

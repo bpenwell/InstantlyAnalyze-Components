@@ -8,8 +8,9 @@
 .expenses-content {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
-  flex-wrap: wrap; /* Ensure content wraps on smaller screens */
+  gap: 20px;
+  flex-wrap: nowrap; /* Keep as single row */
+  align-items: flex-start; /* Align items to the top */
 }
 
 .expenses-box {
@@ -17,12 +18,184 @@
   margin: 10px;
   padding: 10px;
   border-radius: 5px;
-  flex: 1 1 calc(25% - 20px); /* Ensure four columns in a row */
+  flex: 1 1 calc(50% - 20px); /* Ensure two columns in a row */
   box-sizing: border-box;
 }
 
 @media (max-width: 768px) {
+  .expenses-content {
+    flex-wrap: wrap; /* Allow wrapping on mobile */
+    flex-direction: column; /* Stack vertically on mobile */
+  }
+  
   .expenses-box {
     flex: 1 1 100%; /* Ensure full width on mobile */
+  }
+}
+
+/* Tree-style indentation for expense hierarchy */
+.expense-tree {
+  .expense-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+  
+  .expense-item-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  /* Main category items */
+  .expense-main {
+    font-weight: 600;
+    font-size: 14px;
+    color: #232f3e;
+    
+    .expense-amount {
+      font-weight: 600;
+      color: #232f3e;
+    }
+  }
+  
+  /* Sub-category items with indentation */
+  .expense-sub {
+    font-weight: 400;
+    font-size: 13px;
+    color: #5f6b7a;
+    padding-left: 24px;
+    position: relative;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 50%;
+      width: 12px;
+      height: 1px;
+      background-color: #d5dbdb;
+      transform: translateY(-50%);
+    }
+    
+    &::after {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 0;
+      width: 1px;
+      height: 50%;
+      background-color: #d5dbdb;
+    }
+    
+    &:last-child::after {
+      height: 50%;
+    }
+    
+    .expense-amount {
+      color: #5f6b7a;
+      font-weight: 400;
+    }
+  }
+  
+  /* Subtotal styling */
+  .expense-subtotal {
+    font-weight: 700; /* Make subtotals bold */
+    font-size: 14px;
+    color: #232f3e;
+    background-color: #fafbfc;
+    padding: 12px 16px;
+    margin: 8px -16px;
+    border-radius: 4px;
+    
+    .expense-amount {
+      font-weight: 700; /* Make subtotal amounts bold */
+      color: #232f3e;
+    }
+    
+    /* Keep text color normal for subtotals */
+    span:first-of-type {
+      color: #232f3e; /* Normal text color */
+    }
+  }
+}
+
+/* Color indicators for different expense types */
+.expense-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  display: inline-block;
+  
+  &.mortgage { 
+    background-color: #2ea043 !important; 
+  }
+  &.taxes { 
+    background-color: #fd7e14 !important; 
+  }
+  &.insurance { 
+    background-color: #6f42c1 !important; 
+  }
+  &.fixed { 
+    background-color: #0969da !important;
+    border: 1px solid #0969da !important;
+  }
+  &.operational { 
+    background-color: #d1242f !important; 
+  }
+}
+
+/* Ensure Fixed Expenses indicator is visible - very specific selector */
+.expenses-box .expense-tree .expense-subtotal .expense-item-content .expense-indicator.fixed {
+  background: #0969da !important;
+  background-color: #0969da !important;
+  width: 10px !important;
+  height: 10px !important;
+  min-width: 10px !important;
+  min-height: 10px !important;
+  border-radius: 50% !important;
+  display: block !important;
+  flex-shrink: 0 !important;
+  border: 1px solid #0969da !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Fallback for any .fixed indicator */
+.expense-indicator.fixed {
+  background-color: #0969da !important;
+}
+
+/* Make Total Expenses amount bold and bigger */
+.expense-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e9ecef;
+  
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #232f3e;
+  }
+  
+  p {
+    margin: 0;
+    font-size: 20px; /* Bigger text */
+    font-weight: 700; /* Bold */
+    color: #232f3e;
   }
 }
