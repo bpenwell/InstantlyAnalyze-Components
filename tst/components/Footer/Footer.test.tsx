@@ -49,7 +49,7 @@ describe('Footer', () => {
     it('should render the logo', () => {
       renderFooter();
       
-      const logo = screen.getByAltText('logo');
+      const logo = screen.getByAltText('InstantlyAnalyze');
       expect(logo).toBeInTheDocument();
       expect(logo).toHaveAttribute('src', '/public/logo_light.png');
     });
@@ -57,15 +57,16 @@ describe('Footer', () => {
     it('should render all section headings', () => {
       renderFooter();
       
-      expect(screen.getByText('Site Pages')).toBeInTheDocument();
-      expect(screen.getByText('Follow Us')).toBeInTheDocument();
-      expect(screen.getByText('Legal')).toBeInTheDocument();
+      expect(screen.getByText('Navigation')).toBeInTheDocument();
+      expect(screen.getByText('Legal & Support')).toBeInTheDocument();
     });
 
     it('should render copyright text', () => {
       renderFooter();
       
-      expect(screen.getByText(/© 2025 InstantlyAnalyze™. All Rights Reserved/)).toBeInTheDocument();
+      expect(screen.getByText(/© 2025/)).toBeInTheDocument();
+      expect(screen.getByText(/InstantlyAnalyze™/)).toBeInTheDocument();
+      expect(screen.getByText(/All Rights Reserved/)).toBeInTheDocument();
     });
   });
 
@@ -80,16 +81,16 @@ describe('Footer', () => {
     it('should render all social media links', () => {
       renderFooter();
       
-      expect(screen.getByText('Facebook')).toBeInTheDocument();
-      expect(screen.getByText('Instagram')).toBeInTheDocument();
-      expect(screen.getByText('X')).toBeInTheDocument();
-      expect(screen.getByText('Youtube')).toBeInTheDocument();
+      expect(screen.getByLabelText('Facebook')).toBeInTheDocument();
+      expect(screen.getByLabelText('Instagram')).toBeInTheDocument();
+      expect(screen.getByLabelText('X (Twitter)')).toBeInTheDocument();
+      expect(screen.getByLabelText('YouTube')).toBeInTheDocument();
     });
 
     it('should render legal links', () => {
       renderFooter();
       
-      expect(screen.getByText('Privacy Policy and Terms')).toBeInTheDocument();
+      expect(screen.getByText('Privacy Policy & Terms')).toBeInTheDocument();
     });
 
     it('should have correct href attributes for site pages', () => {
@@ -105,10 +106,10 @@ describe('Footer', () => {
     it('should have correct href attributes for social media', () => {
       renderFooter();
       
-      const facebookLink = screen.getByText('Facebook');
-      const instagramLink = screen.getByText('Instagram');
-      const twitterLink = screen.getByText('X');
-      const youtubeLink = screen.getByText('Youtube');
+      const facebookLink = screen.getByLabelText('Facebook');
+      const instagramLink = screen.getByLabelText('Instagram');
+      const twitterLink = screen.getByLabelText('X (Twitter)');
+      const youtubeLink = screen.getByLabelText('YouTube');
       
       expect(facebookLink).toHaveAttribute('href', '/facebook');
       expect(instagramLink).toHaveAttribute('href', '/instagram');
@@ -119,7 +120,7 @@ describe('Footer', () => {
     it('should have correct href attributes for legal pages', () => {
       renderFooter();
       
-      const privacyLink = screen.getByText('Privacy Policy and Terms');
+      const privacyLink = screen.getByText('Privacy Policy & Terms');
       expect(privacyLink).toHaveAttribute('href', '/privacy');
     });
   });
@@ -127,9 +128,9 @@ describe('Footer', () => {
   describe('styling and layout', () => {
     it('should have proper CSS classes', () => {
       renderFooter();
-      
+
       const footer = screen.getByRole('contentinfo');
-      expect(footer).toHaveClass('bg-gray-100', 'text-black', 'dark:text-white', 'dark:bg-neutral-800');
+      expect(footer).toHaveClass('text-gray-700', 'dark:text-gray-300');
     });
 
     it('should have proper structure with sections', () => {
@@ -190,7 +191,7 @@ describe('Footer', () => {
     it('should have proper alt text for logo', () => {
       renderFooter();
       
-      const logo = screen.getByAltText('logo');
+      const logo = screen.getByAltText('InstantlyAnalyze');
       expect(logo).toBeInTheDocument();
     });
   });
@@ -198,16 +199,16 @@ describe('Footer', () => {
   describe('theme integration', () => {
     it('should apply light theme classes by default', () => {
       renderFooter();
-      
+
       const footer = screen.getByRole('contentinfo');
-      expect(footer).toHaveClass('bg-gray-100', 'text-black');
+      expect(footer).toHaveClass('text-gray-700', 'dark:text-gray-300');
     });
 
     it('should include dark theme classes', () => {
       renderFooter();
       
       const footer = screen.getByRole('contentinfo');
-      expect(footer).toHaveClass('dark:text-white', 'dark:bg-neutral-800');
+      expect(footer).toHaveClass('dark:text-gray-300');
     });
   });
 
@@ -237,7 +238,7 @@ describe('Footer', () => {
     it('should contain all required sections', () => {
       renderFooter();
       
-      const sections = ['Site Pages', 'Follow Us', 'Legal'];
+      const sections = ['Navigation', 'Legal & Support'];
       sections.forEach(section => {
         expect(screen.getByText(section)).toBeInTheDocument();
       });
@@ -247,8 +248,7 @@ describe('Footer', () => {
       renderFooter();
       
       const requiredLinks = [
-        'Home', 'Contact Us', 'Facebook', 'Instagram', 'X', 'Youtube',
-        'Privacy Policy and Terms'
+        'Home', 'Contact Us', 'Privacy Policy & Terms'
       ];
       
       requiredLinks.forEach(link => {

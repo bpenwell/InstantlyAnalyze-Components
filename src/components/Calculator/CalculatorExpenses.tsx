@@ -6,9 +6,13 @@ import '../Charts/Chart.css';
 import { CalculationUtils, Frequency } from '@bpenwell/instantlyanalyze-module';
 import { CloudscapePieChart } from '../Charts/PieChart';
 import { Container, Header, TextContent } from '@cloudscape-design/components';
+import { useAppContext } from '../../utils/AppContextProvider';
+import { Mode } from '@cloudscape-design/global-styles';
 
 export const CalculatorExpenses: React.FC<IRentalCalculatorPageProps> = (props: IRentalCalculatorPageProps) => {
   const calculationUtils: CalculationUtils = new CalculationUtils();
+  const { getAppMode } = useAppContext();
+  const appMode = getAppMode();
 
   const [taxes, setTaxes] = useState(props.currentYearData.expenseDetails.propertyTaxes);
   const [insurance, setInsurance] = useState(props.currentYearData.expenseDetails.insurance);
@@ -63,21 +67,22 @@ export const CalculatorExpenses: React.FC<IRentalCalculatorPageProps> = (props: 
   }, [props.currentYearData]);
 
   return (
-    <Container className="calculator-container">
-      <Header variant="h2" description='Visualize where your money is being spent'>Expenses</Header>
-      <TextContent>
-        <div className="expenses-content">
-          {/* Pie Chart */}
-          <div className="chart-box">
-            <CloudscapePieChart
-              labels={['Mortgage', 'Taxes', 'Insurance', 'Budgeting Expenses', 'Fixed Expenses']}
-              data={[mortgage, taxes, insurance, totalOperationalExpenses, totalFixedExpenses]}
-              title="Expense Breakdown"
-            />
-          </div>
+    <div className={appMode}>
+      <Container className="calculator-container">
+        <Header variant="h2" description='Visualize where your money is being spent'>Expenses</Header>
+        <TextContent>
+          <div className="expenses-content">
+            {/* Pie Chart */}
+            <div className="chart-box">
+              <CloudscapePieChart
+                labels={['Mortgage', 'Taxes', 'Insurance', 'Budgeting Expenses', 'Fixed Expenses']}
+                data={[mortgage, taxes, insurance, totalOperationalExpenses, totalFixedExpenses]}
+                title="Expense Breakdown"
+              />
+            </div>
 
-          {/* Total Expenses Section with Hierarchy */}
-          <div className="expenses-box">
+            {/* Total Expenses Section with Hierarchy */}
+            <div className={`expenses-box ${appMode}`}>
             <div className="expense-header">
               <h3>Total Expenses</h3>
               <p>${monthlyTotalExpenses.toFixed(0)}</p>
@@ -186,8 +191,9 @@ export const CalculatorExpenses: React.FC<IRentalCalculatorPageProps> = (props: 
             </div>
           </div>
 
-        </div>
-      </TextContent>
-    </Container>
+          </div>
+        </TextContent>
+      </Container>
+    </div>
   );
 };

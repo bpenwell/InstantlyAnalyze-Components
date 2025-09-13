@@ -76,29 +76,18 @@ export default function Navbar() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, user]);
 
-  // If Auth0 is still loading, show a placeholder
+  // Always show sticky navbar as requested
   if (isLoading) {
-    if (isFullHeaderApplicable) {
-      return <LoadingPlaceholder />;
-    } else {
-      return <ThinNavbar />;
-    }
-  } else if (!isFullHeaderApplicable) {
-    return <ThinNavbar />;
+    return <LoadingPlaceholder />;
   } else {
-    return (
-      <>
-        <FullNavbar />
-        {displayThin && <ThinNavbar />}
-      </>
-    );
+    return <StickyNavbar />;
   }
 }
 
 /**
- * The large "full" navbar at the top of certain pages.
+ * The large "home" navbar at the top of certain pages.
  */
-function FullNavbar() {
+function HomeNavbar() {
   const path = window.location.pathname;
   const redirectApi: RedirectAPI = new RedirectAPI();
 
@@ -144,7 +133,8 @@ function FullNavbar() {
       ? {
           backgroundImage: `url("/public/${bgImg}")`,
           backgroundSize: "cover",
-          backgroundPositionY: "7%",
+          backgroundPosition: "center top",
+          backgroundRepeat: "no-repeat",
         }
       : {};
 
@@ -156,19 +146,37 @@ function FullNavbar() {
     dark:border-none
     transition-all
     duration-300
-    h-16
+    h-20
   `;
 
   return (
     <div className={appMode}>
-      <header className="flex justify-center bg-[#ffffff] dark:bg-[#161D26] py-4" style={bg}>
+      <header 
+        className="flex justify-center py-4" 
+        style={{
+          ...bg,
+          backgroundColor: (path === PAGE_PATH.HOME && window.scrollY < 100) 
+            ? 'transparent' 
+            : appMode === Mode.Dark 
+              ? 'var(--color-background-layout-main-5ilwcb, #ffffff)' 
+              : '#ffffff'
+        }}
+      >
         <nav
           aria-label="Global"
           style={{ 
-            backdropFilter: "blur(3px)", 
-            backgroundColor: "rgb(59 130 246 / 0.5)"
+            backdropFilter: "blur(12px)", 
+            backgroundColor: appMode === Mode.Dark 
+              ? 'rgba(15, 23, 42, 0.95)'
+              : 'rgba(255, 255, 255, 0.95)',
+            border: `1px solid ${appMode === Mode.Dark 
+              ? 'rgba(2, 151, 251, 0.45)'
+              : 'rgba(2, 151, 251, 0.35)'}`,
+            boxShadow: appMode === Mode.Dark
+              ? '0 8px 32px rgba(2, 151, 251, 0.1)'
+              : '0 8px 32px rgba(2, 151, 251, 0.03)'
           }}
-          className={`${navbarClasses} ${appMode === Mode.Dark ? 'dark:bg-gray-800/50' : 'bg-white/80'}`}
+          className={`${navbarClasses}`}
         >
           {/* Top row: logo, desktop nav items, profile, mobile menu */}
           <div className="flex items-center justify-between px-4 h-full">
@@ -183,7 +191,7 @@ function FullNavbar() {
                   <img
                     alt=""
                     src={`/public/${logo}`}
-                    style={{ maxHeight: "30px", width: "auto" }}
+                    style={{ maxHeight: "50px", width: "auto" }}
                   />
                 </a>
               </div>
@@ -250,7 +258,7 @@ function FullNavbar() {
 
             {/* Right side: Auth/profile + mobile menu */}
             <div className="flex items-center space-x-2">
-              {/* Mobile menu button (hamburger) */}
+              {/* Mobile menu button (hamburger) - only show on mobile */}
               <div className="flex lg:hidden">
                 <button
                   type="button"
@@ -348,7 +356,21 @@ function FullNavbar() {
             className="lg:hidden m-10"
           >
             <div className="fixed inset-0 z-10" />
-            <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+            <DialogPanel 
+              className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto px-6 py-6 sm:max-w-sm sm:ring-1"
+              style={{
+                backgroundColor: appMode === Mode.Dark 
+                  ? 'rgba(15, 23, 42, 0.98)'
+                  : 'rgba(255, 255, 255, 0.98)',
+                backdropFilter: 'blur(12px)',
+                borderLeft: `1px solid ${appMode === Mode.Dark 
+                  ? 'rgba(2, 151, 251, 0.45)'
+                  : 'rgba(2, 151, 251, 0.35)'}`,
+                boxShadow: appMode === Mode.Dark
+                  ? '-8px 0 32px rgba(2, 151, 251, 0.1)'
+                  : '-8px 0 32px rgba(2, 151, 251, 0.03)'
+              }}
+            >
               <div className="flex items-center justify-between">
                 <a href="#" className="-m-1.5 p-1.5">
                   <span className="sr-only">Your Company</span>
@@ -416,9 +438,9 @@ function FullNavbar() {
 }
 
 /**
- * The thinner, sticky navbar that appears after scrolling.
+ * The sticky navbar that appears on all pages.
  */
-const ThinNavbar = () => {
+const StickyNavbar = () => {
   const { user, loginWithPopup, isAuthenticated, logout } = useAuth0();
   const { getAppMode, setAppMode, userExists } = useAppContext();
   const redirectApi = new RedirectAPI();
@@ -485,8 +507,15 @@ const ThinNavbar = () => {
         text-gray-900 dark:text-white
       `}
       style={{ 
-        backgroundColor: appMode === Mode.Dark ? "#161D26" : "#ffffff",
-        backgroundImage: "linear-gradient(rgba(59, 130, 246, 0.5), rgba(59, 130, 246, 0.5))"
+        backgroundColor: appMode === Mode.Dark 
+          ? 'var(--color-background-layout-main-5ilwcb, #ffffff)' 
+          : '#ffffff',
+        borderBottom: `1px solid ${appMode === Mode.Dark 
+          ? 'rgba(2, 151, 251, 0.25)'
+          : 'rgba(2, 151, 251, 0.15)'}`,
+        boxShadow: appMode === Mode.Dark
+          ? '0 4px 16px rgba(2, 151, 251, 0.1)'
+          : '0 4px 16px rgba(2, 151, 251, 0.03)'
       }}
     >
       <nav
@@ -510,47 +539,90 @@ const ThinNavbar = () => {
         {/* Thin navbar links */}
         <div className="flex items-center gap-x-6 text-gray-900 dark:text-white text-sm font-semibold">
           {/* Analyze menu */}
-          <span
-            className="text-base dark:text-white font-semibold cursor-pointer"
-            onClick={handleOpenProductsMenu}
-          >
-            Analyze
-          </span>
-          <Menu
-            anchorEl={anchorElProducts}
-            open={Boolean(anchorElProducts)}
-            onClose={handleCloseProductsMenu}
-            anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-            transformOrigin={{ vertical: "top", horizontal: "left" }}
-            sx={{
-              "& .MuiPaper-root": {
-                backgroundColor:
-                  appMode === Mode.Light ? "white" : "rgb(38,38,38)",
-                color: appMode === Mode.Light ? "black" : "white",
-              },
-            }}
-          >
-            <MenuItem
-              onClick={() => {
-                handleCloseProductsMenu();
-                window.location.href = redirectApi.createRedirectUrl(
-                  PAGE_PATH.RENTAL_CALCULATOR_HOME
-                );
+          <div className="relative group">
+            <span
+              className="text-base dark:text-white font-semibold cursor-pointer hover:text-blue-500 transition-colors duration-200 flex items-center"
+              onClick={handleOpenProductsMenu}
+            >
+              Analyze
+              <svg className="ml-1 w-4 h-4 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </span>
+            <Menu
+              anchorEl={anchorElProducts}
+              open={Boolean(anchorElProducts)}
+              onClose={handleCloseProductsMenu}
+              anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+              transformOrigin={{ vertical: "top", horizontal: "left" }}
+              sx={{
+                "& .MuiPaper-root": {
+                  backgroundColor: appMode === Mode.Light ? "white" : "rgb(15, 23, 42)",
+                  color: appMode === Mode.Light ? "black" : "white",
+                  borderRadius: "12px",
+                  boxShadow: appMode === Mode.Light 
+                    ? "0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05)"
+                    : "0 10px 25px rgba(0, 0, 0, 0.3), 0 4px 6px rgba(0, 0, 0, 0.1)",
+                  border: `1px solid ${appMode === Mode.Light ? "rgba(0, 0, 0, 0.1)" : "rgba(255, 255, 255, 0.1)"}`,
+                  minWidth: "200px",
+                  padding: "8px 0",
+                },
+                "& .MuiMenuItem-root": {
+                  padding: "12px 20px",
+                  fontSize: "14px",
+                  fontWeight: "500",
+                  transition: "all 0.2s ease",
+                  "&:hover": {
+                    backgroundColor: appMode === Mode.Light ? "rgba(59, 130, 246, 0.1)" : "rgba(59, 130, 246, 0.2)",
+                    color: "#3b82f6",
+                  },
+                },
               }}
             >
-              Properties
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                handleCloseProductsMenu();
-                window.location.href = redirectApi.createRedirectUrl(
-                  PAGE_PATH.ZILLOW_SCRAPER
-                );
-              }}
-            >
-              Markets
-            </MenuItem>
-          </Menu>
+              <MenuItem
+                onClick={(e) => {
+                  handleCloseProductsMenu();
+                  const url = redirectApi.createRedirectUrl(PAGE_PATH.RENTAL_CALCULATOR_HOME);
+                  if (e.ctrlKey || e.metaKey) {
+                    window.open(url, '_blank');
+                  } else {
+                    window.location.href = url;
+                  }
+                }}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                }}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+                Properties
+              </MenuItem>
+              <MenuItem
+                onClick={(e) => {
+                  handleCloseProductsMenu();
+                  const url = redirectApi.createRedirectUrl(PAGE_PATH.ZILLOW_SCRAPER);
+                  if (e.ctrlKey || e.metaKey) {
+                    window.open(url, '_blank');
+                  } else {
+                    window.location.href = url;
+                  }
+                }}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                }}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+                Markets
+              </MenuItem>
+            </Menu>
+          </div>
 
           <a
             className="text-base dark:text-white font-semibold"

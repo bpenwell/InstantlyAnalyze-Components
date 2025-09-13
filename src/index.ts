@@ -40,6 +40,7 @@ export {
 export { ManualRefresh } from './components/ManualRefresh/ManualRefresh';
 export { DeleteWithConfirmation } from './components/DeleteWithConfirmation/DeleteWithConfirmation';
 export { AppContextProvider, useAppContext } from './utils/AppContextProvider';
+export { AnalyticsTracker, useAnalytics } from './utils/AnalyticsTracker';
 export { Cards } from './components/Cards/Cards';
 export { CardItem } from './components/Cards/CardItem';
 export { HeroSection } from './components/HeroSection/HeroSection';

@@ -14,12 +14,23 @@
 }
 
 .expenses-box {
-  background-color: #ffffff;
   margin: 10px;
   padding: 10px;
   border-radius: 5px;
   flex: 1 1 calc(50% - 20px); /* Ensure two columns in a row */
   box-sizing: border-box;
+  
+  /* Light mode styling */
+  &.light {
+    background-color: #ffffff;
+    border: 1px solid #e9ecef;
+  }
+  
+  /* Dark mode styling */
+  &.dark {
+    background-color: #1e1e1e;
+    border: 1px solid #404040;
+  }
 }
 
 @media (max-width: 768px) {
@@ -40,7 +51,16 @@
     justify-content: space-between;
     align-items: center;
     padding: 8px 0;
-    border-bottom: 1px solid #f0f0f0;
+    
+    /* Light mode border */
+    .light & {
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    /* Dark mode border */
+    .dark & {
+      border-bottom: 1px solid #404040;
+    }
     
     &:last-child {
       border-bottom: none;
@@ -57,11 +77,25 @@
   .expense-main {
     font-weight: 600;
     font-size: 14px;
-    color: #232f3e;
     
-    .expense-amount {
-      font-weight: 600;
+    /* Light mode colors */
+    .light & {
       color: #232f3e;
+      
+      .expense-amount {
+        font-weight: 600;
+        color: #232f3e;
+      }
+    }
+    
+    /* Dark mode colors */
+    .dark & {
+      color: #ffffff;
+      
+      .expense-amount {
+        font-weight: 600;
+        color: #ffffff;
+      }
     }
   }
   
@@ -69,38 +103,73 @@
   .expense-sub {
     font-weight: 400;
     font-size: 13px;
-    color: #5f6b7a;
     padding-left: 24px;
     position: relative;
     
-    &::before {
-      content: '';
-      position: absolute;
-      left: 8px;
-      top: 50%;
-      width: 12px;
-      height: 1px;
-      background-color: #d5dbdb;
-      transform: translateY(-50%);
+    /* Light mode colors */
+    .light & {
+      color: #5f6b7a;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        left: 8px;
+        top: 50%;
+        width: 12px;
+        height: 1px;
+        background-color: #d5dbdb;
+        transform: translateY(-50%);
+      }
+      
+      &::after {
+        content: '';
+        position: absolute;
+        left: 8px;
+        top: 0;
+        width: 1px;
+        height: 50%;
+        background-color: #d5dbdb;
+      }
+      
+      .expense-amount {
+        color: #5f6b7a;
+        font-weight: 400;
+      }
     }
     
-    &::after {
-      content: '';
-      position: absolute;
-      left: 8px;
-      top: 0;
-      width: 1px;
-      height: 50%;
-      background-color: #d5dbdb;
+    /* Dark mode colors */
+    .dark & {
+      color: #a0a0a0;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        left: 8px;
+        top: 50%;
+        width: 12px;
+        height: 1px;
+        background-color: #606060;
+        transform: translateY(-50%);
+      }
+      
+      &::after {
+        content: '';
+        position: absolute;
+        left: 8px;
+        top: 0;
+        width: 1px;
+        height: 50%;
+        background-color: #606060;
+      }
+      
+      .expense-amount {
+        color: #a0a0a0;
+        font-weight: 400;
+      }
     }
     
     &:last-child::after {
       height: 50%;
-    }
-    
-    .expense-amount {
-      color: #5f6b7a;
-      font-weight: 400;
     }
   }
   
@@ -108,20 +177,40 @@
   .expense-subtotal {
     font-weight: 700; /* Make subtotals bold */
     font-size: 14px;
-    color: #232f3e;
-    background-color: #fafbfc;
     padding: 12px 16px;
     margin: 8px -16px;
     border-radius: 4px;
     
-    .expense-amount {
-      font-weight: 700; /* Make subtotal amounts bold */
+    /* Light mode styling */
+    .light & {
       color: #232f3e;
+      background-color: #fafbfc;
+      
+      .expense-amount {
+        font-weight: 700; /* Make subtotal amounts bold */
+        color: #232f3e;
+      }
+      
+      /* Keep text color normal for subtotals */
+      span:first-of-type {
+        color: #232f3e; /* Normal text color */
+      }
     }
     
-    /* Keep text color normal for subtotals */
-    span:first-of-type {
-      color: #232f3e; /* Normal text color */
+    /* Dark mode styling */
+    .dark & {
+      color: #ffffff;
+      background-color: #2a2a2a;
+      
+      .expense-amount {
+        font-weight: 700; /* Make subtotal amounts bold */
+        color: #ffffff;
+      }
+      
+      /* Keep text color normal for subtotals */
+      span:first-of-type {
+        color: #ffffff; /* Normal text color */
+      }
     }
   }
 }
@@ -183,19 +272,42 @@
   align-items: center;
   margin-bottom: 16px;
   padding-bottom: 12px;
-  border-bottom: 2px solid #e9ecef;
   
-  h3 {
-    margin: 0;
-    font-size: 18px;
-    font-weight: 600;
-    color: #232f3e;
+  /* Light mode styling */
+  .light & {
+    border-bottom: 2px solid #e9ecef;
+    
+    h3 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: #232f3e;
+    }
+    
+    p {
+      margin: 0;
+      font-size: 20px; /* Bigger text */
+      font-weight: 700; /* Bold */
+      color: #232f3e;
+    }
   }
   
-  p {
-    margin: 0;
-    font-size: 20px; /* Bigger text */
-    font-weight: 700; /* Bold */
-    color: #232f3e;
+  /* Dark mode styling */
+  .dark & {
+    border-bottom: 2px solid #404040;
+    
+    h3 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: #ffffff;
+    }
+    
+    p {
+      margin: 0;
+      font-size: 20px; /* Bigger text */
+      font-weight: 700; /* Bold */
+      color: #ffffff;
+    }
   }
 }
