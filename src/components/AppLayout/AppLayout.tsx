@@ -40,7 +40,8 @@ export const AppLayoutPreview = (props: IAppLayoutPreview) => {
 
   const shouldDisableContentPadding = (path: string): boolean => {
     return path === PAGE_PATH.HOME ||
-      path === PAGE_PATH.SUBSCRIBE;
+      path === PAGE_PATH.SUBSCRIBE ||
+      path === PAGE_PATH.WELCOME;
   };
   
   breadcrumbPath.forEach((segment) => {
