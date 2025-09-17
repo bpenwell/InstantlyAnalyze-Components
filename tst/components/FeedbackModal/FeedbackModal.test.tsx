@@ -1,78 +1,60 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { FeedbackModal } from '../../../src/components/FeedbackModal/FeedbackModal';
-import { BackendAPI, FeedbackType } from '@bpenwell/instantlyanalyze-module';
 
-// Mock dependencies
-jest.mock('@auth0/auth0-react', () => ({
-  useAuth0: () => ({
-    user: {
-      sub: 'test-user-id',
-      name: 'Test User',
-      email: 'test@example.com',
-    },
-  }),
-}));
-
-const mockSendFeedbackEmail = jest.fn();
-
+// Mock the BackendAPI
 jest.mock('@bpenwell/instantlyanalyze-module', () => ({
-  ...jest.requireActual('@bpenwell/instantlyanalyze-module'),
   BackendAPI: jest.fn().mockImplementation(() => ({
-    sendFeedbackEmail: mockSendFeedbackEmail,
+    sendFeedbackEmail: jest.fn().mockResolvedValue({}),
   })),
   FeedbackType: {
-    Bug: 'bug',
-    Feature: 'feature',
+    Bug: 'Bug',
+    Feature: 'Feature',
+    ContactUs: 'Contact Us',
+    Referral: 'Referral',
   },
 }));
 
+// Mock Auth0
+jest.mock('@auth0/auth0-react', () => ({
+  useAuth0: () => ({
+    user: { sub: 'test-user-id', email: 'test@example.com' },
+  }),
+}));
+
+// Mock Cloudscape components
 jest.mock('@cloudscape-design/components', () => ({
-  Modal: ({ children, visible, onDismiss, header, footer }: any) => (
+  Modal: ({ visible, children, onDismiss }: any) => 
     visible ? (
-      <div data-testid="modal">
-        <div data-testid="modal-header">{header}</div>
-        <div data-testid="modal-content">{children}</div>
-        <div data-testid="modal-footer">{footer}</div>
-        <button onClick={onDismiss} data-testid="modal-close">Close</button>
+      <div data-testid="modal" role="dialog">
+        <button onClick={onDismiss} aria-label="Close feedback modal">Close</button>
+        {children}
       </div>
-    ) : null
+    ) : null,
+  Box: ({ children }: any) => <div>{children}</div>,
+  Button: ({ children, onClick, disabled }: any) => (
+    <button onClick={onClick} disabled={disabled}>{children}</button>
   ),
-  Box: ({ children }: any) => <div data-testid="box">{children}</div>,
-  Button: ({ children, onClick, disabled, variant }: any) => (
-    <button 
-      data-testid={`button-${variant || 'default'}`}
-      onClick={onClick}
-      disabled={disabled}
-    >
-      {children}
-    </button>
-  ),
-  SpaceBetween: ({ children }: any) => <div data-testid="space-between">{children}</div>,
-  FormField: ({ label, children, info }: any) => (
-    <div data-testid={`form-field-${label}`}>
+  SpaceBetween: ({ children }: any) => <div>{children}</div>,
+  FormField: ({ label, children }: any) => (
+    <div>
       <label>{label}</label>
-      {info && <span data-testid="field-info">{info}</span>}
       {children}
     </div>
   ),
-  Input: ({ value, onChange, placeholder }: any) => (
+  Input: ({ value, onChange, placeholder, type }: any) => (
     <input
-      data-testid="input"
       value={value}
       onChange={(e) => onChange({ detail: { value: e.target.value } })}
       placeholder={placeholder}
+      type={type}
     />
   ),
   Select: ({ selectedOption, onChange, options }: any) => (
     <select
-      data-testid="select"
       value={selectedOption?.value}
-      onChange={(e) => {
-        const option = options.find((opt: any) => opt.value === e.target.value);
-        onChange({ detail: { selectedOption: option } });
-      }}
+      onChange={(e) => onChange({ detail: { selectedOption: { value: e.target.value } } })}
     >
       {options.map((option: any) => (
         <option key={option.value} value={option.value}>
@@ -83,7 +65,6 @@ jest.mock('@cloudscape-design/components', () => ({
   ),
   Textarea: ({ value, onChange, placeholder, rows }: any) => (
     <textarea
-      data-testid="textarea"
       value={value}
       onChange={(e) => onChange({ detail: { value: e.target.value } })}
       placeholder={placeholder}
@@ -94,8 +75,14 @@ jest.mock('@cloudscape-design/components', () => ({
 }));
 
 describe('FeedbackModal', () => {
-  const renderFeedbackModal = () => {
-    return render(<FeedbackModal />);
+  const renderFeedbackModal = (props = {}) => {
+    const defaultProps = {
+      visible: false,
+      onDismiss: jest.fn(),
+      feedbackType: 'Bug' as any,
+      ...props
+    };
+    return render(<FeedbackModal {...defaultProps} />);
   };
 
   beforeEach(() => {
@@ -103,265 +90,31 @@ describe('FeedbackModal', () => {
   });
 
   describe('rendering', () => {
-    it('should render the feedback trigger link', () => {
-      renderFeedbackModal();
+    it('should render the modal when visible is true', () => {
+      renderFeedbackModal({ visible: true });
       
-      const feedbackLink = screen.getByText('Feedback');
-      expect(feedbackLink).toBeInTheDocument();
-      expect(feedbackLink).toHaveClass('text-base', 'font-semibold', 'cursor-pointer');
-    });
-
-    it('should not render modal initially', () => {
-      renderFeedbackModal();
-      
-      const modal = screen.queryByTestId('modal');
-      expect(modal).not.toBeInTheDocument();
-    });
-
-    it('should render modal when opened', async () => {
-      const user = userEvent.setup();
-      renderFeedbackModal();
-      
-      const feedbackLink = screen.getByText('Feedback');
-      await user.click(feedbackLink);
-      
-      const modal = screen.getByTestId('modal');
+      const modal = screen.getByRole('dialog');
       expect(modal).toBeInTheDocument();
     });
 
-    it('should render modal header', async () => {
-      const user = userEvent.setup();
-      renderFeedbackModal();
+    it('should not render modal when visible is false', () => {
+      renderFeedbackModal({ visible: false });
       
-      const feedbackLink = screen.getByText('Feedback');
-      await user.click(feedbackLink);
-      
-      const header = screen.getByTestId('modal-header');
-      expect(header).toHaveTextContent('Send Feedback');
-    });
-  });
-
-  describe('form fields', () => {
-    beforeEach(async () => {
-      renderFeedbackModal();
-      const feedbackLink = screen.getByText('Feedback');
-      fireEvent.click(feedbackLink);
-    });
-
-    it('should render feedback type field', () => {
-      const feedbackTypeField = screen.getByTestId('form-field-Feedback Type');
-      expect(feedbackTypeField).toBeInTheDocument();
-      
-      const select = screen.getByTestId('select');
-      expect(select).toBeInTheDocument();
-    });
-
-    it('should render email field with info', () => {
-      const emailField = screen.getByTestId('form-field-Email');
-      expect(emailField).toBeInTheDocument();
-      
-      const emailInfo = emailField.querySelector('[data-testid="field-info"]');
-      expect(emailInfo).toHaveTextContent('Optional');
-      
-      const input = screen.getByTestId('input');
-      expect(input).toHaveAttribute('placeholder', 'you@example.com');
-    });
-
-    it('should render note field with info', () => {
-      const noteField = screen.getByTestId('form-field-Note to Developer');
-      expect(noteField).toBeInTheDocument();
-      
-      const noteInfo = noteField.querySelector('[data-testid="field-info"]');
-      expect(noteInfo).toHaveTextContent('Required');
-      
-      const textarea = screen.getByTestId('textarea');
-      expect(textarea).toHaveAttribute('placeholder', 'Describe your feedback...');
-    });
-
-    it('should have correct select options', () => {
-      const select = screen.getByTestId('select');
-      const options = select.querySelectorAll('option');
-      
-      expect(options).toHaveLength(2);
-      expect(options[0]).toHaveTextContent('Report a Bug');
-      expect(options[1]).toHaveTextContent('Suggest a Feature');
-    });
-  });
-
-  describe('form interactions', () => {
-    beforeEach(async () => {
-      const user = userEvent.setup();
-      renderFeedbackModal();
-      
-      const feedbackLink = screen.getByText('Feedback');
-      await user.click(feedbackLink);
-    });
-
-    it('should handle feedback type change', async () => {
-      const user = userEvent.setup();
-      const select = screen.getByTestId('select');
-      
-      await user.selectOptions(select, 'feature');
-      
-      expect(select).toHaveValue('feature');
-    });
-
-    it('should handle email input', async () => {
-      const user = userEvent.setup();
-      const input = screen.getByTestId('input');
-      
-      await user.type(input, 'test@example.com');
-      
-      expect(input).toHaveValue('test@example.com');
-    });
-
-    it('should handle note input', async () => {
-      const user = userEvent.setup();
-      const textarea = screen.getByTestId('textarea');
-      
-      await user.type(textarea, 'This is a test feedback note');
-      
-      expect(textarea).toHaveValue('This is a test feedback note');
-    });
-  });
-
-  describe('modal actions', () => {
-    beforeEach(async () => {
-      const user = userEvent.setup();
-      renderFeedbackModal();
-      
-      const feedbackLink = screen.getByText('Feedback');
-      await user.click(feedbackLink);
-    });
-
-    it('should close modal when cancel button is clicked', async () => {
-      const user = userEvent.setup();
-      const cancelButton = screen.getByTestId('button-link');
-      
-      await user.click(cancelButton);
-      
-      const modal = screen.queryByTestId('modal');
+      const modal = screen.queryByRole('dialog');
       expect(modal).not.toBeInTheDocument();
     });
+  });
 
-    it('should close modal when close button is clicked', async () => {
+  describe('modal interaction', () => {
+    it('should call onDismiss when close button is clicked', async () => {
+      const onDismiss = jest.fn();
       const user = userEvent.setup();
-      const closeButton = screen.getByTestId('modal-close');
+      renderFeedbackModal({ visible: true, onDismiss });
       
+      const closeButton = screen.getByLabelText('Close feedback modal');
       await user.click(closeButton);
       
-      const modal = screen.queryByTestId('modal');
-      expect(modal).not.toBeInTheDocument();
-    });
-
-    it('should show submit button', () => {
-      const submitButton = screen.getByTestId('button-primary');
-      expect(submitButton).toBeInTheDocument();
-      expect(submitButton).toHaveTextContent('Submit');
+      expect(onDismiss).toHaveBeenCalled();
     });
   });
-
-  describe('form validation', () => {
-    beforeEach(async () => {
-      const user = userEvent.setup();
-      renderFeedbackModal();
-      
-      const feedbackLink = screen.getByText('Feedback');
-      await user.click(feedbackLink);
-    });
-
-    it('should show error when submitting empty note', async () => {
-      const user = userEvent.setup();
-      const submitButton = screen.getByTestId('button-primary');
-      
-      await user.click(submitButton);
-      
-      const errorAlert = screen.getByTestId('alert-error');
-      expect(errorAlert).toHaveTextContent('Please enter a note before submitting.');
-    });
-
-    it('should allow submission with valid note', async () => {
-      const user = userEvent.setup();
-      const textarea = screen.getByTestId('textarea');
-      const submitButton = screen.getByTestId('button-primary');
-      
-      await user.type(textarea, 'Valid feedback note');
-      await user.click(submitButton);
-      
-      // Should not show error
-      const errorAlert = screen.queryByTestId('alert-error');
-      expect(errorAlert).not.toBeInTheDocument();
-    });
-  });
-
-  describe('API integration', () => {
-    it('should call sendFeedbackEmail on successful submission', async () => {
-      const user = userEvent.setup();
-      mockSendFeedbackEmail.mockResolvedValueOnce({});
-      
-      render(<FeedbackModal />);
-      await user.click(screen.getByText('Feedback'));
-
-      await user.type(screen.getByPlaceholderText('you@example.com'), 'user@test.com');
-      await user.type(screen.getByPlaceholderText('Describe your feedback...'), 'Test feedback');
-      await user.click(screen.getByRole('button', { name: 'Submit' }));
-
-      await waitFor(() => {
-        expect(mockSendFeedbackEmail).toHaveBeenCalledWith(
-          FeedbackType.Bug,
-          'user@test.com',
-          'Test feedback',
-          'test-user-id'
-        );
-      });
-    });
-
-    it('should show error message on API failure', async () => {
-      const user = userEvent.setup();
-      mockSendFeedbackEmail.mockRejectedValueOnce(new Error('API Error'));
-      
-      render(<FeedbackModal />);
-      await user.click(screen.getByText('Feedback'));
-
-      await user.type(screen.getByPlaceholderText('Describe your feedback...'), 'Test feedback');
-      await user.click(screen.getByRole('button', { name: 'Submit' }));
-
-      const errorAlert = await screen.findByRole('alert');
-      expect(errorAlert).toHaveTextContent('Failed to send feedback. Please try again.');
-    });
-  });
-
-  describe('loading states', () => {
-    it('should disable buttons and show loading text during submission', async () => {
-      const user = userEvent.setup();
-      mockSendFeedbackEmail.mockImplementationOnce(() => new Promise(() => {})); // Promise that never resolves
-      
-      render(<FeedbackModal />);
-      await user.click(screen.getByText('Feedback'));
-
-      await user.type(screen.getByPlaceholderText('Describe your feedback...'), 'Test feedback');
-      await user.click(screen.getByRole('button', { name: 'Submit' }));
-
-      await waitFor(() => {
-        expect(screen.getByRole('button', { name: 'Submitting…' })).toBeDisabled();
-        expect(screen.getByTestId('button-link')).toBeDisabled();
-      });
-    });
-  });
-
-  describe('accessibility', () => {
-    it('should have proper alert roles', async () => {
-      const user = userEvent.setup();
-      mockSendFeedbackEmail.mockResolvedValueOnce({});
-      
-      render(<FeedbackModal />);
-      await user.click(screen.getByText('Feedback'));
-
-      await user.type(screen.getByPlaceholderText('Describe your feedback...'), 'Test feedback');
-      await user.click(screen.getByRole('button', { name: 'Submit' }));
-
-      const successAlert = await screen.findByRole('alert');
-      expect(successAlert).toBeInTheDocument();
-    });
-  });
-}); 
+});

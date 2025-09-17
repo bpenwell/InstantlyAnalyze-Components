@@ -34,7 +34,8 @@ export const AppLayoutPreview = (props: IAppLayoutPreview) => {
   const shouldDisplayNothing = (segment: string): boolean => {
     return segment.includes('#')
       || segment.includes('profile')
-      || segment.includes('subscribe');
+      || segment.includes('subscribe')
+      || segment.includes('welcome');
   };
 
   const shouldDisableContentPadding = (path: string): boolean => {

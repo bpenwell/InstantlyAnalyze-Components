@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Container,
   Header,
@@ -10,12 +10,14 @@ import { Header as CustomHeader } from '../components/Header/Header';
 import { Footer } from '../components/Footer/Footer';
 import { AppContextProvider } from './AppContextProvider';
 import { AppLayoutPreview } from '../components/AppLayout/AppLayout';
-import { PAGE_PATH, RedirectAPI } from '@bpenwell/instantlyanalyze-module';
+import { PAGE_PATH, RedirectAPI, FeedbackType } from '@bpenwell/instantlyanalyze-module';
 import { FeedbackModal } from '../components/FeedbackModal/FeedbackModal';
 
 interface ErrorBoundaryState {
   hasError: boolean;
   error: Error | null;
+  showFeedbackModal: boolean;
+  feedbackType: FeedbackType;
 }
 
 interface ErrorBoundaryProps {
@@ -25,12 +27,22 @@ interface ErrorBoundaryProps {
 export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
-    this.state = { hasError: false, error: null };
+    this.state = { 
+      hasError: false, 
+      error: null, 
+      showFeedbackModal: false, 
+      feedbackType: FeedbackType.Bug 
+    };
   }
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     // Update state so the next render shows the fallback UI
-    return { hasError: true, error };
+    return { 
+      hasError: true, 
+      error, 
+      showFeedbackModal: false, 
+      feedbackType: FeedbackType.Bug 
+    };
   }
 
   componentDidCatch(error: Error, info: React.ErrorInfo): void {
@@ -39,7 +51,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
   }
 
   render() {
-    const { hasError, error } = this.state;
+    const { hasError, error, showFeedbackModal, feedbackType } = this.state;
     // Generates an integer between 1 and 4 (inclusive).
     const randomNumber = Math.floor(Math.random() * 2) + 1;
     const redirectAPI: RedirectAPI = new RedirectAPI();
@@ -68,7 +80,14 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
                   />
                   {/* Feedback Modal Button/Trigger */}
                   <SpaceBetween size="s" direction="horizontal">
-                    <FeedbackModal />
+                    <Button 
+                      onClick={() => this.setState({ 
+                        showFeedbackModal: true, 
+                        feedbackType: FeedbackType.Bug 
+                      })}
+                    >
+                      Report Bug
+                    </Button>
                     <Button href={redirectAPI.createRedirectUrl(PAGE_PATH.HOME)}>Return to Home</Button>
                   </SpaceBetween>
                   {error && (
@@ -80,6 +99,14 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
               </SpaceBetween>
             </Container>
           </AppLayoutPreview>
+          
+          {/* Feedback Modal */}
+          <FeedbackModal
+            visible={showFeedbackModal}
+            onDismiss={() => this.setState({ showFeedbackModal: false })}
+            feedbackType={feedbackType}
+          />
+          
           <Footer />
         </AppContextProvider>
       );

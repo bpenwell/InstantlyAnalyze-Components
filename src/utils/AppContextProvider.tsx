@@ -39,6 +39,8 @@ type AppContextType = {
   getDefaultRentalInputs: () => IDefaultRentalInputs;
   setDefaultRentalInputs: (value: IDefaultRentalInputs) => void;
   getSubscriptionDetails: () => ISubscriptionDetails;
+  hasSeenWelcomePage: () => boolean;
+  setHasSeenWelcomePage: (hasSeen: boolean) => Promise<void>;
 };
 
 // 2. Create the actual context:
@@ -67,6 +69,8 @@ const AppContext = createContext<AppContextType>({
   setBuyBoxSetsPreference: (preferences: IZillowBuyboxSet[]) => {},
   getDefaultRentalInputs: () => defaultRentalInputs,
   setDefaultRentalInputs: (value: IDefaultRentalInputs) => {},
+  hasSeenWelcomePage: () => false,
+  setHasSeenWelcomePage: async (hasSeen: boolean) => {},
 });
 
 // 3. Create a provider component:
@@ -85,6 +89,7 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
     },
     freeReportsAvailable: 0,
     freeZillowScrapesAvailable: 0,
+    hasSeenWelcomePage: false,
     preferences: {
       rentalReportBuyBoxSets: [],
       tablePageSize: 10,
@@ -100,6 +105,32 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
     return userConfig.userId !== '' || userConfig.subscription.status !== UserStatus.UNDEFINED;
   };
 
+  const hasSeenWelcomePage = (): boolean => {
+    return userConfig.hasSeenWelcomePage ?? false;
+  };
+
+  const setHasSeenWelcomePage = useCallback(async (hasSeen: boolean): Promise<void> => {
+    if (!userConfig.userId) {
+      console.warn('Cannot update hasSeenWelcomePage: No userId available');
+      return;
+    }
+    
+    const newUserConfig = {
+      ...userConfig,
+      hasSeenWelcomePage: hasSeen,
+    };
+    
+    try {
+      const backendApi: BackendAPI = new BackendAPI();
+      setUserConfigState(newUserConfig);
+      await backendApi.updateUserConfigs(newUserConfig, userConfig.userId);
+    } catch (error) {
+      console.error('Error updating hasSeenWelcomePage:', error);
+      // Revert the state change if the API call failed
+      setUserConfigState(userConfig);
+    }
+  }, [userConfig]);
+
   const getRemainingFreeRentalReports = (): number => {
     if (userConfig.freeReportsAvailable === undefined) {
       return 0;
@@ -109,8 +140,10 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
   };
 
   const getRemainingFreeZillowScrapes = (): number => {
-    if (!userConfig.freeZillowScrapesAvailable) {
-      throw new Error('[getRemainingFreeZillowScrapes] userConfig.freeZillowScrapesAvailable does not exist');
+    console.log('AppContextProvider - userConfig.freeZillowScrapesAvailable:', userConfig.freeZillowScrapesAvailable, 'type:', typeof userConfig.freeZillowScrapesAvailable);
+    if (userConfig.freeZillowScrapesAvailable === undefined) {
+      console.log('AppContextProvider - freeZillowScrapesAvailable is undefined, returning 0');
+      return 0;
     }
 
     return userConfig.freeZillowScrapesAvailable;
@@ -271,11 +304,22 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
     setUserConfig(newUserConfig);
   };
 
-  const setUserConfig = async (newConfig: IUserConfigs): Promise<void> => {
-    const backendApi: BackendAPI = new BackendAPI();
-    setUserConfigState(newConfig);
-    const updatedUserConfig = await backendApi.updateUserConfigs(newConfig, newConfig.userId);
-  };
+  const setUserConfig = useCallback(async (newConfig: IUserConfigs): Promise<void> => {
+    if (!newConfig.userId) {
+      console.warn('Cannot update user config: No userId available');
+      return;
+    }
+    
+    try {
+      const backendApi: BackendAPI = new BackendAPI();
+      setUserConfigState(newConfig);
+      await backendApi.updateUserConfigs(newConfig, newConfig.userId);
+    } catch (error) {
+      console.error('Error updating user config:', error);
+      // Revert the state change if the API call failed
+      setUserConfigState(userConfig);
+    }
+  }, [userConfig]);
 
   // The value provided to context consumers
   const value: AppContextType = {
@@ -303,6 +347,8 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
     getDefaultRentalInputs,
     setDefaultRentalInputs,
     getSubscriptionDetails,
+    hasSeenWelcomePage,
+    setHasSeenWelcomePage,
   };
 
   return (

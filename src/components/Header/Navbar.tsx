@@ -6,6 +6,7 @@ import {
   BackendAPI,
   PAGE_PATH,
   RedirectAPI,
+  FeedbackType,
 } from "@bpenwell/instantlyanalyze-module";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useAppContext } from "../../utils/AppContextProvider";
@@ -14,6 +15,7 @@ import IconButton from "@mui/material/IconButton";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { applyMode, Mode } from "@cloudscape-design/global-styles";
 import { FeedbackModal } from "../FeedbackModal/FeedbackModal";
+import { CachedAvatar } from "../Common/CachedAvatar";
 
 /**
  * Main Navbar component. Shows:
@@ -53,8 +55,9 @@ export default function Navbar() {
 
   // Auth & user config logic
   const { user, loginWithPopup, isAuthenticated, isLoading } = useAuth0();
-  const { userExists, setUserConfig, setIsUserLoading } = useAppContext();
+  const { userExists, setUserConfig, setIsUserLoading, hasSeenWelcomePage } = useAppContext();
   const backendAPI: BackendAPI = new BackendAPI();
+  const redirectApi: RedirectAPI = new RedirectAPI();
 
   useEffect(() => {
     const fetchUserConfigs = async () => {
@@ -66,8 +69,17 @@ export default function Navbar() {
         if (configs.message === "User not found") {
           const newUserConfig = await backendAPI.createUserConfig(userId);
           setUserConfig(newUserConfig);
+          
+          // Redirect new users to welcome page only if not already there
+          if (window.location.pathname !== PAGE_PATH.WELCOME) {
+            redirectApi.redirectToPage(PAGE_PATH.WELCOME);
+          }
         } else {
           setUserConfig(configs);
+          // Check if user hasn't seen welcome page and redirect them (using configs directly)
+          if (!configs.hasSeenWelcomePage && window.location.pathname !== PAGE_PATH.WELCOME) {
+            redirectApi.redirectToPage(PAGE_PATH.WELCOME);
+          }
         }
         setIsUserLoading(false);
       }
@@ -97,6 +109,10 @@ function HomeNavbar() {
   // States for product menu anchor & user menu anchor
   const [anchorElProducts, setAnchorElProducts] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+
+  // Feedback modal state
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [feedbackType, setFeedbackType] = useState<FeedbackType>(FeedbackType.Bug);
 
   const { getAppMode, setAppMode, userExists } = useAppContext();
   const { user, loginWithPopup, isAuthenticated, logout } = useAuth0();
@@ -252,7 +268,15 @@ function HomeNavbar() {
                 >
                   Pricing
                 </a>
-                <FeedbackModal />
+                <a
+                  className="text-base font-semibold cursor-pointer"
+                  onClick={() => {
+                    setFeedbackType(FeedbackType.Bug);
+                    setShowFeedbackModal(true);
+                  }}
+                >
+                  Feedback
+                </a>
               </div>
             </div>
 
@@ -276,25 +300,43 @@ function HomeNavbar() {
               {/* Auth & Profile menu */}
               {isAuthenticated && user && userExists() ? (
                 <>
-                  <IconButton
-                    onClick={handleOpenUserMenu}
-                    className="mx-0 my-2 text-black"
-                  >
-                    {user?.picture ? (
-                      <Avatar
-                        src={user?.picture}
-                        alt="User Avatar"
-                        sx={{
-                          width: 40,
-                          height: 40,
-                        }}
-                      />
-                    ) : (
-                      <AccountCircle
-                        sx={[appMode === Mode.Dark && { filter: "invert(1)" }]}
-                      />
-                    )}
-                  </IconButton>
+                  <div className="relative">
+                    <span
+                      className="text-base dark:text-white font-semibold cursor-pointer hover:text-blue-500 transition-colors duration-200 flex items-center"
+                      onClick={handleOpenUserMenu}
+                    >
+                      {user?.picture ? (
+                        <CachedAvatar
+                          src={user?.picture}
+                          alt="User Avatar"
+                          sx={{
+                            width: 32,
+                            height: 32,
+                            marginRight: "8px",
+                          }}
+                        />
+                      ) : (
+                        <AccountCircle
+                          sx={[
+                            { 
+                              width: 32, 
+                              height: 32, 
+                              marginRight: "8px" 
+                            },
+                            appMode === Mode.Dark && { filter: "invert(1)" }
+                          ]}
+                        />
+                      )}
+                      Profile
+                      <svg 
+                        className={`ml-1 w-4 h-4 transition-transform duration-200 ${Boolean(anchorElUser) ? 'rotate-180' : ''}`} 
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </span>
                   <Menu
                     anchorEl={anchorElUser}
                     open={Boolean(anchorElUser)}
@@ -303,9 +345,25 @@ function HomeNavbar() {
                     transformOrigin={{ vertical: "top", horizontal: "right" }}
                     sx={{
                       "& .MuiPaper-root": {
-                        backgroundColor:
-                          appMode === Mode.Light ? "white" : "rgb(38,38,38)",
+                        backgroundColor: appMode === Mode.Light ? "white" : "rgb(15, 23, 42)",
                         color: appMode === Mode.Light ? "black" : "white",
+                        borderRadius: "12px",
+                        boxShadow: appMode === Mode.Light 
+                          ? "0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05)"
+                          : "0 10px 25px rgba(0, 0, 0, 0.3), 0 4px 6px rgba(0, 0, 0, 0.1)",
+                        border: `1px solid ${appMode === Mode.Light ? "rgba(0, 0, 0, 0.1)" : "rgba(255, 255, 255, 0.1)"}`,
+                        minWidth: "200px",
+                        padding: "8px 0",
+                      },
+                      "& .MuiMenuItem-root": {
+                        padding: "12px 20px",
+                        fontSize: "14px",
+                        fontWeight: "500",
+                        transition: "all 0.2s ease",
+                        "&:hover": {
+                          backgroundColor: appMode === Mode.Light ? "rgba(59, 130, 246, 0.1)" : "rgba(59, 130, 246, 0.2)",
+                          color: "#3b82f6",
+                        },
                       },
                     }}
                   >
@@ -313,26 +371,46 @@ function HomeNavbar() {
                       {`Welcome back${user?.name ? ` ${user.name}` : ""}!`}
                     </MenuItem>
                     <MenuItem
-                      onClick={() => {
+                      onClick={(e) => {
                         handleCloseUserMenu();
-                        window.location.href = redirectApi.createRedirectUrl(
-                          PAGE_PATH.PROFILE
-                        );
+                        const url = redirectApi.createRedirectUrl(PAGE_PATH.PROFILE);
+                        if (e.ctrlKey || e.metaKey) {
+                          window.open(url, '_blank');
+                        } else {
+                          window.location.href = url;
+                        }
+                      }}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
                       }}
                     >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
                       Profile
                     </MenuItem>
                     <MenuItem
-                      onClick={() => {
+                      onClick={(e) => {
                         handleCloseUserMenu();
                         logout({
                           logoutParams: { returnTo: window.location.origin },
                         });
                       }}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                      }}
                     >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                      </svg>
                       Log out
                     </MenuItem>
                   </Menu>
+                  </div>
                 </>
               ) : (
                 <div className="flex px-2">
@@ -454,6 +532,10 @@ const StickyNavbar = () => {
   const [anchorElProducts, setAnchorElProducts] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
+  // Feedback modal state
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [feedbackType, setFeedbackType] = useState<FeedbackType>(FeedbackType.Bug);
+
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
@@ -539,13 +621,18 @@ const StickyNavbar = () => {
         {/* Thin navbar links */}
         <div className="flex items-center gap-x-6 text-gray-900 dark:text-white text-sm font-semibold">
           {/* Analyze menu */}
-          <div className="relative group">
+          <div className="relative">
             <span
               className="text-base dark:text-white font-semibold cursor-pointer hover:text-blue-500 transition-colors duration-200 flex items-center"
               onClick={handleOpenProductsMenu}
             >
               Analyze
-              <svg className="ml-1 w-4 h-4 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg 
+                className={`ml-1 w-4 h-4 transition-transform duration-200 ${Boolean(anchorElProducts) ? 'rotate-180' : ''}`} 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </span>
@@ -637,69 +724,131 @@ const StickyNavbar = () => {
             Pricing
           </a>
 
-          <FeedbackModal />
+          <a
+            className="text-base dark:text-white font-semibold cursor-pointer"
+            onClick={() => {
+              setFeedbackType(FeedbackType.Bug);
+              setShowFeedbackModal(true);
+            }}
+          >
+            Feedback
+          </a>
           <ThemeSwitch checked={appMode === Mode.Dark} onClick={themeChange} />
 
           {/* Auth & Profile menu */}
           {isAuthenticated && user && userExists() ? (
             <>
-              <IconButton
-                onClick={handleOpenUserMenu}
-                className="mx-0 my-2 text-black"
-              >
-                {user?.picture ? (
-                  <Avatar
-                    src={user?.picture}
-                    alt="User Avatar"
-                    sx={{
-                      width: 40,
-                      height: 40,
-                    }}
-                  />
-                ) : (
-                  <AccountCircle
-                    sx={[appMode === Mode.Dark && { filter: "invert(1)" }]}
-                  />
-                )}
-              </IconButton>
-              <Menu
-                anchorEl={anchorElUser}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                transformOrigin={{ vertical: "top", horizontal: "right" }}
-                sx={{
-                  "& .MuiPaper-root": {
-                    backgroundColor:
-                      appMode === Mode.Light ? "white" : "rgb(38,38,38)",
-                    color: appMode === Mode.Light ? "black" : "white",
-                  },
-                }}
-              >
-                <MenuItem disabled>
-                  {`Welcome back${user?.name ? ` ${user.name}` : ""}!`}
-                </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    handleCloseUserMenu();
-                    window.location.href = redirectApi.createRedirectUrl(
-                      PAGE_PATH.PROFILE
-                    );
-                  }}
+              <div className="relative">
+                <span
+                  className="text-base dark:text-white font-semibold cursor-pointer hover:text-blue-500 transition-colors duration-200 flex items-center"
+                  onClick={handleOpenUserMenu}
                 >
+                  {user?.picture ? (
+                    <CachedAvatar
+                      src={user?.picture}
+                      alt="User Avatar"
+                      sx={{
+                        width: 32,
+                        height: 32,
+                        marginRight: "8px",
+                      }}
+                    />
+                  ) : (
+                    <AccountCircle
+                      sx={[
+                        { 
+                          width: 32, 
+                          height: 32, 
+                          marginRight: "8px" 
+                        },
+                        appMode === Mode.Dark && { filter: "invert(1)" }
+                      ]}
+                    />
+                  )}
                   Profile
-                </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    handleCloseUserMenu();
-                    logout({
-                      logoutParams: { returnTo: window.location.origin },
-                    });
+                  <svg 
+                    className={`ml-1 w-4 h-4 transition-transform duration-200 ${Boolean(anchorElUser) ? 'rotate-180' : ''}`} 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </span>
+                <Menu
+                  anchorEl={anchorElUser}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                  anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                  transformOrigin={{ vertical: "top", horizontal: "right" }}
+                  sx={{
+                    "& .MuiPaper-root": {
+                      backgroundColor: appMode === Mode.Light ? "white" : "rgb(15, 23, 42)",
+                      color: appMode === Mode.Light ? "black" : "white",
+                      borderRadius: "12px",
+                      boxShadow: appMode === Mode.Light 
+                        ? "0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05)"
+                        : "0 10px 25px rgba(0, 0, 0, 0.3), 0 4px 6px rgba(0, 0, 0, 0.1)",
+                      border: `1px solid ${appMode === Mode.Light ? "rgba(0, 0, 0, 0.1)" : "rgba(255, 255, 255, 0.1)"}`,
+                      minWidth: "200px",
+                      padding: "8px 0",
+                    },
+                    "& .MuiMenuItem-root": {
+                      padding: "12px 20px",
+                      fontSize: "14px",
+                      fontWeight: "500",
+                      transition: "all 0.2s ease",
+                      "&:hover": {
+                        backgroundColor: appMode === Mode.Light ? "rgba(59, 130, 246, 0.1)" : "rgba(59, 130, 246, 0.2)",
+                        color: "#3b82f6",
+                      },
+                    },
                   }}
                 >
-                  Log out
-                </MenuItem>
-              </Menu>
+                  <MenuItem disabled>
+                    {`Welcome back${user?.name ? ` ${user.name}` : ""}!`}
+                  </MenuItem>
+                  <MenuItem
+                    onClick={(e) => {
+                      handleCloseUserMenu();
+                      const url = redirectApi.createRedirectUrl(PAGE_PATH.PROFILE);
+                      if (e.ctrlKey || e.metaKey) {
+                        window.open(url, '_blank');
+                      } else {
+                        window.location.href = url;
+                      }
+                    }}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "12px",
+                    }}
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    Profile
+                  </MenuItem>
+                  <MenuItem
+                    onClick={(e) => {
+                      handleCloseUserMenu();
+                      logout({
+                        logoutParams: { returnTo: window.location.origin },
+                      });
+                    }}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "12px",
+                    }}
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    Log out
+                  </MenuItem>
+                </Menu>
+              </div>
             </>
           ) : (
             <div className="flex lg:flex px-2">

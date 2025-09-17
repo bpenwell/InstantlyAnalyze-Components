@@ -54,6 +54,12 @@ export {
 } from './components/BuyBox/constants';
 export { ComingSoonWrapper } from './components/ComingSoonWrapper/ComingSoonWrapper';
 
+// Common Components
+export { CachedAvatar } from './components/Common/CachedAvatar';
+
+// Utils
+export { useProfilePictureCache } from './utils/useProfilePictureCache';
+
 // Profile Components
 export {
     ProfileHeader,

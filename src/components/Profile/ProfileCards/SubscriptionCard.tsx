@@ -7,7 +7,6 @@ import {
   StatusIndicator,
   Button,
   Badge,
-  ProgressBar,
   ColumnLayout,
 } from '@cloudscape-design/components';
 import { 
@@ -16,14 +15,13 @@ import {
   PAGE_PATH,
   RedirectAPI,
 } from '@bpenwell/instantlyanalyze-module';
+import { useAppContext } from '../../../utils/AppContextProvider';
 
 export interface SubscriptionCardProps {
   subscriptionTier?: 'free' | 'standard' | 'premium';
   billingCycle?: BillingCycle;
   currentPeriodEnd?: string;
   willRenew?: boolean;
-  reportsUsed?: number;
-  reportsLimit?: number;
   onUpdateSubscription?: () => void;
   onCancelSubscription?: () => void;
 }
@@ -34,19 +32,6 @@ const mockSubscriptionData = {
   billingCycle: BillingCycle.MONTHLY,
   currentPeriodEnd: '2024-10-15',
   willRenew: true,
-  reportsUsed: 12,
-  reportsLimit: -1, // Unlimited for paid plans
-  subscriptionValue: 1850, // More realistic ROI calculation
-  features: [
-    { name: 'Unlimited Property Analysis', included: true, limit: 'Unlimited' },
-    { name: 'Advanced Market Analytics', included: true, limit: 'Unlimited' },
-    { name: 'Export to PDF/Excel', included: true, limit: 'Unlimited' },
-    { name: 'Deal Pipeline Management', included: true, limit: 'Unlimited' },
-    { name: 'Custom Market Reports', included: true, limit: 'Unlimited' },
-    { name: 'Priority Email Support', included: true, limit: 'Included' },
-    { name: 'API Access', included: false, limit: 'Pro Plan only' },
-    { name: 'White-label Reports', included: false, limit: 'Pro Plan only' },
-  ],
 };
 
 export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
@@ -54,17 +39,46 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
   billingCycle = mockSubscriptionData.billingCycle,
   currentPeriodEnd = mockSubscriptionData.currentPeriodEnd,
   willRenew = mockSubscriptionData.willRenew,
-  reportsUsed = mockSubscriptionData.reportsUsed,
-  reportsLimit = mockSubscriptionData.reportsLimit,
   onUpdateSubscription,
   onCancelSubscription,
 }) => {
   const redirectAPI = new RedirectAPI();
+  const { isPaidMember, getRemainingFreeRentalReports, getSubscriptionDetails, getRemainingFreeZillowScrapes, isUserLoading } = useAppContext();
   const isProUser = subscriptionTier !== 'free';
-  const usagePercentage = reportsLimit ? Math.round((reportsUsed / reportsLimit) * 100) : 0;
+  
+  // Defensive programming: handle potential undefined/null values and loading states
+  const freeReportsAvailable = (() => {
+    if (isUserLoading) return 0; // Return 0 while loading
+    try {
+      const value = getRemainingFreeRentalReports();
+      return typeof value === 'number' ? value : 0;
+    } catch (error) {
+      console.warn('Error getting remaining free reports:', error);
+      return 0;
+    }
+  })();
+  
+  const freeZillowScrapesAvailable = (() => {
+    if (isUserLoading) return 0; // Return 0 while loading
+    try {
+      const value = getRemainingFreeZillowScrapes();
+      console.log('SubscriptionCard - freeZillowScrapesAvailable:', value, 'type:', typeof value);
+      return typeof value === 'number' ? value : 0;
+    } catch (error) {
+      console.warn('Error getting remaining free Zillow scrapes:', error);
+      return 0;
+    }
+  })();
 
   const getTierDisplayName = (tier: string) => {
-    return tier.charAt(0).toUpperCase() + tier.slice(1);
+    switch (tier) {
+      case 'standard':
+        return 'Time Saver';
+      case 'premium':
+        return 'Fully Automated';
+      default:
+        return 'Free';
+    }
   };
 
   const getTierColor = (tier: string) => {
@@ -81,9 +95,9 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
   const getNextTier = () => {
     switch (subscriptionTier) {
       case 'free':
-        return 'Pro';
+        return 'Time Saver';
       case 'standard':
-        return 'Pro';
+        return 'Fully Automated';
       default:
         return null;
     }
@@ -94,7 +108,7 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
       case 'free':
         return '$0';
       case 'standard':
-        return billingCycle === BillingCycle.MONTHLY ? '$47' : '$470';
+        return billingCycle === BillingCycle.MONTHLY ? '$20' : '$200';
       case 'premium':
         return billingCycle === BillingCycle.MONTHLY ? '$97' : '$970';
       default:
@@ -102,20 +116,54 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
     }
   };
 
-  const handleUpdateBillingCycle = () => {
-    // Mock implementation - will be replaced with real API call
-    console.log('Updating billing cycle...');
-    onUpdateSubscription?.();
+  const getPlanFeatures = () => {
+    // Ensure we have valid numbers
+    const safeReportsAvailable = typeof freeReportsAvailable === 'number' ? freeReportsAvailable : 0;
+    const safeZillowScrapesAvailable = typeof freeZillowScrapesAvailable === 'number' ? freeZillowScrapesAvailable : 0;
+    
+    const features = [
+      {
+        name: 'Property Analysis',
+        included: true,
+        limit: isProUser ? 'Unlimited' : `${safeReportsAvailable} remaining`
+      },
+      {
+        name: 'Market scans with Zillow Scraper',
+        included: true,
+        limit: `${safeZillowScrapesAvailable} remaining`
+      },
+      {
+        name: 'Priority Email Support',
+        included: isProUser,
+        limit: isProUser ? 'Included' : 'Time Saver Plan only'
+      },
+      {
+        name: 'AI analysis and insights',
+        included: subscriptionTier === 'premium',
+        limit: 'Fully Automated Plan only'
+      }
+    ];
+    return features;
   };
 
-  const handleCancelRenew = () => {
-    // Mock implementation - will be replaced with real API call
-    console.log('Toggling subscription renewal...');
-    onCancelSubscription?.();
+  const handleUpdateBillingCycle = async () => {
+    try {
+      await onUpdateSubscription?.();
+    } catch (error) {
+      console.error('Error updating billing cycle:', error);
+    }
+  };
+
+  const handleCancelRenew = async () => {
+    try {
+      await onCancelSubscription?.();
+    } catch (error) {
+      console.error('Error canceling subscription:', error);
+    }
   };
 
   const handleUpgrade = () => {
-    window.location.href = redirectAPI.createRedirectUrl(PAGE_PATH.SUBSCRIBE);
+    redirectAPI.redirectToPage(PAGE_PATH.SUBSCRIBE);
   };
 
   return (
@@ -123,13 +171,13 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
       header={
         <Header
           variant="h2"
-          actions={
+          /*actions={
             subscriptionTier !== 'premium' ? (
               <Button variant="primary" onClick={handleUpgrade}>
                 Upgrade to {getNextTier()}
               </Button>
             ) : undefined
-          }
+          }*/
         >
           Subscription Details
         </Header>
@@ -142,12 +190,31 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
             <div>
               <SpaceBetween direction="horizontal" size="xs" alignItems="center">
                 <strong>Current Plan:</strong>
-                <Badge color={getTierColor(subscriptionTier)}>
-                  {getTierDisplayName(subscriptionTier)} - {getPlanPrice()}/{billingCycle === BillingCycle.MONTHLY ? 'mo' : 'yr'}
-                </Badge>
-                <StatusIndicator type={isProUser ? 'success' : 'info'}>
+                {subscriptionTier === 'standard' ? (
+                  <div 
+                    style={{
+                      backgroundColor: '#FFD700',
+                      color: '#000000',
+                      border: '1px solid #FFA500',
+                      borderRadius: '4px',
+                      padding: '4px 8px',
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      display: 'inline-block',
+                      textAlign: 'center',
+                      minWidth: '120px'
+                    }}
+                  >
+                    {getTierDisplayName(subscriptionTier)} - {getPlanPrice()}/{billingCycle === BillingCycle.MONTHLY ? 'mo' : 'yr'}
+                  </div>
+                ) : (
+                  <Badge color={getTierColor(subscriptionTier)}>
+                    {getTierDisplayName(subscriptionTier)} - {getPlanPrice()}/{billingCycle === BillingCycle.MONTHLY ? 'mo' : 'yr'}
+                  </Badge>
+                )}
+                {/*<StatusIndicator type={isProUser ? 'success' : 'info'}>
                   {isProUser ? 'Active' : 'Free Tier'}
-                </StatusIndicator>
+                </StatusIndicator>*/}
               </SpaceBetween>
             </div>
 
@@ -165,96 +232,13 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
           </SpaceBetween>
         </Box>
 
-        {/* Usage Metrics */}
-        <Box>
-          <SpaceBetween size="s">
-            <div>
-              <SpaceBetween direction="horizontal" size="xs" alignItems="center">
-                <strong>Usage This Period:</strong>
-                <Badge color={usagePercentage > 80 ? 'red' : 'green'}>
-                  {reportsUsed}/{reportsLimit === -1 ? '∞' : reportsLimit} reports
-                </Badge>
-              </SpaceBetween>
-            </div>
-            
-            {reportsLimit !== -1 && (
-              <ProgressBar
-                value={usagePercentage}
-                description={`${reportsLimit - reportsUsed} reports remaining this period`}
-              />
-            )}
-          </SpaceBetween>
-        </Box>
-
-        {/* ROI Display */}
-        {isProUser && (
-          <Box>
-            <SpaceBetween size="s">
-              <strong>Value This Month:</strong>
-              <div style={{ 
-                padding: '20px', 
-                background: 'linear-gradient(135deg, rgba(46, 125, 50, 0.1) 0%, rgba(46, 125, 50, 0.05) 100%)',
-                borderRadius: '12px',
-                border: '1px solid rgba(46, 125, 50, 0.2)',
-                position: 'relative',
-                overflow: 'hidden'
-              }}>
-                {/* Decorative background pattern */}
-                <div style={{
-                  position: 'absolute',
-                  top: -10,
-                  right: -10,
-                  width: 60,
-                  height: 60,
-                  background: 'radial-gradient(circle, rgba(46, 125, 50, 0.1) 0%, transparent 70%)',
-                  borderRadius: '50%'
-                }} />
-                
-                <SpaceBetween direction="horizontal" size="m" alignItems="center">
-                  <div style={{ flex: 1 }}>
-                    <div style={{ 
-                      fontSize: '2rem', 
-                      fontWeight: '800', 
-                      color: 'var(--color-text-status-success)',
-                      lineHeight: 1.2,
-                      marginBottom: '4px'
-                    }}>
-                      ${mockSubscriptionData.subscriptionValue}
-                    </div>
-                    <div style={{ 
-                      fontSize: '0.875rem', 
-                      color: 'var(--color-text-body-secondary)',
-                      fontWeight: '500'
-                    }}>
-                      Estimated value from analyses
-                    </div>
-                  </div>
-                  <div style={{
-                    padding: '8px 16px',
-                    background: 'rgba(46, 125, 50, 0.15)',
-                    borderRadius: '20px',
-                    border: '1px solid rgba(46, 125, 50, 0.3)'
-                  }}>
-                    <div style={{ 
-                      fontSize: '1.1rem', 
-                      fontWeight: 'bold', 
-                      color: 'var(--color-text-status-success)' 
-                    }}>
-                      ROI: {Math.round((mockSubscriptionData.subscriptionValue / (billingCycle === BillingCycle.MONTHLY ? 47 : 470)) * 100)}%
-                    </div>
-                  </div>
-                </SpaceBetween>
-              </div>
-            </SpaceBetween>
-          </Box>
-        )}
 
         {/* Feature Comparison */}
         <Box>
           <SpaceBetween size="s">
             <strong>Plan Features:</strong>
             <ColumnLayout columns={1} variant="text-grid">
-              {mockSubscriptionData.features.map((feature, index) => (
+              {getPlanFeatures().map((feature, index) => (
                 <div key={index}>
                   <SpaceBetween direction="horizontal" size="xs" alignItems="center">
                     <StatusIndicator type={feature.included ? 'success' : 'stopped'}>
@@ -293,9 +277,8 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
           <Button 
             variant="primary" 
             onClick={handleUpgrade}
-            fullWidth
           >
-            Upgrade to Pro Plan - Start at $47/month
+            Upgrade to Time Saver Plan - Start at $20/month
           </Button>
         )}
 
