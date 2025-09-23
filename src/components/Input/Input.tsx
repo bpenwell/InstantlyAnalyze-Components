@@ -14,6 +14,21 @@ const LockButton = styled.button`
   border: none;
   cursor: pointer;
   color: #888;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: #f0f0f0;
+    color: #666;
+  }
+  
+  &:active {
+    background-color: #e0e0e0;
+  }
 `;
 
 const MAX_CURRENCY_VALUE = 9007199254740991;
@@ -34,13 +49,63 @@ interface InputProps {
    * Is unlockable
    */
   locked?: boolean;
+  /**
+   * Placeholder text
+   */
+  placeholder?: string;
+  /**
+   * Error state
+   */
+  error?: boolean;
+  /**
+   * Success state
+   */
+  success?: boolean;
+  /**
+   * Loading state
+   */
+  loading?: boolean;
+  /**
+   * Floating label style
+   */
+  floatingLabel?: boolean;
+  /**
+   * Disabled state
+   */
+  disabled?: boolean;
+  /**
+   * Help text below input
+   */
+  helpText?: string;
+  /**
+   * Error message
+   */
+  errorMessage?: string;
 }
 
 export const Input = (props: InputProps) => {
-  const { id, label, type = 'text', options, value, onChange, required, locked } = props;
+  const { 
+    id, 
+    label, 
+    type = 'text', 
+    options, 
+    value, 
+    onChange, 
+    required, 
+    locked,
+    placeholder,
+    error,
+    success,
+    loading,
+    floatingLabel,
+    disabled,
+    helpText,
+    errorMessage
+  } = props;
   const valueNotUndefined = value !== undefined ? value : '';
   const [displayValue, setDisplayValue] = useState<string>(valueNotUndefined.toString());
   const [isLocked, setIsLocked] = useState(locked);
+  const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -108,12 +173,20 @@ export const Input = (props: InputProps) => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const inputElement = e.target;
     let rawInputValue = inputElement.value.replace('$', '').replace('%', '').replace(/,/g, '').replace(/[^0-9.]/g, ''); // Remove the currency symbol and commas
-    //Prevent multiple `.`
+    
+    // Prevent multiple decimal points
     const parts = rawInputValue.split('.');
-    if (parts[1]?.length > 2) {
-        parts[1] = parts[1].substring(0, 2);
+    if (parts.length > 2) {
+      // If more than one decimal point, keep only the first one
+      rawInputValue = parts[0] + '.' + parts.slice(1).join('');
     }
-    rawInputValue = parts.join('.');
+    
+    // Limit decimal places to 2 for currency, 3 for percent
+    if (parts[1]?.length > (type === 'currency' ? 2 : 3)) {
+        parts[1] = parts[1].substring(0, type === 'currency' ? 2 : 3);
+        rawInputValue = parts.join('.');
+    }
+    
     const currentCaretPosition = (inputElement as any).selectionStart || 0; // Save the current caret position
 
     let newValue: any = '';
@@ -135,7 +208,13 @@ export const Input = (props: InputProps) => {
         inputElement.setCustomValidity(''); // Clear the custom validity message
       }
 
-      newValue = rawInputValue + '%';
+      // Handle the "0%" edge case - don't add extra zeros
+      if (rawInputValue === '0' || rawInputValue === '') {
+        newValue = rawInputValue + '%';
+      } else {
+        newValue = rawInputValue + '%';
+      }
+      
       // Set the caret position
       setPercentCaretPosition(currentCaretPosition, newValue);
     }
@@ -201,55 +280,98 @@ export const Input = (props: InputProps) => {
   };
 
   const renderInput = () => {
-    const inputClassName = `input-field ${isLocked ? 'locked' : ''}`;
+    const inputClassName = `input-field ${isLocked ? 'locked' : ''} ${error ? 'error' : ''} ${success ? 'success' : ''}`;
+    const containerClassName = `input-container ${floatingLabel ? 'floating-label' : ''} ${loading ? 'loading' : ''}`;
     const toggleLock = () => {
       setIsLocked(!isLocked);
     };
     
     if (type === 'select' && options) {
       return (
-        <select id={id} value={displayValue} onChange={handleInputChange} className={inputClassName} disabled={isLocked}>
-          {options.map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-            
-          ))}
-        </select>
+        <div className={containerClassName}>
+          {!floatingLabel && (
+            <label htmlFor={id} className='label'>
+              {label}
+              {required && <Asterisk>*</Asterisk>}
+            </label>
+          )}
+          <select 
+            id={id} 
+            value={displayValue} 
+            onChange={handleInputChange} 
+            className={inputClassName} 
+            disabled={isLocked || disabled}
+          >
+            {options.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          {floatingLabel && (
+            <label htmlFor={id} className='label'>
+              {label}
+              {required && <Asterisk>*</Asterisk>}
+            </label>
+          )}
+          {helpText && !errorMessage && (
+            <div className="help-text">{helpText}</div>
+          )}
+          {errorMessage && (
+            <div className="error-message">{errorMessage}</div>
+          )}
+        </div>
       );
     } else {
       return (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <input
-            id={id}
-            required={required}
-            type={type}
-            value={displayValue}
-            onChange={handleInputChange}
-            onClick={handleOnClick}
-            onKeyDown={handleKeyDown}
-            ref={inputRef}
-            className={inputClassName}
-            checked={props.checked}
-            disabled={isLocked}
-          />
-          {isLocked && (
-            <LockButton onClick={toggleLock}>
-              🔓
-            </LockButton>
+        <div className={containerClassName}>
+          {!floatingLabel && (
+            <label htmlFor={id} className='label'>
+              {label}
+              {required && <Asterisk>*</Asterisk>}
+            </label>
+          )}
+          <div className="input-group">
+            <input
+              id={id}
+              required={required}
+              type={type}
+              value={displayValue}
+              onChange={handleInputChange}
+              onClick={handleOnClick}
+              onKeyDown={handleKeyDown}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+              ref={inputRef}
+              className={inputClassName}
+              checked={props.checked}
+              disabled={isLocked || disabled}
+              placeholder={floatingLabel ? ' ' : placeholder}
+            />
+            {isLocked && (
+              <LockButton onClick={toggleLock} title="Click to unlock">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM12 17c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM15.1 8H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+                </svg>
+              </LockButton>
+            )}
+          </div>
+          {floatingLabel && (
+            <label htmlFor={id} className='label'>
+              {label}
+              {required && <Asterisk>*</Asterisk>}
+            </label>
+          )}
+          {helpText && !errorMessage && (
+            <div className="help-text">{helpText}</div>
+          )}
+          {errorMessage && (
+            <div className="error-message">{errorMessage}</div>
           )}
         </div>
       );
     }
   };
 
-  return (
-    <div className='input-container'>
-      <label htmlFor={id} className='label'>
-        {label}
-        {required && <Asterisk>*</Asterisk>}
-      </label>
-      {renderInput()}
-    </div>
-  );
+  return renderInput();
 };

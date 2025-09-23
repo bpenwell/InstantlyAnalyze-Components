@@ -27,6 +27,7 @@ export { ImageUploadContainer } from './components/ImageUploadContainer/ImageUpl
 export type { IImageUploadContainerProps } from './components/ImageUploadContainer/ImageUploadContainer';
 export { AddressForm } from './components/AddressForm/AddressForm';
 export { AddressFormV2, MAPBOX_KEY } from './components/AddressForm/AddressFormV2';
+export type { AddressFormV2Ref } from './components/AddressForm/AddressFormV2';
 export { Dropdown } from './components/Dropdown/Dropdown';
 export { AppLayoutPreview } from './components/AppLayout/AppLayout';
 export {

@@ -2,41 +2,327 @@
 
 /* Style for the container of each input field */
 .input-container {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    position: relative;
+    min-width: 0; /* Allow container to shrink below content size */
+}
+
+/* Ensure consistent spacing for all input fields */
+.input-container .input-label {
+    margin-bottom: 8px;
+}
+
+/* Field label container for consistent spacing */
+.field-label-container {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #16191f;
+    transition: color 0.2s ease;
+    height: 18.39px;
+    line-height: 18.39px;
+}
+
+/* When there's a help tooltip, make it flex */
+.field-label-container:has(.help-tooltip-container) {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.dark .field-label-container {
+    color: #ffffff;
 }
 
 /* Style for the label above the input field */
-.label {
+.input-label {
     display: block;
-    margin-bottom: 5px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #16191f;
+    transition: color 0.2s ease;
+}
+
+/* Dark mode label */
+.dark .input-label {
+    color: #ffffff;
 }
 
 /* Style for the input field */
 .input-field {
     width: 100%;
-    padding: 8px;
+    padding: 8px 12px;
+    height: 36.39px;
     box-sizing: border-box; /* Ensures padding and border are included in the total width/height */
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
+    border: 2px solid #e1e5e9;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Input field focus state */
+.input-field:focus {
+    border-color: #0073bb;
+    box-shadow: 0 0 0 3px rgba(0, 115, 187, 0.1);
+    transform: translateY(-1px);
+}
+
+/* Input field hover state */
+.input-field:hover:not(:focus):not(:disabled) {
+    border-color: #aab7b8;
+    transform: translateY(-1px);
 }
 
 /* Style for locked input field */
 .input-field.locked {
-    background-color: #f0f0f0; /* Light gray background */
+    background-color: #f8f9fa;
+    border-color: #d1d5db;
+    color: #6b7280;
+    cursor: not-allowed;
 }
 
-/* Style for the submit button */
-.submit-button {
-    background-color: #4caf50;
-    color: white;
-    padding: 10px 15px;
+/* Dark mode input field */
+.dark .input-field {
+    background-color: #2d2d2d;
+    border-color: #404040;
+    color: #ffffff;
+}
+
+.dark .input-field:focus {
+    border-color: #0073bb;
+    box-shadow: 0 0 0 3px rgba(0, 115, 187, 0.2);
+}
+
+.dark .input-field:hover:not(:focus):not(:disabled) {
+    border-color: #6b7280;
+}
+
+.dark .input-field.locked {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #9ca3af;
+}
+
+/* Input field disabled state */
+.input-field:disabled {
+    background-color: #f3f4f6;
+    border-color: #d1d5db;
+    color: #9ca3af;
+    cursor: not-allowed;
+}
+
+.dark .input-field:disabled {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #6b7280;
+}
+
+/* Floating label animation */
+.input-container.floating-label .input-label {
+    position: absolute;
+    top: 12px;
+    left: 16px;
+    background-color: #ffffff;
+    padding: 0 4px;
     font-size: 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+    color: #6b7280;
+    transition: all 0.2s ease;
+    pointer-events: none;
+    z-index: 1;
 }
 
-.submit-button:hover {
-    background-color: #45a049;
+.dark .input-container.floating-label .input-label {
+    background-color: #2d2d2d;
+    color: #9ca3af;
+}
+
+.input-container.floating-label .input-field:focus + .input-label,
+.input-container.floating-label .input-field:not(:placeholder-shown) + .input-label {
+    top: -8px;
+    font-size: 12px;
+    color: #0073bb;
+    font-weight: 500;
+}
+
+.dark .input-container.floating-label .input-field:focus + .input-label,
+.dark .input-container.floating-label .input-field:not(:placeholder-shown) + .input-label {
+    color: #0073bb;
+}
+
+/* Error state */
+.input-field.error {
+    border-color: #d13212;
+    box-shadow: 0 0 0 3px rgba(209, 50, 18, 0.1);
+}
+
+.input-field.error:focus {
+    box-shadow: 0 0 0 3px rgba(209, 50, 18, 0.2);
+}
+
+/* Success state */
+.input-field.success {
+    border-color: #007f5f;
+    box-shadow: 0 0 0 3px rgba(0, 127, 95, 0.1);
+}
+
+.input-field.success:focus {
+    box-shadow: 0 0 0 3px rgba(0, 127, 95, 0.2);
+}
+
+/* Input group styling */
+.input-group {
+    display: flex;
+    position: relative;
+    margin-top: 8px;
+}
+
+/* Special styling for inputs with lock buttons */
+.input-group:has(.lock-button) .input-field {
+    border-radius: 8px 0 0 8px;
+    border-right: none;
+}
+
+.input-group:has(.lock-button) .input-field:focus {
+    border-radius: 8px 0 0 8px;
+    border-right: none;
+}
+
+/* Loading state */
+.input-container.loading .input-field {
+    background-image: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
+
+.dark .input-container.loading .input-field {
+    background-image: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+}
+
+@keyframes loading {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Smooth transitions for all interactive elements */
+.input-field,
+.input-label,
+.input-container {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced focus ring for accessibility */
+.input-field:focus-visible {
+    outline: 2px solid #0073bb;
+    outline-offset: 2px;
+}
+
+/* Placeholder styling */
+.input-field::placeholder {
+    color: #9ca3af;
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
+
+.dark .input-field::placeholder {
+    color: #6b7280;
+}
+
+.input-field:focus::placeholder {
+    opacity: 0.7;
+}
+
+/* Help text and error message styling */
+.help-text {
+    font-size: 12px;
+    color: #687078;
+    margin-top: 4px;
+    line-height: 1.4;
+}
+
+.dark .help-text {
+    color: #aab7b8;
+}
+
+.error-message {
+    font-size: 12px;
+    color: #d13212;
+    margin-top: 4px;
+    line-height: 1.4;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.error-message::before {
+    content: "⚠";
+    font-size: 14px;
+}
+
+/* Enhanced lock button styling */
+.input-group .lock-button {
+    border-radius: 0 8px 8px 0;
+    border: 2px solid #e1e5e9;
+    border-left: none;
+    background-color: #ffffff;
+    padding: 8px 12px;
+    height: 36.39px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.dark .input-group .lock-button {
+    background-color: #2d2d2d;
+    border-color: #404040;
+}
+
+.input-group .lock-button:hover {
+    background-color: #f8f9fa;
+    border-color: #aab7b8;
+}
+
+.dark .input-group .lock-button:hover {
+    background-color: #3a3a3a;
+    border-color: #6b7280;
+}
+
+/* Focus state for input group */
+.input-group:focus-within .lock-button {
+    border-color: #0073bb;
+}
+
+/* Improved select styling */
+select.input-field {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 40px;
+}
+
+/* Checkbox styling */
+input[type="checkbox"].input-field {
+    width: auto;
+    margin-right: 8px;
+    transform: scale(1.2);
+}
+
+/* Number input styling */
+input[type="number"].input-field {
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+input[type="number"].input-field::-webkit-outer-spin-button,
+input[type="number"].input-field::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }

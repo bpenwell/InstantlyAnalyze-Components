@@ -15,8 +15,51 @@ jest.mock('../../../src/components/LoadingBar/LoadingBar', () => ({
   LoadingBar: ({ text }: any) => <div data-testid="loading-bar">{text}</div>,
 }));
 
+jest.mock('../../../src/components/Input/Input', () => ({
+  Input: ({ label, placeholder, onChange, value, ...props }: any) => (
+    <div>
+      <label>{label}</label>
+      <input 
+        placeholder={placeholder} 
+        onChange={onChange} 
+        value={value} 
+        data-testid="input"
+        {...props} 
+      />
+    </div>
+  ),
+}));
+
+jest.mock('../../../src/utils/AppContextProvider', () => ({
+  useAppContext: () => ({
+    getAppMode: () => 'light',
+  }),
+}));
+
 jest.mock('@cloudscape-design/components', () => ({
   SpaceBetween: ({ children }: any) => <div data-testid="space-between">{children}</div>,
+  Container: ({ children }: any) => <div data-testid="container">{children}</div>,
+  Header: ({ children }: any) => <div data-testid="header">{children}</div>,
+  Button: ({ children, onClick, disabled, ...props }: any) => (
+    <button data-testid="button" onClick={onClick} disabled={disabled} {...props}>
+      {children}
+    </button>
+  ),
+  Toggle: ({ onChange, checked, children, ...props }: any) => (
+    <div data-testid="toggle" {...props}>
+      <input 
+        type="checkbox" 
+        onChange={onChange} 
+        checked={checked} 
+      />
+      {children}
+    </div>
+  ),
+  Alert: ({ children, type, ...props }: any) => (
+    <div data-testid="alert" className={`alert-${type}`} {...props}>
+      {children}
+    </div>
+  ),
 }));
 
 const mockOnAddressSubmit = jest.fn();
@@ -42,8 +85,8 @@ describe('AddressFormV2 Component', () => {
         rentalData={{} as any}
       />
     );
-    expect(screen.getByLabelText('Address:')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Enter your address')).toBeInTheDocument();
+    expect(screen.getByLabelText('Enter Address:')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Start typing your address...')).toBeInTheDocument();
     expect(screen.getByTestId('address-autofill')).toBeInTheDocument();
   });
 
@@ -70,7 +113,7 @@ describe('AddressFormV2 Component', () => {
         rentalData={{} as any}
       />
     );
-    const input = screen.getByPlaceholderText('Enter your address') as HTMLInputElement;
+    const input = screen.getByPlaceholderText('Start typing your address...') as HTMLInputElement;
     fireEvent.change(input, { target: { value: '456 Broadway' } });
     expect(input.value).toBe('456 Broadway');
   });

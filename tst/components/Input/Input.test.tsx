@@ -195,7 +195,7 @@ describe('Input', () => {
     it('should render lock button when locked is true', () => {
       renderInput({ locked: true });
       
-      const lockButton = screen.getByText('🔓');
+      const lockButton = screen.getByTitle('Click to unlock');
       expect(lockButton).toBeInTheDocument();
     });
 
@@ -210,7 +210,7 @@ describe('Input', () => {
       const user = userEvent.setup();
       renderInput({ locked: true });
       
-      const lockButton = screen.getByText('🔓');
+      const lockButton = screen.getByTitle('Click to unlock');
       const input = screen.getByRole('textbox');
       
       expect(input).toBeDisabled();
