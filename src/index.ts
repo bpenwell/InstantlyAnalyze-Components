@@ -55,11 +55,18 @@ export {
 } from './components/BuyBox/constants';
 export { ComingSoonWrapper } from './components/ComingSoonWrapper/ComingSoonWrapper';
 
+// SEO Components
+export { SEOHead, createSoftwareApplicationSchema, createWebPageSchema } from './components/SEO/SEOHead';
+export type { SEOHeadProps } from './components/SEO/SEOHead';
+
 // Common Components
 export { CachedAvatar } from './components/Common/CachedAvatar';
 
 // Utils
 export { useProfilePictureCache } from './utils/useProfilePictureCache';
+
+// Hooks
+export { useSEO } from './hooks/useSEO';
 
 // Profile Components
 export {

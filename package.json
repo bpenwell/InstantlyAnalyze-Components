@@ -14,6 +14,7 @@
   "scripts": {
     "build": "npx tsc && webpack --mode development",
     "build:prod": "npx tsc && webpack --mode production",
+    "build:minify": "npx tsc && webpack --mode production",
     "dev": "webpack --mode development",
     "server": "webpack --mode development --watch",
     "lint": "eslint .",

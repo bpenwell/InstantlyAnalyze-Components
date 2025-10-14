@@ -1,8 +1,8 @@
 const path = require('path');
 
-module.exports = {
-    mode: 'development',
-    //devtool: 'source-map',
+module.exports = (env, argv) => ({
+    mode: argv.mode || 'development',
+    devtool: argv.mode === 'production' ? false : 'source-map',
     entry: './src/index.ts',
     output: {
       path: path.resolve(__dirname, 'dist'),
@@ -39,6 +39,9 @@ module.exports = {
             },
         ],
     },
+    optimization: {
+      minimize: argv.mode === 'production',
+    },
     externals: {
       react: 'react',
       'react-dom': 'react-dom',
@@ -50,4 +53,4 @@ module.exports = {
       '@cloudscape-design/chat-components': '@cloudscape-design/chat-components',
       '@cloudscape-design/components': '@cloudscape-design/components',
     },
-};
+});
