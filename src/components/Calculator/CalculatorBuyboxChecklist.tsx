@@ -33,8 +33,22 @@ const RULES = [
       </Link>
     ),
     valueType: 'percent',
-    calculate: (calcUtils: CalculationUtils, data: IRentalCalculatorData) =>
-      calcUtils.calculateCoCROI(data),
+    calculate: (calcUtils: CalculationUtils, data: IRentalCalculatorData) => {
+      // For deals with timeline events (BRRRR, rehab, refinance), use stabilized CoC ROI
+      const cashFlowByPhase = calcUtils.getCashFlowByPhase(data);
+
+      // Use the most stabilized phase available (prefer refinance > rehab > purchase)
+      if (cashFlowByPhase.afterRefinance) {
+        return cashFlowByPhase.afterRefinance.cocROI;
+      } else if (cashFlowByPhase.afterRehab) {
+        return cashFlowByPhase.afterRehab.cocROI;
+      } else if (cashFlowByPhase.atPurchase) {
+        return cashFlowByPhase.atPurchase.cocROI;
+      }
+
+      // Fallback to standard calculation
+      return calcUtils.calculateCoCROI(data);
+    },
     displayFn: (value: number) => {
       return displayAsPercent(value, 2, false);
     },

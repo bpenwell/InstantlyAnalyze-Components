@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Button, Header, SpaceBetween, Grid, Link } from '@cloudscape-design/components';
-import { 
-  BackendAPI, 
-  getImageSrc, 
-  IRentalCalculatorData, 
-  PAGE_PATH, 
-  printObjectFields, 
-  RedirectAPI 
+import {
+  BackendAPI,
+  getImageSrc,
+  IRentalCalculatorData,
+  PAGE_PATH,
+  printObjectFields,
+  RedirectAPI
 } from '@bpenwell/instantlyanalyze-module';
 import { ShareModal } from '../ShareModal/ShareModal';
+import { useNotifications } from '../Notification/NotificationProvider';
 import './CalculatorHeader.css';
 import { useAuth0 } from '@auth0/auth0-react';
 import { ICalculatorSummary } from './CalculatorSummary';
@@ -32,13 +33,14 @@ export const CalculatorHeader: React.FC<ICalculatorSummary> = ({
   };
 
   const [reportData, setReportData] = useState<IRentalCalculatorData>(initialRentalReportData);
-  const [originalReportData] = useState<IRentalCalculatorData>(initialRentalReportData); // Track original data
+  const [originalReportData, setOriginalReportData] = useState<IRentalCalculatorData>(initialRentalReportData); // Track original data
   const [isModified, setIsModified] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [shareableLink, setShareableLink] = useState(getShareableReportLink(initialRentalReportData.isShareable));
   const backendAPI = new BackendAPI();
   const redirectAPI = new RedirectAPI();
   const { user } = useAuth0();
+  const { showNotification } = useNotifications();
   const isSharePage = window.location.href.includes('share/');
 
   // Sync reportData with prop changes
@@ -50,16 +52,39 @@ export const CalculatorHeader: React.FC<ICalculatorSummary> = ({
       // Compare reportData with the original data to determine if modifications have been made
       setIsModified(JSON.stringify(reportData) !== JSON.stringify(originalReportData));
   }, [reportData, originalReportData]);
+
+  // Sync originalReportData when external saves occur (e.g., timeline editor)
+  // This prevents false "unsaved changes" detection after timeline saves
+  useEffect(() => {
+    const reportDataStr = JSON.stringify(reportData);
+    const originalDataStr = JSON.stringify(originalReportData);
+
+    // If data has changed but we're not showing as modified,
+    // it means an external save occurred (like timeline editor save)
+    // Update our baseline to match
+    if (!isModified && reportDataStr !== originalDataStr) {
+      console.log('[CalculatorHeader] Syncing baseline after external save');
+      setOriginalReportData(reportData);
+    }
+  }, [reportData, isModified, originalReportData]);
   
   const handleSave = async () => {
     try {
       console.debug(`[DEBUG] initialData ${printObjectFields(reportData)}`);
       await backendAPI.saveUpdatedRentalReport(reportId, reportData, true, user?.sub);
-      alert('Report saved successfully.');
+      showNotification({
+        type: 'success',
+        message: 'Report data has been successfully saved.',
+      });
+      // Reset baseline after successful save
+      setOriginalReportData(reportData);
       setIsModified(false);
     } catch (error) {
       console.error('Error saving report:', error);
-      alert('Failed to save the report.');
+      showNotification({
+        type: 'error',
+        message: 'Failed to save the report. Please try again.',
+      });
     }
   };
 

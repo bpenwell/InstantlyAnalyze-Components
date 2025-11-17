@@ -7,6 +7,8 @@ import {
   PAGE_PATH,
   RedirectAPI,
   FeedbackType,
+  LOCAL_STORAGE_KEYS,
+  save,
 } from "@bpenwell/instantlyanalyze-module";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useAppContext } from "../../utils/AppContextProvider";
@@ -416,7 +418,11 @@ function HomeNavbar() {
                 <div className="flex px-2">
                   <Button
                     onClick={() => {
-                      loginWithPopup();
+                      // Save current page as redirect destination
+                      const currentPath = window.location.pathname + window.location.search;
+                      save(LOCAL_STORAGE_KEYS.REDIRECT_AFTER_LOGIN, currentPath);
+                      // Redirect to login page
+                      redirectApi.redirectToPage(PAGE_PATH.LOGIN);
                     }}
                     className="w-30 h-25 text-base px-2 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
                   >
@@ -498,7 +504,11 @@ function HomeNavbar() {
                   <div className="flex py-2">
                     <Button
                       onClick={() => {
-                        loginWithPopup();
+                        // Save current page as redirect destination
+                        const currentPath = window.location.pathname + window.location.search;
+                        save(LOCAL_STORAGE_KEYS.REDIRECT_AFTER_LOGIN, currentPath);
+                        // Redirect to login page
+                        redirectApi.redirectToPage(PAGE_PATH.LOGIN);
                       }}
                       className="mw-30 mh-25 text-base px-2 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
                     >
@@ -854,7 +864,11 @@ const StickyNavbar = () => {
             <div className="flex lg:flex px-2">
               <Button
                 onClick={() => {
-                  loginWithPopup();
+                  // Save current page as redirect destination
+                  const currentPath = window.location.pathname + window.location.search;
+                  save(LOCAL_STORAGE_KEYS.REDIRECT_AFTER_LOGIN, currentPath);
+                  // Redirect to login page
+                  redirectApi.redirectToPage(PAGE_PATH.LOGIN);
                 }}
                 className="w-30 h-25 text-base px-2 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
               >

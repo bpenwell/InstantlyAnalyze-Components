@@ -10,6 +10,7 @@ jest.mock('@bpenwell/instantlyanalyze-module', () => ({
     calculateMortgagePayment: jest.fn(() => 1200),
     calculateBeforeTaxEquityReversion: jest.fn(() => 150000),
     calculateAnnualizedReturn: jest.fn(() => 10),
+    calculateMonthlyTimelineData: jest.fn(() => []),
   })),
   displayAsMoney: (val: number) => `$${val}`,
   displayAsPercent: (val: number) => `${val}%`,
@@ -77,4 +78,4 @@ describe('CalculatorLoanPaydown Component', () => {
     expect(screen.queryByText('Year 20')).not.toBeInTheDocument();
     expect(screen.queryByText('Year 30')).not.toBeInTheDocument();
   });
-}); 
+});

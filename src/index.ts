@@ -28,6 +28,7 @@ export type { IImageUploadContainerProps } from './components/ImageUploadContain
 export { AddressForm } from './components/AddressForm/AddressForm';
 export { AddressFormV2, MAPBOX_KEY } from './components/AddressForm/AddressFormV2';
 export type { AddressFormV2Ref } from './components/AddressForm/AddressFormV2';
+export { HeroAddressSearch } from './components/HeroAddressSearch/HeroAddressSearch';
 export { Dropdown } from './components/Dropdown/Dropdown';
 export { AppLayoutPreview } from './components/AppLayout/AppLayout';
 export {
@@ -42,6 +43,9 @@ export { ManualRefresh } from './components/ManualRefresh/ManualRefresh';
 export { DeleteWithConfirmation } from './components/DeleteWithConfirmation/DeleteWithConfirmation';
 export { AppContextProvider, useAppContext } from './utils/AppContextProvider';
 export { AnalyticsTracker, useAnalytics } from './utils/AnalyticsTracker';
+export { NotificationProvider, useNotifications } from './components/Notification/NotificationProvider';
+export type { NotificationMessage } from './components/Notification/NotificationProvider';
+export { NotificationBanner } from './components/Notification/NotificationBanner';
 export { Cards } from './components/Cards/Cards';
 export { CardItem } from './components/Cards/CardItem';
 export { HeroSection } from './components/HeroSection/HeroSection';
@@ -54,6 +58,8 @@ export {
     meetsBuyboxCriteria,
 } from './components/BuyBox/constants';
 export { ComingSoonWrapper } from './components/ComingSoonWrapper/ComingSoonWrapper';
+export { UnitLayoutEditor } from './components/RentalCalculator/UnitLayoutEditor';
+export type { UnitLayoutEditorProps } from './components/RentalCalculator/UnitLayoutEditor';
 
 // SEO Components
 export { SEOHead, createSoftwareApplicationSchema, createWebPageSchema } from './components/SEO/SEOHead';

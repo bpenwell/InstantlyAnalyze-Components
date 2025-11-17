@@ -28,18 +28,25 @@ jest.mock('@cloudscape-design/components', () => ({
   Container: ({ children }: any) => <div data-testid="container">{children}</div>,
   Header: ({ children }: any) => <h2 data-testid="header">{children}</h2>,
   Button: ({ children, onClick, disabled }: any) => <button onClick={onClick} disabled={disabled}>{children}</button>,
-  Table: ({ items }: any) => (
-    <table data-testid="table">
-      <tbody>
-        {items.map((item: any, index: number) => (
-          <tr key={index}>
-            {Object.values(item).map((val: any, i: number) => <td key={i}>{val.display || val}</td>)}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+  Table: ({ items, columnDefinitions, header }: any) => (
+    <div data-testid="table">
+      {header}
+      <table>
+        <tbody>
+          {items.map((item: any, index: number) => (
+            <tr key={index}>
+              {columnDefinitions.map((col: any) => (
+                <td key={col.id}>{typeof col.cell === 'function' ? col.cell(item) : item[col.id]}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   ),
   TextContent: ({ children }: any) => <div>{children}</div>,
+  SpaceBetween: ({ children }: any) => <div>{children}</div>,
+  Box: ({ children }: any) => <div>{children}</div>,
 }));
 
 const mockProps = {
@@ -75,7 +82,7 @@ describe('CalculatorSensitivityTable Component', () => {
     render(<CalculatorSensitivityTable {...mockProps} />);
     expect(screen.getByTestId('container')).toBeInTheDocument();
     expect(screen.getByText('Sensitivity Analysis')).toBeInTheDocument();
-    expect(screen.getByText('Generate Table')).toBeInTheDocument();
+    expect(screen.getByText('Generate Sensitivity Table')).toBeInTheDocument();
   });
 
   it('should display sensitivity data correctly after generation', async () => {
@@ -83,15 +90,14 @@ describe('CalculatorSensitivityTable Component', () => {
     fireEvent.click(screen.getByText('Rental Income'));
     fireEvent.click(screen.getByText('Purchase Price'));
     fireEvent.click(screen.getByText('Cash on Cash Return on Investment'));
-    fireEvent.click(screen.getByText('Generate Table'));
+    fireEvent.click(screen.getByText('Generate Sensitivity Table'));
     expect(await screen.findByTestId('table')).toBeInTheDocument();
     expect(screen.getAllByRole('row').length).toBeGreaterThan(1);
   });
 
-  it('should show an alert if not enough inputs are selected', () => {
-    window.alert = jest.fn();
+  it('should disable generate button when not enough inputs are selected', () => {
     render(<CalculatorSensitivityTable {...mockProps} />);
-    fireEvent.click(screen.getByText('Generate Table'));
-    expect(window.alert).toHaveBeenCalledWith('Please select exactly 2 input variables and 1 output variable.');
+    const generateButton = screen.getByText('Generate Sensitivity Table');
+    expect(generateButton).toBeDisabled();
   });
-}); 
+});

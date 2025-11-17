@@ -4,7 +4,10 @@ import {
   Container,
   Header,
   Table,
-  TextContent
+  TextContent,
+  SpaceBetween,
+  Box,
+  ColumnLayout
 } from '@cloudscape-design/components';
 
 import { IRentalCalculatorPageProps } from '../../interfaces';
@@ -16,6 +19,7 @@ import {
   getManagementFeesDisplayConfig,
   getOtherExpensesDisplayConfig,
   getPurchasePriceDisplayConfig,
+  getRehabBudgetDisplayConfig,
   getRentalIncomeDisplayConfig,
   getVacancyDisplayConfig,
   IDataDisplayConfig,
@@ -145,6 +149,7 @@ const inputOptions: DataClassifier[] = [
   DataClassifier.CustomExpenses,
   DataClassifier.Vacancy,
   DataClassifier.PurchasePrice,
+  DataClassifier.RehabBudget,
   DataClassifier.ManagementFees,
   DataClassifier.LoanToValuePercent,
   DataClassifier.LoanTerm,
@@ -374,6 +379,11 @@ export const CalculatorSensitivityTable: React.FC<IRentalCalculatorPageProps> = 
             Number(initialData.purchaseDetails.purchasePrice.toFixed(0))
           );
           break;
+        case 'Rehab Budget':
+          displayConfig = getRehabBudgetDisplayConfig(
+            Number((initialData.strategyDetails.rehabRepairCosts || 0).toFixed(0))
+          );
+          break;
         case 'Management Fees':
           displayConfig = getManagementFeesDisplayConfig(
             initialData.expenseDetails.managementFeePercent,
@@ -544,100 +554,114 @@ export const CalculatorSensitivityTable: React.FC<IRentalCalculatorPageProps> = 
 
   return (
     <Container className="calculator-container">
-      <Header variant="h2" description='Select 2 input variables and 1 output to get started'>Sensitivity Analysis</Header>
-      <TextContent>
+      <SpaceBetween size="l">
+        <Header variant="h2" description='Select 2 input variables and 1 output to get started'>
+          Sensitivity Analysis
+        </Header>
 
         {/* INPUT VARIABLE SELECTION */}
-        <div className="form-group">
-          <label className="label bold-label">Select Input Variables:</label>
-          <div className="button-group">
-            {inputOptions.map((input) => (
-              <Button
-                key={input}
-                onClick={() => handleInputChange(input)}
-                disabled={selectedInputs.length >= 2 && !selectedInputs.includes(input)}
-                variant={selectedInputs.includes(input) ? 'primary' : 'normal'}
-              >
-                {input}
-              </Button>
-            ))}
-          </div>
-        </div>
+        <Box>
+          <SpaceBetween size="s">
+            <Header variant="h3">Input Variables</Header>
+            <div className="button-group">
+              {inputOptions.map((input) => (
+                <Button
+                  key={input}
+                  onClick={() => handleInputChange(input)}
+                  disabled={selectedInputs.length >= 2 && !selectedInputs.includes(input)}
+                  variant={selectedInputs.includes(input) ? 'primary' : 'normal'}
+                >
+                  {input}
+                </Button>
+              ))}
+            </div>
+          </SpaceBetween>
+        </Box>
 
         {/* OUTPUT VARIABLE SELECTION */}
-        <div className="form-group">
-          <label className="label bold-label">Select Output Variables:</label>
-          <div className="button-group">
-            {outputOptions.map((output) => (
-              <Button
-                key={output}
-                onClick={() => handleOutputChange(output)}
-                disabled={selectedOutput !== null && selectedOutput !== output}
-                variant={selectedOutput === output ? 'primary' : 'normal'}
-              >
-                {output}
-              </Button>
-            ))}
-          </div>
-        </div>
+        <Box>
+          <SpaceBetween size="s">
+            <Header variant="h3">Output Metric</Header>
+            <div className="button-group">
+              {outputOptions.map((output) => (
+                <Button
+                  key={output}
+                  onClick={() => handleOutputChange(output)}
+                  disabled={selectedOutput !== null && selectedOutput !== output}
+                  variant={selectedOutput === output ? 'primary' : 'normal'}
+                >
+                  {output}
+                </Button>
+              ))}
+            </div>
+          </SpaceBetween>
+        </Box>
 
         {/* GENERATE TABLE BUTTON */}
-        <Button variant="primary" onClick={handleGenerateTable}>
-          Generate Table
-        </Button>
+        <Box textAlign="center">
+          <Button
+            variant="primary"
+            onClick={handleGenerateTable}
+            disabled={selectedInputs.length !== 2 || selectedOutput === null}
+          >
+            Generate Sensitivity Table
+          </Button>
+        </Box>
 
         {isTableCleared && (
-          <p className="form-group" style={{ marginTop: '1rem' }}>
+          <Box variant="p" color="text-status-warning" textAlign="center">
             Table cleared due to report data updating.
-          </p>
+          </Box>
         )}
 
         {/* TABLE OR LOADING BAR */}
         {loading ? (
-          <div style={{ marginTop: '1rem' }}>
+          <Box textAlign="center" padding="xxl">
             <LoadingBar />
-          </div>
+          </Box>
         ) : (
           generatedTable.length > 0 && (
-            <div className="grid-container">
-              {/* Top axis label (column axis) */}
-              <div className="top-header">
-                {tableData[0]?.displayFormat.label /* e.g. "Vacancy" */}
-              </div>
+            <Box>
+              <div className="grid-container">
+                {/* Top axis label (column axis) */}
+                <div className="top-header">
+                  {tableData[0]?.displayFormat.label /* e.g. "Vacancy" */}
+                </div>
 
-              {/* Side axis label (row axis) */}
-              <div className="side-header">
-                {tableData[1]?.displayFormat.label /* e.g. "Rental Income" */}
-              </div>
+                {/* Side axis label (row axis) */}
+                <div className="side-header">
+                  {tableData[1]?.displayFormat.label /* e.g. "Rental Income" */}
+                </div>
 
-              {/* The table itself. 
-                  We'll wrap it in a div with className="sensitivity-table"
-                  so we can do "querySelectorAll('.sensitivity-table table tr')".
-               */}
-              <div className="table-wrapper sensitivity-table">
-                <Table
-                  items={cloudscapeTableData.items}
-                  columnDefinitions={cloudscapeTableData.columns}
-                  variant="container"
-                  contentDensity="compact"
-                  header={<Header variant="h2">{cloudscapeTableData.tableHeader}</Header>}
-                />
+                {/* The table itself.
+                    We'll wrap it in a div with className="sensitivity-table"
+                    so we can do "querySelectorAll('.sensitivity-table table tr')".
+                 */}
+                <div className="table-wrapper sensitivity-table">
+                  <Table
+                    items={cloudscapeTableData.items}
+                    columnDefinitions={cloudscapeTableData.columns}
+                    variant="container"
+                    contentDensity="compact"
+                    header={<Header variant="h2">{cloudscapeTableData.tableHeader}</Header>}
+                  />
+                </div>
               </div>
-            </div>
+            </Box>
           )
         )}
 
-        {/* OPTIONAL LEGEND */}
+        {/* LEGEND */}
         {generatedTable.length > 0 && !loading && (
-          <div className="legend-container">
-            <div className="legend">
+          <Box textAlign="center" padding={{ top: 's' }}>
+            <SpaceBetween size="xs" direction="horizontal" alignItems="center">
               <div className="legend-color-box"></div>
-              <span>Closest Report Configuration</span>
-            </div>
-          </div>
+              <Box variant="small">Closest to Current Configuration</Box>
+            </SpaceBetween>
+          </Box>
         )}
 
-      </TextContent>
+      </SpaceBetween>
     </Container>
   );
 };

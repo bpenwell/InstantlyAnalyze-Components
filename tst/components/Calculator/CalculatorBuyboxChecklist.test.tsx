@@ -6,6 +6,9 @@ import userEvent from '@testing-library/user-event';
 const mockCalculateCoCROI = jest.fn().mockReturnValue(10.5);
 const mockCalculateGoingInCapRate = jest.fn().mockReturnValue(8.2);
 const mockCalculate50PercentRuleCashFlow = jest.fn().mockReturnValue(500);
+const mockGetCashFlowByPhase = jest.fn().mockReturnValue({
+  atPurchase: { cashFlow: 1000, cocROI: 10.5, month: 0 }
+});
 
 // Mock the module BEFORE importing the component
 jest.mock('@bpenwell/instantlyanalyze-module', () => ({
@@ -13,6 +16,7 @@ jest.mock('@bpenwell/instantlyanalyze-module', () => ({
     calculateCoCROI: mockCalculateCoCROI,
     calculateGoingInCapRate: mockCalculateGoingInCapRate,
     calculate50PercentRuleCashFlow: mockCalculate50PercentRuleCashFlow,
+    getCashFlowByPhase: mockGetCashFlowByPhase,
   })),
   displayAsMoney: jest.fn((value: number) => `$${value.toFixed(0)}`),
   displayAsPercent: jest.fn((value: number) => `${value.toFixed(2)}%`),
@@ -165,9 +169,11 @@ describe('CalculatorBuyboxChecklist', () => {
   describe('rule calculations', () => {
     it('should calculate CoC ROI correctly', () => {
       renderCalculatorBuyboxChecklist();
-      
+
       expect(mockCalculationUtils).toHaveBeenCalled();
-      expect(mockCalculateCoCROI).toHaveBeenCalledWith(mockProps.initialRentalReportData);
+      expect(mockGetCashFlowByPhase).toHaveBeenCalledWith(mockProps.initialRentalReportData);
+      // Should not fall back to calculateCoCROI since getCashFlowByPhase returns atPurchase
+      expect(mockCalculateCoCROI).not.toHaveBeenCalled();
     });
 
     it('should calculate Cap Rate correctly', () => {
@@ -283,4 +289,4 @@ describe('CalculatorBuyboxChecklist', () => {
       expect(screen.getByText('Edit')).toBeInTheDocument();
     });
   });
-}); 
+});

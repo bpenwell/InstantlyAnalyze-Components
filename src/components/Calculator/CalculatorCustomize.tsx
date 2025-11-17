@@ -348,10 +348,6 @@ export const CalculatorCustomize: React.FC<IRentalCalculatorPageProps> = (props:
             </div>
           </div>
           <div className="report-section">
-            <h3 className="section-title">Total Cash Needed</h3>
-            <div className="total-cash-value">
-              {displayAsMoney(totalCashNeeded, 0, '$', false, true)}
-            </div>
             <div className="section-header">
               <h3 className="section-title">Loan details</h3>
             </div>

@@ -4,9 +4,11 @@ import {
   CalculationUtils,
   displayAsMoney,
   displayAsPercent,
+  TimelineEventType,
+  IMonthlyCalculationData,
 } from '@bpenwell/instantlyanalyze-module';
 
-import { 
+import {
   Container,
   Header,
   SpaceBetween,
@@ -24,9 +26,38 @@ export const CalculatorLoanPaydown: React.FC<IRentalCalculatorPageProps> = (prop
   const calculationUtils = new CalculationUtils();
   const { initialRentalReportData, fullLoanTermRentalReportData } = props;
 
-  // Filter applicable time periods based on the loan term.
+  // Check for timeline events and determine loan lifecycle
+  let maxYear = initialRentalReportData.loanDetails.loanTerm;
+  let refinanceYear: number | null = null;
+  let saleYear: number | null = null;
+
+  if (initialRentalReportData.timelineDetails && initialRentalReportData.timelineDetails.events) {
+    const refinanceEvent = initialRentalReportData.timelineDetails.events.find(
+      e => e.type === TimelineEventType.REFINANCE
+    );
+    if (refinanceEvent) {
+      refinanceYear = Math.floor(refinanceEvent.month / 12);
+    }
+
+    const saleEvent = initialRentalReportData.timelineDetails.events.find(
+      e => e.type === TimelineEventType.SALE
+    );
+    if (saleEvent) {
+      saleYear = Math.floor(saleEvent.month / 12);
+      maxYear = Math.min(maxYear, saleYear);
+    }
+  }
+
+  // For BRRRR deals with refinance, adjust maxYear to account for refinance timing
+  if (refinanceYear !== null) {
+    const yearsAfterRefinance = maxYear - refinanceYear;
+    const refinanceLoanTerm = initialRentalReportData.loanDetails.loanTerm;
+    maxYear = Math.min(maxYear, refinanceYear + refinanceLoanTerm);
+  }
+
+  // Filter applicable time periods based on the loan term and sale event
   const applicableLoanTermTimePeriods = TIME_PERIODS.filter(
-    (period) => period <= initialRentalReportData.loanDetails.loanTerm
+    (period) => period <= maxYear
   );
 
   const loanAmount = (year: number): number =>
@@ -93,6 +124,25 @@ export const CalculatorLoanPaydown: React.FC<IRentalCalculatorPageProps> = (prop
     getAnnualizedReturn(year, true)
   );
 
+  // Get monthly timeline data for event metrics
+  const monthlyTimelineData: IMonthlyCalculationData[] = calculationUtils.calculateMonthlyTimelineData(initialRentalReportData);
+
+  // Extract event metrics by year
+  const refinanceCashoutByYear: number[] = applicableLoanTermTimePeriods.map(() => 0);
+  const saleProceedsByYear: number[] = applicableLoanTermTimePeriods.map(() => 0);
+
+  monthlyTimelineData.forEach((monthData) => {
+    const yearIndex = Math.floor(monthData.month / 12);
+    if (yearIndex < refinanceCashoutByYear.length) {
+      if (monthData.refinanceCashout !== undefined) {
+        refinanceCashoutByYear[yearIndex] = monthData.refinanceCashout;
+      }
+      if (monthData.saleProceeds !== undefined) {
+        saleProceedsByYear[yearIndex] = monthData.saleProceeds;
+      }
+    }
+  });
+
   // Build Cloudscape Table column definitions
   const columns = [
     {
@@ -101,12 +151,21 @@ export const CalculatorLoanPaydown: React.FC<IRentalCalculatorPageProps> = (prop
       cell: (item: any) => item.metric,
       width: 200,
     },
-    ...applicableLoanTermTimePeriods.map((year, index) => ({
-      id: `year-${index}`,
-      header: index === 0 ? '-' : `Year ${year}`,
-      cell: (item: any) => item[`year-${index}`],
-      align: 'center',
-    })),
+    ...applicableLoanTermTimePeriods.map((year, index) => {
+      let headerLabel = index === 0 ? '-' : `Year ${year}`;
+
+      // For BRRRR deals, add clarifying labels for refinance year
+      if (refinanceYear !== null && year === refinanceYear) {
+        headerLabel += ' (Refi)';
+      }
+
+      return {
+        id: `year-${index}`,
+        header: headerLabel,
+        cell: (item: any) => item[`year-${index}`],
+        align: 'center',
+      };
+    }),
   ];
 
   type TableRow = {
@@ -204,7 +263,7 @@ export const CalculatorLoanPaydown: React.FC<IRentalCalculatorPageProps> = (prop
                 ariaLabel="Loan Paydown Chart"
                 hideFilter={true}
                 xScaleType="linear"
-                xDomain={[0, initialRentalReportData.loanDetails.loanTerm]}
+                xDomain={[0, maxYear]}
             />
         </Box>
         <Table
