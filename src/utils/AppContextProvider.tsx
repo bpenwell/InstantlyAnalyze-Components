@@ -321,35 +321,53 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
   };
 
   const getAppMode = (): Mode => {
-    return userConfig?.preferences?.appMode ?? localAppMode;
+    // For authenticated users, use their saved preference
+    if (userConfig.userId) {
+      return userConfig?.preferences?.appMode ?? localAppMode;
+    }
+    // For anonymous users, use the current localStorage value
+    return localAppMode;
   }
 
   const setAppMode = (mode: Mode): void => {
-    const newUserConfig = {
-      ...userConfig,
-      preferences: {
-        ...userConfig.preferences,
-        appMode: mode,
-      }
-    };
-    setUserConfig(newUserConfig);
     setLocalAppMode(mode);
+
+    // Only update user config if user is authenticated
+    if (userConfig.userId) {
+      const newUserConfig = {
+        ...userConfig,
+        preferences: {
+          ...userConfig.preferences,
+          appMode: mode,
+        }
+      };
+      setUserConfig(newUserConfig);
+    }
   };
 
   const getAppDensity = (): Density => {
-    return userConfig?.preferences?.appDensity ?? localAppDensity;
+    // For authenticated users, use their saved preference
+    if (userConfig.userId) {
+      return userConfig?.preferences?.appDensity ?? localAppDensity;
+    }
+    // For anonymous users, use the current localStorage value
+    return localAppDensity;
   };
 
   const setAppDensity = (density: Density): void => {
-    const newUserConfig = {
-      ...userConfig,
-      preferences: {
-        ...userConfig.preferences,
-        appDensity: density,
-      }
-    };
     setLocalAppDensity(density);
-    setUserConfig(newUserConfig);
+
+    // Only update user config if user is authenticated
+    if (userConfig.userId) {
+      const newUserConfig = {
+        ...userConfig,
+        preferences: {
+          ...userConfig.preferences,
+          appDensity: density,
+        }
+      };
+      setUserConfig(newUserConfig);
+    }
   };
 
   const setUserConfig = useCallback(async (newConfig: IUserConfigs): Promise<void> => {
