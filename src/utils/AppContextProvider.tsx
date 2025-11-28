@@ -25,11 +25,14 @@ type AppContextType = {
   setUserConfig: (status: IUserConfigs) => void;
   canCreateNewReport: () => boolean;
   canUseZillowScraper: () => boolean;
+  canUseRentEstimator: () => boolean;
   isPaidMember: () => boolean;
   recordReportUse: () => void;
   recordZillowScraperUse: () => void;
+  recordRentEstimateUse: () => void;
   getRemainingFreeRentalReports: () => number;
   getRemainingFreeZillowScrapes: () => number;
+  getRemainingFreeRentEstimates: () => number;
   getTablePageSizePreference: () => number;
   setTablePageSizePreference: (number: number) => void;
   getZillowBuyBoxSetsPreference: () => IZillowBuyboxSet[] | [];
@@ -55,12 +58,15 @@ const AppContext = createContext<AppContextType>({
   setUserConfig: () => {},
   canCreateNewReport: () => false,
   canUseZillowScraper: () => false,
+  canUseRentEstimator: () => false,
   isPaidMember: () => false,
   recordReportUse: () => {},
   getSubscriptionDetails: () => ({} as any),
   recordZillowScraperUse: () => {},
+  recordRentEstimateUse: () => {},
   getRemainingFreeRentalReports: () => -1,
   getRemainingFreeZillowScrapes: () => -1,
+  getRemainingFreeRentEstimates: () => -1,
   getTablePageSizePreference: () => 10,
   setTablePageSizePreference: (number: number) => {},
   getZillowBuyBoxSetsPreference: () => [],
@@ -89,6 +95,7 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
     },
     freeReportsAvailable: 0,
     freeZillowScrapesAvailable: 0,
+    freeRentEstimatesAvailable: 0,
     hasSeenWelcomePage: false,
     preferences: {
       rentalReportBuyBoxSets: [],
@@ -176,6 +183,12 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
   };
 
   const recordReportUse = (): void => {
+    // Wait for user config to load before attempting to record report use
+    if (userConfig.subscription.status === UserStatus.UNDEFINED) {
+      console.warn('[recordReportUse] User config not loaded yet, skipping report counter update');
+      return;
+    }
+
     if (isPaidMember()) return;
 
     if (userConfig.freeReportsAvailable === undefined) {
@@ -222,6 +235,41 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
       setUserConfig({
         ...userConfig,
         freeZillowScrapesAvailable: userConfig.freeZillowScrapesAvailable - 1,
+      });
+    }
+  };
+
+  const getRemainingFreeRentEstimates = (): number => {
+    if (userConfig.freeRentEstimatesAvailable === undefined) {
+      return 0;
+    }
+
+    return userConfig.freeRentEstimatesAvailable;
+  };
+
+  const canUseRentEstimator = (): boolean => {
+    return userConfig.subscription.status === UserStatus.ADMIN ||
+      userConfig.subscription.status === UserStatus.PRO ||
+      (!!userConfig.freeRentEstimatesAvailable && userConfig.freeRentEstimatesAvailable > 0);
+  };
+
+  const recordRentEstimateUse = (): void => {
+    // For existing users without this field, silently return (they get 0 free uses)
+    if (userConfig.freeRentEstimatesAvailable === undefined) {
+      console.warn('[recordRentEstimateUse] User does not have rent estimate quota');
+      return;
+    }
+
+    if (userConfig.freeRentEstimatesAvailable === 0) {
+      console.warn('[recordRentEstimateUse] No free rent estimates remaining');
+      return;
+    }
+
+    // Only decrement if user has free uses
+    if (userConfig.freeRentEstimatesAvailable > 0) {
+      setUserConfig({
+        ...userConfig,
+        freeRentEstimatesAvailable: userConfig.freeRentEstimatesAvailable - 1,
       });
     }
   };
@@ -335,11 +383,14 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
     setUserConfig: setUserConfigState,
     canCreateNewReport,
     canUseZillowScraper,
+    canUseRentEstimator,
     isPaidMember,
     recordReportUse,
     recordZillowScraperUse,
+    recordRentEstimateUse,
     getRemainingFreeRentalReports,
     getRemainingFreeZillowScrapes,
+    getRemainingFreeRentEstimates,
     getZillowBuyBoxSetsPreference,
     getRentalReportBuyBoxSetsPreference,
     setRentalReportBuyBoxSetsPreference,

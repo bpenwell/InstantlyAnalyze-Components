@@ -3,8 +3,9 @@ import { Alert } from '@cloudscape-design/components';
 import { useAppContext } from '../../utils/AppContextProvider';
 
 export enum BannerType {
-    RENTAL_REPORTS='InstantlyReport uses', 
-    ZILLOW_SCRAPER='InstantlyScan uses', 
+    RENTAL_REPORTS='InstantlyReport uses',
+    ZILLOW_SCRAPER='InstantlyScan uses',
+    RENT_ESTIMATES='InstantlyEstimate uses',
 };
 
 export interface IRemainingFreeBannerProps {
@@ -13,7 +14,7 @@ export interface IRemainingFreeBannerProps {
 
 export const FreeTrialBanner: React.FC<IRemainingFreeBannerProps> = (props: IRemainingFreeBannerProps) => {
 const bannerType = props.bannerType;
-const { isUserLoading, isPaidMember, getRemainingFreeRentalReports, getRemainingFreeZillowScrapes } = useAppContext();
+const { isUserLoading, isPaidMember, getRemainingFreeRentalReports, getRemainingFreeZillowScrapes, getRemainingFreeRentEstimates } = useAppContext();
     useEffect(() => {
         //Re-render renderBanner
     }, [isUserLoading]);
@@ -29,6 +30,9 @@ const { isUserLoading, isPaidMember, getRemainingFreeRentalReports, getRemaining
             break;
         case BannerType.ZILLOW_SCRAPER:
             remainingTrialProductUsages = getRemainingFreeZillowScrapes;
+            break;
+        case BannerType.RENT_ESTIMATES:
+            remainingTrialProductUsages = getRemainingFreeRentEstimates;
             break;
         default:
             throw Error(`Invalid BannerType: ${bannerType}`);

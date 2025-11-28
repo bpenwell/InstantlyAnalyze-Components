@@ -20,6 +20,7 @@ interface AddressFormV2Props {
 export interface AddressFormV2Ref {
   submitAddress: () => void;
   isFormValid: () => boolean;
+  isManualMode: () => boolean;
 }
 
 export const MAPBOX_KEY =
@@ -151,9 +152,19 @@ export const AddressFormV2 = forwardRef<AddressFormV2Ref, AddressFormV2Props>(({
       },
     });
 
-    // Submit with basic address data
+    // Submit with manual property data
     onAddressSubmit({
       address: `${manualAddress.streetAddress}, ${manualAddress.city}, ${manualAddress.state}`,
+      propertyData: [{
+        addressLine1: manualAddress.streetAddress,
+        city: manualAddress.city,
+        state: manualAddress.state,
+        zipCode: manualAddress.zipCode,
+        bedrooms: Number(manualAddress.bedrooms),
+        bathrooms: Number(manualAddress.bathrooms),
+        squareFootage: Number(manualAddress.sqft),
+        propertyType: 'SINGLE_FAMILY', // Default property type for manual entry
+      }],
     });
 
     setError(null);
@@ -196,7 +207,7 @@ export const AddressFormV2 = forwardRef<AddressFormV2Ref, AddressFormV2Props>(({
     submitAddress: () => {
       // Clear any existing errors first
       setError(null);
-      
+
       if (useManualInput) {
         handleManualSubmit();
       } else if (address.trim()) {
@@ -216,11 +227,14 @@ export const AddressFormV2 = forwardRef<AddressFormV2Ref, AddressFormV2Props>(({
     },
     isFormValid: () => {
       if (useManualInput) {
-        return !!(manualAddress.streetAddress && manualAddress.city && manualAddress.state && 
+        return !!(manualAddress.streetAddress && manualAddress.city && manualAddress.state &&
                  manualAddress.bedrooms && manualAddress.bathrooms && manualAddress.sqft);
       } else {
         return !!address.trim();
       }
+    },
+    isManualMode: () => {
+      return useManualInput;
     }
   }));
 
@@ -418,7 +432,7 @@ export const AddressFormV2 = forwardRef<AddressFormV2Ref, AddressFormV2Props>(({
                   marginTop: '16px',
                   marginBottom: '8px'
                 }}>
-                  Property Details (Required):
+                  Property Details:
                 </div>
 
                 <div style={{ 

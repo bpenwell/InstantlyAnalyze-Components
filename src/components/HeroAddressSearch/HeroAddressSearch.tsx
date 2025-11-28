@@ -80,7 +80,7 @@ export const HeroAddressSearch: React.FC<HeroAddressSearchProps> = ({ onAddressE
     const manualPropertyData = {
       address: `${manualAddress.streetAddress}, ${manualAddress.city}, ${manualAddress.state}${manualAddress.zipCode ? ' ' + manualAddress.zipCode : ''}`,
       propertyData: [{
-        address: manualAddress.streetAddress,
+        addressLine1: manualAddress.streetAddress, // Match backend API field name
         city: manualAddress.city,
         state: manualAddress.state,
         zipCode: manualAddress.zipCode || '',
@@ -109,15 +109,9 @@ export const HeroAddressSearch: React.FC<HeroAddressSearchProps> = ({ onAddressE
   };
 
   const redirectToReportCreation = () => {
-    // Check if authenticated
-    if (isAuthenticated) {
-      // Go directly to step 1 (Property Type & Strategy) of report creation
-      window.location.href = `${PAGE_PATH.RENTAL_CALCULATOR_CREATE}?step=1`;
-    } else {
-      // Save redirect destination and go to login
-      save(LOCAL_STORAGE_KEYS.REDIRECT_AFTER_LOGIN, `${PAGE_PATH.RENTAL_CALCULATOR_CREATE}?step=1`);
-      redirectApi.redirectToPage(PAGE_PATH.LOGIN);
-    }
+    // Allow unauthenticated users to access creation wizard
+    // Authentication will be required at final submit step
+    window.location.href = `${PAGE_PATH.RENTAL_CALCULATOR_CREATE}?step=1`;
   };
 
   return (
